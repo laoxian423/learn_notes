@@ -538,12 +538,35 @@
   #### 十五、磁盘管理
 
   ```shell
-  
+  # 磁盘查看和分区
+  fdisk -l  # 分区信息
+  /dev/sda
+  df -Th   #磁盘使用情况
+  fdisk /dev/sda 
+  # 格式化分区
+  mkfs.ext4 /dev/sda5
+  # 挂载
+  mkdir /mnt/sda5
+  mount /dev/sda5 /mnt/sda5
+  # 卸载
+  unmount /mnt/sda5
+  vim /etc/fstab
+  blkid  # 查看UUID
+  /dev/sda5  /mnt/sda5  ext4  defaults  0  0
+  /建议UUID                            /访问方式  /是否检测
+  # 可以在fdisk 中修改磁盘类型 t                            
+  # 创建SWAP                            
+  mkswap /dev/sda6                            
+  UUID=，，，，，，    swap  swap defaults 0 0 
+  swapon -s  # 查看swap分区
+  swapoff /dev/sda6 # 卸载
+  swapon -a # 挂载通过fstab
+  mount -a # 挂载fstab中所有的配置
+  # 大于2T的硬盘
+  gdisk /dev/sdb
   ```
 
-  
-
-
+#### 
 
 
 
