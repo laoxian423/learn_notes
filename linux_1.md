@@ -566,8 +566,96 @@
   gdisk /dev/sdb
   ```
 
-#### 
+  ```shell
+  # 磁盘卷
+  # 逻辑卷，redhat，lvm，
+  # sda1 sda2 >>>>>>  pv >>>>>> vg  >>>>>>> lv
+  准备7个分区
+  5  6  7 >>>>> 8e  转换成lvm
+  partprobe
+  pvcreate /dev/sda5{5..7}
+  pvs
+  pvdisplay
+  # 合成一个vg
+  vgcreate  qinvg /dev/sda5 /dev/sda6
+  vgs
+  lvcreate -L 500M  qingvg -n qinlv
+  lvs
+  lvdisplay
+  # 删除
+  lvremove /dev/qingvg/qinlv
+  vgremove qingvg
+  pvremove /dev/sda5 
+  ```
 
+  ```shell
+  # 在线扩容
+  pvcreate /dev/sda{5..7}
+  vgcreate -s 32M qinvg  /dev/sda5 /dev/sda6
+  lvcreate -L 1G qinvg -n qinlv
+  # 格式化
+  mkfs.ext4 /dev/qinvg/qinlv
+  mkdir /mnt/qinlv
+  mount /dev/qinvg/qinlv  /mnt/qinlv/
+  # 写入fstab
+  blkid
+  <fstab>
+  UUID="22222"  /mnt/qinlv  ext4 defaults  0 0 
+  mount -a
+  
+  df -Th
+  # 扩充
+  lvresize  
+  vgextend qinvg /dev/sda7  # 把sda7加入到qinvg中
+  pvs
+  vgs
+  lvresize -L 2G /dev/qinvg/qinlv 
+  df -Th
+  resize2fs /dev/qinvg/qinlv  # ext4
+  df -Th
+  
+  ```
 
+  ```shell
+  # xfs的扩容，准备分区，如sda4
+  vgcreate qinvg /dev/sda4
+  lvcreate -L 1G qinvg -n qinlv
+  mkfs.xfs /dev/qinvg/qinlv
+  blkid
+  mkdir /mnt/qinlv
+  vim fstab
+  UUID =.........
+  mount -a
+  touch /mnt/qinlv/qintest
+  df -Th
+  lvresize -L 2G /dev/qinvg/qinlv
+  df -Th
+  xfs_growfs /mont/qinlv/
+  ```
+
+  * 磁盘配额：不能随便用，要给用户限制使用
+
+  ```shell
+  # 准备分区，sda4 ,sda5
+  mkfs.ext4 /dev/sda5
+  mkdir /mnt/sda5
+  setenforce 0 # 关闭SElinux，vim /etc/selinux/config
+  blkid
+  vim /etc/fstab
+  UUID=333  /mnt/sda5  ext4   defaults,usrquota，grpquota 0 0
+  mount -a
+  quotacheck -cugv /mnt/sda5
+  # 在sda5中多两个文件，aquota.group   aquot.user
+  setquota -u qin 10240 20480 5 6  /mnt/sda5/   # 10M报警，20M不让用了 ,5个文件警告，6不让用
+  # 激活规则
+  quotaon -ugv /mnt/sda5/
+  
+  history  # 历史命令
+  
+  # 测试：
+  dd if=/dev/zero/ of=/mnt/sda5/1 bs=1M count=9
+  ```
+
+  
 
 
