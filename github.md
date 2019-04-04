@@ -1,16 +1,84 @@
-#### 一、gitHub 网站浏览
+### 一、简单体验
 
-##### 1、结构说明
+#### 1、我们用git的来做什么？
 
-##### 2、资料库、关注大牛
+* 最初是用来管理代码的
+* 现在啥人都来用：写小说、写日志、写日记、免费的存储空间、书籍翻译等等
+* 大牛们云集的地方，与其仰望大牛，不如github
 
-#### 二、git bash的使用
+#### 2、github网站：
 
-#### 1、结构图：
+##### 2.1    浏览网站结构
 
-![](/pic/1554078515520.png)
+* 找个大牛的网站，了解git的主要概念。仓库、提交、工作态度等，比如Linus，看看一个50岁的人是如何工作的。大牛之所以成为大牛是有原因的。
+* git   Linux Kernel  perl  eclipse  gnome  kde  docker   react  ruby on rails  android  postgresql   debain 
 
-![](/pic/1554078562914.png)
+##### 2.2、 创建自己的账户
+
+##### 2.3、安装windows客户端gitbash
+
+* 所有命令在linux下是一样的。
+
+##### 2.4、一个简单的实验
+
+* 构建仓库
+* 本地下载仓库
+* 编写点内容
+* push，最大100M限制，可配置
+
+#### 3、git、github、gitlab
+
+* git：是一个开源的分布式版本控制系统，作者linus,bitkeeper,samba,two weeks。
+* github：是一个网站，来管理git项目（仓库）,最著名的开源网站
+* gitlab：是一个基于git的开源项目
+
+### 二、git   bash的使用
+
+#### 1、重要概念：
+
+> ![](/pic/1554078515520.png)
+>
+> - Workspace：工作区，工作目录，我们在本地的仓库（项目）目录。我们修改、创建文件等操作都是先在工作区中操作。
+> - Index / Stage：暂存区，工作区修改确认的文件添加到暂存区里，可以多次加入，分批或者一次提交到本地仓库，为了项目颗粒度的管理。
+> - Repository：仓库区（或本地仓库），把暂存区或工作区提交状态保存起来。
+>
+> ![](/pic/1554078562914.png)
+>
+> * Remote：远程仓库，与本地仓库进行交换，分工协作的目的，分布式代码管理。
+
+#### 2、创建仓库：
+
+> * 创建仓库的命令：
+>
+>   ```shell
+>   # 从本地创建
+>   mkdir <Reposistory name>    # 创建一个仓库目录
+>   git init   # 在创建好的目录中，初始化仓库
+>   # 直接克隆远程仓库
+>   git clone <url>
+>   ```
+>
+> * 例子
+>
+>   ```shell
+>   # 我们计划在 D 盘 （都是在Windows上实验，如果你是linux，请忽略某某盘的语句），创建一个myRepository 的目录，作为后面所有实验用的总目录，以后所有的仓库都放在这个目录里。
+>   $ mkdir /d/myRepository
+>   # 创建第一个式样仓库，testgit
+>   $ mkdir /d/myRepository/testgit
+>   # 初始化这个仓库
+>   $ cd /d/myRepository/testgit
+>   $ git init
+>   # 查看testgit的目录结构，观察里面多了些什么
+>   $ ls -l -a
+>   # 看看目录中.git子目录中的文件,.git目录实际就是本地仓库
+>   $ ls -l -a ./.git
+>   ```
+>
+>   
+
+
+
+
 
 #### 2、命令示例：
 
@@ -282,7 +350,71 @@ git push origin :refs/tags/v0.0
 
 ```shell
 # 为解决并行开发
+(master) git branch iss53
+(master) git branch hotfix
+(master) git merge hotfix
+# 切换分支
+(master) git checkout iss53
+# 显示所有分支
+git branch
+git branch -v  # 显示分支并显示每个分支的当前提交
+# 合并操作，注意：要把 A 合并 到 B 上，必须在B上操作，比如把hotfix合并到master，必须到master上操作
+git checkout master
+git merge hotfix
+# 删除分支
+git branch -d hotfix
 
+# 解决冲突
+# 模拟在两个分支中编辑同一个文件的同一个地方
+```
+
+```shell
+# 常用分支命令
+# 创建分支foo
+git branch foo
+# 切换到分支
+git checkout foo
+# 创建分支并同时切换到foo
+git checkout -b foo
+# 修改分支名字
+git branch -m old_name new_name
+git branch -M old_name new_name  # 强制执行
+# 删除分支
+git branch -d foo  # 未合并不允许删除
+git branch -D foo  # 强制删除
+# 列出远程分支
+git branch -r
+git branch -v # 本地带分支版本
+# 查看已经合并的分支
+git branch --merged
+git branch --no-merged
+# 列出远程合并的分支
+git branch -r --merged
+# 取出远程foo 分支
+git checkout -t origin/foo
+# 删除远程分支
+git push origin <space>:<remote branch>  # 
+git fetch -p
+# 合并分支
+git merge <branch name>
+# 合并分支，拒绝fast forward ,产生合并commit
+git merge --no-ff
+# 推送到远程,分支要一个个推，在分支内
+(master) git push
+(iss53) git push -u origin iss53
+```
+
+```shell
+# git stash
+# 在分支中的工作去中有未提交暂存区或暂存区未提交时，切换不到别的分支。
+# 保存进度
+git stash
+# 弹出进度
+git stash pop
+# 查看stash列表
+git stash lish
+# 删除stash列表
+git stash clear
 ```
 
 
