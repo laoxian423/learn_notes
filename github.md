@@ -216,8 +216,74 @@ git  diff --cached  # 比较暂存区和master
 git diff HEAD  # 比较工作去和master
 git diff    # 比较工作区和暂存区
 git diff da988  cd112  # 比较这两个版本
+```
+
+* 回撤操作
+
+* ![](pic/1554257471341.png)
 
 
+
+```shell
+# 回撤暂存区内容到工作区
+git reset HEAD
+
+# 回撤提交到暂存区
+git reset HEAD --soft
+
+# 回撤提交，放弃变更,HEAD可以是任意一个提交
+git reset HEAD  --hard
+
+# 回撤远程操作，团队协作时不能这样做
+git push -f
+
+# 回撤上一次提交
+git add .
+git commit --amend -m "messages"
+
+# 变基操作，改写历史提交
+git rebase -i HEAD~3
+```
+
+####  8、标签操作
+
+```shell
+# 大版本，里程碑，重大变动上
+# 在当前提交上，打标签,在HEAD上
+git tag foo
+git show foo
+
+# 在当前提交上，打标签，并给message信息注释
+git tag foo -m "message"
+
+# 在当前提交之前的第4个版本上，打标签
+git tag foo HEAD~4
+
+# 列出所有标签
+git tag
+
+# 删除标签
+git tag -d foo
+
+# 把标签推送到remote
+git push origin --tags  # 推送多个标签
+git push origin v0.1   # 推送1个标签
+
+# 删除远程仓库标签
+git push origin :refs/tags/v0.0
 
 ```
+
+#### 9、分支操作
+
+![](pic\1554269674384.png)
+
+![](pic\1554270320533.png)
+
+```shell
+# 为解决并行开发
+
+```
+
+
 
