@@ -1,62 +1,255 @@
-#### 一、linux简介：
+       1991年10月5日，还在上大学的Linus在一次UNIX实验后，对UNIX极度不满，决定自己写一个最好用操作系统，随后将第一个Linux 内核版本放到GNU。
+       GNU  自由软件基金会，由当时被成为第一黑客的richard stallman创建
+### 1、linux 常见版本：
 
-* Unix对Linux的最大贡献就是非常不好用
-* Unix诞生于60年代末期的贝尔实验室
-* Linus Torvalds 来纳斯  ，1991/10/5，大学学Unix极其不爽，写了个几十K的内核，放在GNU
-* GNU ，创始人richard stallman 第一黑客，组织的中心思想是开源，技术发展慢，开源拿着去，开源放回来
-* 发展出好多衍生版本
-* 微软，最后的8M。
-* red hat ：最大的开源公司
-* Fedora  ：飞到热，新的软件，测试没问题放会redhat，redhat桌面版
-* ubuntu : 号称界面最精美
-* debian :的版，纯开源
-* suse: 
-* 中标麒麟：一个军用，一个民用
-* 深度deepin: 基于debian
-* centos   :
-* 差不多，99%相似
-* redhat 稳定性最好，使用最广，美国北卡罗来纳州，全球22个分部
-* 课程设计的非常好
-* rhce 中级，rhca 最高级，几百个，中国大头，
-* 按照培训课程体系走
-* RHEL 红帽企业版
+* RedHat ：RHEL ，使用最广，全球最大。培训课程设计的最好。
+* centos：redhat的克隆版本，几乎就是RHEL，与RHEL唯一的技术差异就是品牌。
+* Fedora  ：Redhat将其新的修改，首先放到Fedora供用户使用，被称之为Redhat的小白鼠。
+* Ubuntu : 号称界面最精美，最受欢迎的桌面Linux发行版
+* Debian :有史以来最大的协作软件项目，它由1000多名志愿者开发。
+* SUSE: Novell公司旗下产品，由于其与微软在Linux知识产权纠纷事件被大量客户放弃
+* 中标麒麟：国产Linux，一个民用，一个军用，合并而成。
 
-二、系统安装
+### 2、系统安装:
 
-* https://opsx.alibaba.com/mirror
-* http://mirrors.163.com/
-* everythin   什么都有，包含源码包
-* kdump   崩溃转存，内存中花一块地
-* /boot     启动相关，内核  200M
-* /  根分区  
-* swap <8g 两倍内存，内存不够用的当内存用。
+> 以下实验都在Centos上操作，可通过下列镜像网站下载：
+>
+> * 阿里： https://opsx.alibaba.com/mirror
+>
+> * 网易：http://mirrors.163.com/
+>
+>   注：everythin 版本，包含所有的RPM和源码包。
+>
+> ```shell
+> # 部署虚拟机实验环境，最好虚拟两台，一台安装centos 6 ,一台安装centos 7,6 和 7有一部分系统管理不同，目前6和7是企业中使用最广的版本。其中6.8被称为6里面的终极稳定版。
+> # 安装过程比较简单，只需注意一下几点：
+>   1、无关硬件都去掉，比如声卡、打印机等
+>   2、在安装配置中不要启用SELinux,后期学习过以后再考虑启动
+>   3、KDUMP 为系统崩溃转存功能，可关闭。
+>   4、硬盘最好分区，不要一股脑分到一个区上，不利于后期实验，下面是建议：
+>       /boot    启动相关的文件，还有内核，分配200M即可
+>       swap     如果内存<8G ,就分配两倍内存的空间。如果内存很大比如256G，这个分区
+>                不用过大，没有必要。
+>       /        剩下的都可以给根。
+> ```
+>
+> 
 
-#### 三、基础操作
+### 3、基础操作
 
-* 普通用户$，root用户#
-* 图形化对服务器没有好处，占资源，耗带宽
-* etc/shells
-* cd -  回到上一次
-* cd ~  回到家目录
-* alias 查看别名
+> * 命令：
+>
+> ```shell
+> # 提示符 $ 表示普通用户， # 表示root用户
+> # ~ 表示home目录，对于root来说，它的家目录在 /root
+> 
+> # 列出目录列表：
+> ls -l /boot      # -l 使用长列表方式
+> ls -l -a /boot   # -a 显示所有文件，包括隐藏属性
+> ls -la -h /boot  # -h 以人类方式显示，就是文件大小显示为 K,M,G
+> 
+> # 创建目录：
+> mkdir /home/zhangsan/test 
+> 
+> # 改变当前目录
+> cd /home/zhangsan/test
+> cd -  # 回到上一次的目录
+> cd ~  # 改变目录到家目录home
+> 
+> # 查看当前目录
+> pwd
+> 
+> # 创建一个文本文件：
+> touch ex01     # 创建一个0字节大小的文件，文件名为ex01
+> echo "this is a test" > ex02 # 利用重定向生成一个文件ex02
+> echo "second line" >> ex02  # 在文件ex02末尾追加一行内容
+> vi /home/zhangsan/ex03  # 用编辑程序 vi 创建文件ex03
+> vim /home/zhangsan/ex04  # 用编辑程序 vim 创建文件ex04
+> 
+> # 查看文件内容
+> cat ex02    # 列出ex02文件内容
+> tail ex02   # 从文件末尾显示
+> tail -n 5 /etc/passwd  # 现实最后5行
+> head ex02   # 从文件头开始显示，支持指定行数，-n 5
+> vi  vim   more   
+> 
+> # 拷贝文件：
+> cp /etc/passwd /home/zhangsan/test/  # 把/etc下的文件passed拷贝到test下
+> cp -r /etc  /home/zhangsan/test/  # 把/etc下的所有文件包含子目录全拷贝过来
+> 
+> # 删除文件：
+> rm ex03     # 删除文件ex03
+> rm -f ex03  # 强制删除ex03
+> rm -rf /home/zhangsan/test  # 强制删除目录test及其下所有目录文件
+> 
+> # 移动文件（可当作改名命令）
+> mv /home/zhangsan/test/ex02  /home/zhangsan/test/ex30
+> 
+> # 查看当前系统支持的shell  
+> cat /etc/shells
+> 
+> # 查看Linux内核版本
+> uname -a 
+> ls -l /boot/
+> 
+> # 查看命令别名
+> alias
+> ```
 
-四、文件管理
+### 4、用户和组管理
 
-* touch
-* 文件最长256个字符
-* 文件名前加点 .  隐藏文件
-* b 块设备   c  字符设备
-* id root
-* su - qin
-* chown  root:root  /home/qin/test
-* u(user)   g(group)    o(onthers) 
-* useradd bing
-* rwx    
-* groupadd  caiwubu
-* useradd kuaiji -g caiwubu
-* chown kuaiji:caiwubu /caiwubu/    对文件夹生效， -R  递归
-* chmod o-r  -R /caiwubu/
-* r -4   w -2    x-1    chmod 400 /caiwubu/zhangben
+#### 4.1 passwd 和 shadow
+
+* /etc/passwd 文件：
+
+> ```shell
+> root: x : 0 : 0: root:/root:/bin/bash
+> 1 : 2 : 3 : 4:  5  : 6   :  7
+> ```
+>
+> > 1  用户名
+> >
+> > 2  口令
+> >
+> > 3  uid  用户ID，root 的UID 是0,**应该说uid等于0的root用户**，普通用户在1000以后
+> >
+> > 4  gid  组ID
+> >
+> > 5  描述
+> >
+> > 6  家目录
+> >
+> > 7  login后的动作，/bin/bash 表示登陆后进入shell，如果是nologin 则禁止登陆
+
+* 口令文件：/etc/shadow
+
+>
+> ```shell
+> root:k1KrZUNStssQ1.....: 17810 : 0 : 99999 : 7 :   :  :
+> 1 :       2            :   3   : 4 :  5    : 6 : 7 : 8
+> ```
+>
+> > 1  用户名  2   口令
+> >
+> > 3  密码创建日期，自1970.1.1起计算，每过一天加1
+> >
+> > 4   和3相比两次密码的修改间隔时间，也就是多少天改一次密码
+> >
+> > 5   和3相比，密码有效期
+> >
+> > 6   密码过期多少天开始提醒
+> >
+> > 7   过期多少天后禁用
+> >
+> > 8   账号失效时间
+
+#### 4.2 用户管理常用命令：
+
+```shell
+# 增加新用户 zhangsan 
+useradd xiaomin
+
+# 新增用户并指定uid
+useradd -u 888 boss
+
+# 为用户设置密码
+passwd xiaomin
+
+# 管理用户密码时效，密码60天失效
+chage -E 60 xiaomin 
+# 查看用户密码策略
+chage -l xiaomin
+
+# 修改用户账号信息
+usermod -d /home/xm xiaomin   # 修改家目录
+usermod -g class2 xiaomin     # 修改组信息  
+
+# 切换账户,exit 退出
+su - xiaomin
+
+# 删除用户,-r 删除小明的相关资源，如家目录
+userdel -r xiaomin  
+```
+#### 4.3 组管理命令
+
+>   * 组配置文件： /etc/group    /etc/gshadow
+>
+>   ```shell
+>   # 增加新组，可以 -g  指定组ID
+>   groupadd class1
+>   # 分配组成员,把xiaomin加到class1组里
+>   gpasswd -a xiaomin class1
+>   # 从组中删除一个成员
+>   gpasswd -d xiaomin class1
+>   # 删除组（里面不能有成员）
+>   groupdel class1
+>   ```
+
+### 5、文件管理
+
+* Linux 中一切都是文件,包括硬件设备
+
+* linux 文件名长度限制在256个字节。
+
+* 文件名前加点表示隐藏文件，如`.git`
+
+#### 5.1 文件类型说明：
+```shell
+$ ls -l /etc 
+...
+drwxr-xr-x  2  root  root   244,  0  4月   4  18:26 pts
+...
+```
+```shell
+# 第1位，文件类型说明：
+- 普通文件
+d 目录
+b 块设备，接口设备，比如硬盘、光驱
+c 字符设备，串行端口的接口设备，比如键盘、鼠标
+l 链接文件，类似windows的快捷方式。
+# 第2,3,4为代表user(u)的权限，第5,6,7位代表group(g)的权限，第8,9,10位代表other（o）的权限。
+r  表示读,对应的10进制数值为4
+w  表示写，对应的10进制数值为2
+X  对于文件来说表示执行，对目录来说就是搜索，对应的10进制数值为1
+- 表示无权限
+```
+
+#### 5.2  文件管理常用命令
+
+```shell
+# 将指定文件的拥有者改为指定的用户或组 chown
+chown root:root /home/test/ex0  # 把文件ex0的拥有者修改为root，组修改为root
+chown root /home/test/ex0  # 文件给root
+chown :root /home/test/ex0  # 文件给root组
+chown -R root /home/test/   # 包含子目录
+
+# 修改文件访问权限，-R 迭代目录
+chmod o+w ex0    # 给其他人授予写这个文件的权限
+chmod go-rw ex0  # 删除群组和其他人对这个文件的读和写的权限
+chmod go-w+x <dir> # 拒绝组成员和其他人创建或删除目录 dir（go-w）中文件的权限，允许组成员和其他人搜索 dir，或在路径名(go+x)中使用它.
+
+# 用数字修改文件访问权限，-R 迭代目录
+chmod 700 ex0   #  user拥有最大权限（rwx 4+2+1=7)，组和其他人无权限
+
+
+
+# 两个文件属性查看命令：
+file ex01    # file 辨识文件类型
+stat ex01    # 文件/文件系统的详细信息显示,诸如访问时间，修改时间等
+```
+
+#### 5.3 文件隐藏属性的设置
+
+* 对每一个文件设置更精确的权限设置，设置文件访问列表ACL
+* 
+
+```shell
+
+
+```
+
+
+
 * umask  掩码  0022     ：    umask   0000
 * useradd boss
 * setfacl  -m u:boss:rwx  -R  /caiwubu/         set   f    acl
@@ -157,30 +350,7 @@
 * tee file     转存文件
 * paste 1 2 3  按列合并  按行对应
 
-#### 八、用户和组
-
-* cat /etc/passwd
-* `root​:x:​0:0:root:/root:/bin/bash`    3列： uid   普通用户1000以后 ，/bin/bahs 该用户可以登陆   
-* 第4列 组用户，第5列 描述，第6列  家目录  
-* cat /et/shadow   密码
-* uid  为 0 权利最大，为管理员
-* useradd  bing
-* useradd  -u  8888  boss
-* userdel -r  bing     -r   删除相关资源
-* passwd  zhangsan    
-* bc
-* 1970.1.1
-* shadow  mima:密码创建时间： 几天只能不能该密码：密码有效期：过期多少天前提醒：过期后几天禁用
-* chage -d 0 zhangsan   -d有效期   -E  失效日期
-* /etc/group      /etc/gshadow
-* groupadd xiaoshoubu
-* id xiaoshou
-* useradd -g   xiaoshoubu xiaoshou2    -g  分配组
-* useradd -G xiaoshoubu xiaoshao3  -G   建同名组并且加入xiaoshoubu
-* usermod -g shichangbu xiaoshou2    修改用户
-* groupdel    组里不能有成员
-
-#### 九、软件包的安装
+#### 八、用户和组九、软件包的安装
 
 * rpm    yum    编译安装
 
