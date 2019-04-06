@@ -69,7 +69,8 @@
 > # 查看文件内容
 > cat ex02    # 列出ex02文件内容
 > tail ex02   # 从文件末尾显示
-> tail -n 5 /etc/passwd  # 现实最后5行
+> tail -n 5 /etc/passwd  # 显示最后5行
+> tail -f /var/log/messages  # 不停的现实最后内容，适合监控日志
 > head ex02   # 从文件头开始显示，支持指定行数，-n 5
 > vi  vim   more   
 > 
@@ -94,6 +95,11 @@
 > 
 > # 查看命令别名
 > alias
+> 
+> # 查找文件位置：
+> which rm   
+> find 
+> whereis 
 > ```
 
 ### 4、用户和组管理
@@ -226,245 +232,328 @@ chown -R root /home/test/   # 包含子目录
 # 修改文件访问权限，-R 迭代目录
 chmod o+w ex0    # 给其他人授予写这个文件的权限
 chmod go-rw ex0  # 删除群组和其他人对这个文件的读和写的权限
-chmod go-w+x <dir> # 拒绝组成员和其他人创建或删除目录 dir（go-w）中文件的权限，允许组成员和其他人搜索 dir，或在路径名(go+x)中使用它.
+chmod go-w+x <dir> # 拒绝组成员和其他人创建或删除目录 dir（go-w）中文件的权限，允许组成员# 和其他人搜索 dir，或在路径名(go+x)中使用它.
+# 只有拥有者能够操作
+chmod u+t ex0 
+# 让用户能够执行他无权执行的程序
+chmod u+s /usr/bin/vim
 
 # 用数字修改文件访问权限，-R 迭代目录
 chmod 700 ex0   #  user拥有最大权限（rwx 4+2+1=7)，组和其他人无权限
 
-
-
 # 两个文件属性查看命令：
 file ex01    # file 辨识文件类型
 stat ex01    # 文件/文件系统的详细信息显示,诸如访问时间，修改时间等
+
+# 查看默认文件权限掩码
+umask 
+
 ```
 
 #### 5.3 文件隐藏属性的设置
 
 * 对每一个文件设置更精确的权限设置，设置文件访问列表ACL
-* 
+* 文件访问控制列表：
 
 ```shell
+# 设置一个非拥有者和组的用户，访问文件的权限
+setfacl -m u:boss:rwx -R /home/test/
 
+# 查看文件的访问控制列表
+getfacl /home/test/a
+
+# 移除用户的访问控制列表
+setfacl -x u:boss /home/test/a
+
+# 移除文件的所有访问控制列表
+setfacl -b /home/test/a
+```
+
+* chmod只是改变文件的读写、执行权限，更底层的属性控制由chattr来改变的。 
+
+* 文件隐藏属性的设置
+
+  ```shell
+  # 显示文件隐藏属性：
+  lsattr <filename>
+  
+  # 任何人不得修改
+  chattr +i /home/test/ex01
+  # 只允许文件追加内容
+  chattr +a /home/test/ex01
+  ```
+
+* 创建文件链接
+
+  ```shell
+  # 创建软链接（类似windows下的快捷方式）
+  ln -s /etc/passwd  ./passwd2
+  
+  # 创建硬链接
+  ln /etc/passwd ./passwd3  # ls -l观察一下，属性后面的数字会加1,有多硬链接就加多少  
+  ```
+
+### 6、目录管理：
+
+#### 6.1  linux 常见目录说明
+
+```shell
+/root 		# root用户的家目录
+/boot    	# 内核，启动资源
+/home   	# 用户家目录
+/dev    	# 设备，sda   cpu
+/etc    	# 配置文件
+/mnt   		# 挂载点
+/bin   /sbin    	# 可执行文件
+/opt    	# 第三方工具
+/proc    	# 虚目录，对应内存映射，开机才有
+/usr   		# 自己编译的文件
+/var  		# 放一些数据文件，日志文件  /var/log/messages
+
+/lib   /lib64 	  	# 动态链接库
+/run     			# 运行的东西，进程号
+/sys   				# 虚目录，对应内存映射，开机才有
+/tmp   				# 临时文件，定期自动清理
+```
+
+#### 6.2 目录相关命令
+
+```shell
+# linux 下一切都是文件，所以针对文件的命令都适用于目录
+```
+
+### 7、系统交互工具与编辑器 vim
+
+#### 7.1 vim 常用键盘操作
+
+* 其配置文件一般在/etc/vimrc
+
+```shell
+yy  # 复制当前行
+4yy  # 复制当前行到其下共4行
+p    # 粘贴
+dd   # 剪切
+u    # 撤销操作
+gg   # 光标到第一行
+G    # 光标到最后一行
+o    # 下插一行
+：w  # 保存
+:q   # 没有修改文件情况下退出
+:q!  # 不保存强制退出
+:wq  # 保存退出
+:r /etc/fstab  # 把fstab文件内容读到当前位置
+:r! df -Th  # 把df -Th的命令结果插入到当前位置
+:set number # 设置行号
+:s/nologin/bash/g  # 搜索替换当前行
+:1,10s/nogoin/bash/g # 替换第一行到第10行的
+:%s/nologin/bash/g  # 全部替换
+/main  #搜索”mail“  n  下一个
+```
+
+* ctrl + z  可以暂时回到shell，fg 返回，jobs 查看有几个任务
+
+### 8、输入输出及管道重定向
+
+#### 8.1 输出重定向
+
+* `>`    覆盖输出重定向
+
+```shell
+# 将输出到屏幕的内容输出到文件，覆盖原有内容
+ls -l > list.txt
+find / -user boss  > ofboss.txt
+
+```
+
+* `>>`  追加输出重定向
+
+```shell
+# 新的内容追加到文件
+ls -l /etc >> list.txt
+```
+
+* `2>`   错误输出重定向
+
+```shell
+#  shell中:
+#      0    表示标准输入
+#      1    表示标准输出
+#      2    表示标准错误输出
+find / -user boss > right 2> error
+# 把标准输出和标准错误输出一起输出
+find / -user boss &> all
+```
+
+#### 8.2 输入重定向
+
+* `<`
+
+```shell
+# 出入重定向到test1
+cat > test2 < test1
+```
+
+#### 8.3 管道
+
+* `|`
+
+```shell
+# 将cat的内容通过管道输出给grep
+cat /etc/passwd | grep root
+
+# 取磁盘使用百分比的一个列子：将磁盘信息中boot目录的信息先grep出来，然后用tr把各列的多个空格压缩成一个，然后在用cut进行分割，分割后的字段取第6个。
+df -Th  | tee temp01 |  grep boot  |  tr -s " " | cut -d " " -f 6 
+# tee     把临时内容转存到一个文件中
+# tr      压缩空格
+# cut     分割
 
 ```
 
 
 
-* umask  掩码  0022     ：    umask   0000
-* useradd boss
-* setfacl  -m u:boss:rwx  -R  /caiwubu/         set   f    acl
-* ll 后有个加
-* getfacl  /caiwubu/zhangben 
-* lsattr   /caiwubu/zhangben    隐藏属性
-* chattr   +i /caiwubu/zhangben    i 不让改不让删    a 能追加   root也不行
-* chattr  -i /caiwubu/zhangben
-* ln -s /etc/passwd  ./passwd2   软链接
-* ln    /etc/passwd   ./passwd3   硬链接     -rw-r--r--   2    有一个硬链接这个数字加1，与源文件保持一致
+### 9、软件包的安装
 
-#### 五、目录管理：
+* 三种安装软件包的方式：rpm 、 yum  、  编译安装
+* rpm 是Redhat的打包格式。
+* 升级内核必须使用rpm，升级过程中不可被终止。
+* rpm 不能解决包依赖问题。
 
-* /root
-* /boot    内核，启动资源
-* /home   用户家目录
-* /dev    设备，sda   cpu
-* /etc    配置文件
-* /mnt   挂载点
-* /opt    第三方工具
-* /proc    虚目录，对应内存映射，开机才有
-* /run     运行的东西，进程号
-* /srv
-* /sys   虚目录，对应内存映射，开机才有
-*  /usr   自己编译的文件
-* /var  放一些数据文件，日志文件  /var/log/messages
-* /lib   /lib64    动态链接库
-* /bin   /sbin    可执行文件
-* /tmp   临时文件，定期自动清理
+#### 9.1 rpm 的使用
 
-* which  rm
+```shell
+# 安装一个软件包， -i 安装  v 过程信息可见   h  进度条
+rpm -ivh httpd-2.2.15-39.el6.centos.x86_64.rpm
+rpm -ivh httpd-2.2.15-39.el6.centos.x86_64.rpm --force   #force 强制安装
 
-* u+s  g+s  o +t
+# 查询包详细信息
+rpm -qpi  httpd-2.2.15-39.el6.centos.x86_64.rpm   
+# 查询软件包安装的文件列表
+rpm -ql httpd-2.2.15-39.el6.centos.x86_64.rpm
+# 查询软件包的依赖
+rpm -q --requires httpd
 
-* u+s   加给命令的，passwd  bing  , which passwd  , ll /usr/bin/passwd
+# 升级一个软件包
+rpm -Uvh httpd-2.2.15-39.el6.centos.x86_64.rpm
 
-* 有 s 时，表示暂时拥有属主的权限
+# 降级一个软件包
+rpm -Uvh --oldpackage httpd-2.2.15-30.el6.centos.x86_64.rpm
 
-* chmod u+s /usr/bin/vim     相当于给命令提权
+# 卸载一个软件包
+ rpm -e httpd
+ 
+# 查询已经安装的所有包，可结合grep
+rpm -qa
+rpm -qa | wc -l    # 统计安装了多少个包
+rpm -qa | grep python  # 是否安装了python
 
-* vim /etc/passwd   保存成功
+# 查询某个命令来自于那个包
+rpm  -qf  /usr/bin/touch 
+```
 
-*  g+s  mkdir /caiwubu  /  groupadd caiwubu /  useradd -g caiwubu chuna
+#### 9.2 yum的使用
 
-* 
+* yellow dog update
 
-* ll  -d /caiwubu/
+* 解决了包依赖的问题
 
-* chown kuaiji:caiwubu -R /caiwubu/
+* 重新指定yum源的一些方法（有时候因为下载速度，或者保持版本环境）：
 
-* 谁创建的目录权限归谁
-
-* 文件夹的执行权限表示能不能进来看
-
-*  chmod g+s /caiwu/   不管谁建文件，属主归文件夹属主
-
-* o+t  只有文件本人能管理
-
-* u+s 4   g+s 2  o+t  1
-
-* chmod 4740  qingbing    加在前面
-
-#### 六、系统交互工具与编辑器
-
-* linux下一切都是文件
-* yy  复制当前行   p   粘贴
-* 4yy   复制4行
-* dd   剪切
-* u   撤销
-* gg   去第一行   G   最后一行
-* o  下插一行  O 上插一行
-* w  q   !
-* 命令行模式下： r   /etc/fstab     把其他文件的内容读入
-* ： r!  df -Th    把命令结果输入到文件内
-* ：X  文件加密码    
-* /mail   搜索   n  下一个
-* : set number      :30       set nonumber
-* s/nologin/qin/g   替换一行的    1,10s/nologin/qin/g 换10行的   %s/nologin/qin/g全部换掉
-* vim  /etc/vimrc    配置文件
-
-#### 七、输入、是输出和重定向
-
-* `>`
-* `>>`
-* `2>`错误输出重定向
-* find / -user qin > yes 2> no   正确和错误的分别输出
-* find / -user qin &> all 疏导一个文件
-* cat  >  qintest  <<  EOF
-* |  管道     cat  /etc/passwd  |  grep  root
-* wc  -l  /etc/passwd    多少行
-* cat /boot/grub2/grub.cfg |  grep -v ^#  ^$    $空行
-* head -n 2   头两行    tail -n 2  尾2行    
-* tail -f /var/log/messages   持续不断后10行
-* sort  qintest  排序文件内内容   sort  - n   按数字大小排序  -r 反序
-* sort  -t :  -k3  -n /etc/passwd    按冒号分割按第3列,以数字排序
-* uniq  qingtest     去重    uniq  -c  qintest   统计合并  挨着的合并
-* df -Th  | tee file |  grep boot  |  tr -s " " | cut -d "  " -f 6    ;   tr  把多个空格转换成一个
-* tee file     转存文件
-* paste 1 2 3  按列合并  按行对应
-
-#### 八、用户和组九、软件包的安装
-
-* rpm    yum    编译安装
-
-* rpm   redhat 打包格式
-
-* mkdir /mnt/cdrom/
-
-* mount /dev/cdrom  /mnt/cdrom/
-
-* rpm -ivh  /mnt/cdrom/Packages/zziplib-i331xxxxxxxxx.rpm --force 
-
-* rpm -e   rpm包名   卸载
-
-* rpm -qa    查询所有安装过的包
-
-* rpm -qpi  xxx.rpm   查询包信息
-
-* rpm  -qf  /usr/bin/touch     查询从那个包装的
-
-* which touch
-
-* 红帽内核升级必须用rpm，千万不要终止升级过程
-
-* rpm  不能解决依赖包
-
-* yum  yellow dog  解决依赖包
-
-* vim /etc/yum.repos.d/1222.repo     仓库源
-
-* rm /etc/yum.repos.d/*
-
-* vim /etc/yum.repos.d/qin.repo
-
-* ```
+  ```shell
+  # 将yum源指向cdrom，或者某个目录：
+  # 备份/etc/yum.repos.d/的所有文件，然后清空这个目录。
+  vim /etc/yum.repos.d/test.repo
+  # -----------------------------------
   [qin]
   name=qin
   baseurl=file:///mnt/cdrom
   enabled=1
   gpgcheck=0
-  ```
-
-* yum list
-
-* yum install   httpd
-
-* yum remove  httpd
-
-* yum search htt
-
-* yum clean all    清缓存
-
-* yum makecache   建立缓存
-
-* .bin   的安装   ，直接运行它
-
-* 源码包，编译安装
-
-* PREFIX   安装在那里
-
-* make   假装编译一下
-
-* make install   开始安装
-
-* service nginx start
-
-#### 十、系统监控及进程管理
-
-* uname -r   
-
-* uname -a
-
-* lscpu
-
-*  cat  /proc/cpuinfo
-
-* cat  /proc/meminfo
-
-* hostname
-
-* hostnamectl  set-hostname qin   改主机名
-
-* last  
-
-* top  
-
-* ```
-  zombie  僵尸进程，
-  id  空闲情况
   
+  # 将YUM源指向163(网易）
+  # 首先备份/etc/yum.repos.d/CentOS-Base.repo，下载版本对应的文件
+  # CentOS5 ：http://mirrors.163.com/.help/CentOS5-Base-163.repo
+  # CentOS6 ：http://mirrors.163.com/.help/CentOS6-Base-163.repo
+  # CentOS7 ：http://mirrors.163.com/.help/CentOS7-Base-163.repo
+  wget http://mirrors.163.com/.help/CentOS6-Base-163.repo
+  mv CentOS6-Base-163.repo CentOS-Base.repo
+  
+  # 生成缓存
+  yum clean all
+  yum makecache
   ```
 
-* pstree  
+* yum 的一些常用命令
 
-* `dd if=/dev/zero of=/dev/null bs=1M count=10000000000000`
+  ```shell
+  # 列出所有可安裝的软件清单:
+  yum list 
+  # 列出可供更新的软件：
+  yum check-update
+  # 查找软件包 :
+  yum search <keyword> 
+  # 安装指定软件
+  yum install <package_name>
+  # 升级所有软件包
+  yum update
+  # 升级指定软件
+  yum update <package_name>
+  # 删除指定软件
+  yum remove <package_name> 
+  # 查询软件信息
+  yum info python
+  ```
 
-* ps  aux   | grep  
+### 10、系统监控及进程管理
 
-* kill  -l  给进程发信号
+#### 10.1 常用命令：
 
-* kill -19 2978
+```shell
+# 查看系统信息
+uname -a  # 查看内核
+lscpu    # 查看CPU信息
+cat /proc/cpuinfo  # 查看CPU信息
+cat /proc/meminfo  # 查看内存信息
+hostname   # 获取主机名
+hostnamectl set-hostname  class_3  # 设置主机名
 
-* pidof   httpd
+# last，显示近期用户或终端的登录情况。通过last命令管理员可以获知谁曾经或者企图连接系统
+last -n 10   # 显示10条
+last -10 -f /var/log/btmp   # btmp 记录错误登陆的日志
+# 查看恶意ip试图登录次数，lastb 直接显示 btmp 文件内容：
+lastb | awk ‘{ print $3}’ | sort | uniq -c | sort -n 
+```
 
-* killall -9 httpd  
+```shell
+# top 的使用，常用快捷键
+s  改变画面更新频率
+N  以 PID 的大小的顺序排列表示进程列表
+P  以 CPU 占用率大小的顺序排列进程列表
+M  以内存占用率大小的顺序排列进程列表
+m  显示内存情况，用条状图
+t  显示CPU使用情况
+h  显示帮助
+n  设置在进程列表所显示进程的数量
+q  退出 top
+# 需要关注的一个空闲情况ID，另外是僵尸进程bombie
 
-* firfox &   放到后台
+```
 
-* ctrl + z 回到后台   fg 回去    
+```shell
+# 进程树查看
+pstree
 
-* jobs
+# 进程查看 
+ps aux | grep xxxxx
 
-* fg 1
+# 查看进程信号，给进程发信号
+kill -l   # 9   15
+kill -19 2978
 
-#### 十一、服务与计划任务
+```
+
+* `dd if=/dev/zero of=/dev/null bs=1M count=10000000000000`  给CPU施加压力
+
+### 11、服务与计划任务
 
 * linux 6
 
@@ -542,7 +631,7 @@ stat ex01    # 文件/文件系统的详细信息显示,诸如访问时间，修
 
 * vim  /etc/cron.deny     把用户名写进去
 
-#### 十二、启动流程和故障恢复
+### 12、启动流程和故障恢复
 
 * linux  6
 
@@ -628,59 +717,60 @@ stat ex01    # 文件/文件系统的详细信息显示,诸如访问时间，修
 
   * /etc/grub.d/*
 
-  #### 十三、系统文件查找与文件管理
+
+
+### 13、系统文件查找与文件管理
 
   ```shell
-   which rm
-   whereis  touch
-   locate passwd  不能直接用，updatedb，后期不用做
-   find  /  -name  passwd
-   find / -name *passwd*
-   find /etc/ -type d    #找文件夹
-   find / -type b  #按文件类型找
-   find / -user qin #按用户找
-   find / -size +1M 
-   find / -perm 777
-   find /etc/ -type f -and -size +1M 
-   find / -user qin -exec cp -rf {}  /root/Desktop/qin/  \;
+which rm
+whereis  touch
+locate passwd  不能直接用，updatedb，后期不用做
+find  /  -name  passwd
+find / -name *passwd*
+find /etc/ -type d    #找文件夹
+find / -type b  #按文件类型找
+find / -user qin #按用户找
+find / -size +1M 
+find / -perm 777
+find /etc/ -type f -and -size +1M 
+find / -user qin -exec cp -rf {}  /root/Desktop/qin/  \;
    
-   # 文件里找内容
-   grep   root  /etc/passwd
-   grep -i ROOT /etc/passwd  #忽略大小写
-   
-   # 压缩解压  gzip  bzip2 
-   # tar 打包
-   /var/log
-   tar czvf log.tar.gz /var/log/  #c建立tar包，z gzip v 要看到过程 f 保存的文件名
-  date +"%Y-%m-%d"
-  tar czvf /root/Desktop/`date +%F`-log.tar.gz /var/log/
-  file <filename> #看文件类型
-  # 解压
-  tar xzvf /root/Desktop/sssss.tar.gz -C  /tmp/  #指定解压路径
-  
+# 文件里找内容
+grep   root  /etc/passwd
+grep -i ROOT /etc/passwd  #忽略大小写
+ 
+# 压缩解压  gzip  bzip2 
+# tar 打包
+/var/log
+tar czvf log.tar.gz /var/log/  #c建立tar包，z gzip v 要看到过程 f 保存的文件名
+date +"%Y-%m-%d"
+tar czvf /root/Desktop/`date +%F`-log.tar.gz /var/log/
+file <filename> #看文件类型
+# 解压
+tar xzvf /root/Desktop/sssss.tar.gz -C  /tmp/  #指定解压路径  
   ```
 
-  #### 十四、网络管理
+  ### 14、网络管理
 
   ```shell
-  # linux 6
-  network   
-  service NetworkManager stop
-  chkconfig NetworkManager off
-  service network start
-  chkconfig network on
-  # 查询网卡地址信息
-  ifconfig
-  ip addr show
-  vim /etc/sysconfig/network-scripts/ifcfg-eth0
-  service network restart
-  !ser
-  # 一个网卡可以有多个网卡
-  cp /etc/sysconfig/network-scripts/ifcfg-eth0  /etc/sysconfig/network-scripts/ifcfg-eth0：0
-  vim /etc/sysconfig/network-scripts/ifcfg-eth0:0
-  #  DEVICE=eth0:0
-  #  IPADDR=new ip
-  service network restart 
+# linux 6
+network   
+service NetworkManager stop
+chkconfig NetworkManager off
+service network start
+chkconfig network on
+# 查询网卡地址信息
+ifconfig
+ip addr show
+vim /etc/sysconfig/network-scripts/ifcfg-eth0
+service network restart
+!ser
+# 一个网卡可以有多个网卡
+cp /etc/sysconfig/network-scripts/ifcfg-eth0  /etc/sysconfig/network-scripts/ifcfg-eth0：0
+vim /etc/sysconfig/network-scripts/ifcfg-eth0:0
+#  DEVICE=eth0:0
+#  IPADDR=new ip
+service network restart 
   
   ```
 
@@ -705,7 +795,7 @@ stat ex01    # 文件/文件系统的详细信息显示,诸如访问时间，修
   
   ```
 
-  #### 十五、磁盘管理
+  ### 15、磁盘管理
 
   ```shell
   # 磁盘查看和分区
