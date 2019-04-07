@@ -555,66 +555,105 @@ kill -19 2978
 
 ### 11、服务与计划任务
 
-* linux 6
+#### 11.1  systemv 和 sytemd
 
-* system-v 架构
+>**system V (Linux 6):**
+>
+>* 大多数基于Linux的操作系统，使用的是System-V风格的init守护进程，换句话说，它们的启动处理由**init**进程管理，其管理功能在一定程度上继承了基于System V 的Unix操作系统。该守护进程根据运行级别(run level)的原则，系统的运行级别表示当前计算机的状态。
+>* runlevel0:  系统停机状态，系统默认运行级别不能设置为0，否则不能正常启动，机器关闭。 
+>  runlevel1:  单用户工作状态，root权限，用于系统维护，禁止远程登陆，就像Windows下的安全模式登录。 
+>  runlevel2:  多用户状态，没有NFS支持。 
+>  runlevel3:  完整的多用户模式，有NFS，登陆后进入控制台命令行模式。 
+>  runlevel4:  系统保留。 
+>  runlevel5:  登陆后进入图形GUI模式。 
+>  runlevel6:  系统正常关闭并重启，默认运行级别不能设为6，否则不能正常启动。运行init 6机器就会重启。标准的Linux运行级别为3或5
+>* system V主要用 chkconfig, sevice,  update-rc.d 命令管理服务
+>* /etc/inittab
+>
+>**systemd(Linux 7)**
+>
+>* 守护进程是systemd。
+>* 在systemd的管理体系里面，以前的运行级别（runlevel）的概念被新的运行目标（target）所取代。target（相当于以前的默认运行级别）是通过软链来实现。如： 
+>  `ln -s /lib/systemd/system/runlevel3.target /etc/systemd/system/default.target `
+>* /etc/inittab 文件被废弃。
+>* systemd使用systemctl命令管理。
 
-* 第一个进程是init
+#### 11.2  Linux 6 操作：
 
-* service httpd start  stop  restart  status
+* 使用 pstree 查看进程。`yum -y install psmisc`
 
-* vim /etc/httpd/conf/httpd.conf
+```shell
+# 修改默认启动模式：
+vim /etc/inittab  
+id:5:initdefault
 
-* vim /etc/inittab,id:5:initdefault:  
+# 检查开机自启动项目
+chkconfig --list
+# 设置某个进程开机自启动或者关闭
+chkconfig httpd on
+chkconfig iptables off
 
-* init 6  重启去了
+# 重启机器或者从字符模式启动到图形模式
+init 6   # 重启
+init 5   # 从字符模式启动到图形模式
+```
 
-* chkconfig --list
+#### 11.3 Linux 7 操作
 
-* chkconfig httpd on    开机启动
+* 使用pstree 查看进程。`yum -y install psmisc`
 
-* chkconfig iptables off   
+```shell
+systemctl enable httpd.service   # 随机自启动
+systemctl  mask httpd.service    # 屏蔽这个服务
+systemctl mask firewalld.service  # 屏蔽防火墙，或者 vim /etc/selinux/config 然后 selinux=disabled
+systemctl unmask httpd.service   # 解除屏蔽
 
-* linux 7
+systemctl disable firewalld.service  # 禁止这个服务
 
-* pstree    /   systemd
+systemctl status xxx.service   # 检查某个服务状态
+systemctl set-default runlevel3.target  # 设置缺省模式为命令行模式
+systemctl  get-default  # 获取当前启动模式
+systemctl list-units   # 列出所有正在运行的单元
 
-* systemctl  start httpd
+systemctl start xxx.service  # 启动某服务
+systemctl stop xxx.service  # 停止某服务
+systemctl restart xxx.service # 重启某服务
+systemctl kill  crond   # 杀死服务
+```
 
-* !yum 表示执行上一次的yum命令
+#### 11.4 计划任务管理
 
-* ![](\pic\1554028346756.png)
+* 一次性任务 at
 
-  这个disabled 表示不随机启动
-
-* systemctl enable httpd.service   随机启动
-
-* systemctl  mask httpd.service   不允许启动这个服务
-
-* systemctl unmask httpd.service
-
-* systemctl set-default runlevel3.target
-
-* systemctl  get-default
-
-* systemctl list-unit-files
-
-* systemctl mask firewalld.service
-
-* vim  /etc/selinux/config   selinux=disabled
-
-* systemctl  status atd.service    一次性计划任务
-
-* at  1 am  monday
-
+  ```shell
+  # atd服务管理，Linux 6
+  service atd start    # 启动服务
+  service atd  stop    # 关闭服务
+  service atd restart  # 重启服务
+  service atd reload   # 重新载入配置
+  service atd status   # 查看服务状态 
+  # atd服务管理，Linux 7
+  systemctl  start atd.service  
+  # 例子：
+  at 2:05 tomorrow   # 在命令行下敲入命令后，回车进入at编辑模式
+  at> /home/kyle/do_job   # 输入要执行的脚本或命令
+  at> ctrl+d
+  # 关于时间的说明：
+  at now + 5 minutes     任务在5分钟后运行
+  at now + 1 hour        任务在1小时后运行
+  at now + 3 days        任务在3天后运行
+  at now + 2 weeks       任务在两周后运行
+  at midnight            任务在午夜运行
+  at 10:30pm             任务在晚上10点30分
+  at 23:59 12/31/2018　  任务在2018年12月31号23点59分运行
+  
+  # 查询at任务：atq
+  # 删除at任务：atrm
   ```
-  > /usr/bin/touch  /root/Desktop/qin
-  > /usr/bin/systemctl restart httpd
-  ```
 
-* atq   查询定任务
+  
 
-* atrm 删除定时任务
+* 
 
 * crond  周期任务
 
