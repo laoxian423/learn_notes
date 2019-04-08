@@ -106,7 +106,8 @@
 > # 查看当前身份
 > whoami
 > 
-> 
+> # 查看历史命令
+> history
 > ```
 
 ### 4、用户和组管理
@@ -311,11 +312,11 @@ locate passwd  # 第一次使用时需要执行 updatedb，后期不用做
 find  /  -name  passwd  # 按名字查找，前面指定从哪里查找
 find / -name *passwd*   # 通配符查找
 find /etc/ -type d    # 按文件类型查找，d 找文件夹
-find / -user qin  # 按用户找
+find / -user stud01  # 按用户找
 find / -size +1M  # 按大小找
 find / -perm 777  # 按权限找
 find /etc/ -type f -and -size +1M  # 支持 .and  .or  等逻辑指令
-find / -user qin -exec cp -rf {}  /root/Desktop/qin/  \;  # 支持命令嵌套
+find / -usstud01 -exec cp -rf {}  /root/Desktop/stud01/  \;  # 支持命令嵌套
    
 # 文件里找内容
 grep   root  /etc/passwd
@@ -505,8 +506,8 @@ rpm  -qf  /usr/bin/touch
   # 备份/etc/yum.repos.d/的所有文件，然后清空这个目录。
   vim /etc/yum.repos.d/test.repo
   # -----------------------------------
-  [qin]
-  name=qin
+  [stud01]
+  nastud01
   baseurl=file:///mnt/cdrom
   enabled=1
   gpgcheck=0
@@ -974,98 +975,108 @@ ip link
 
 ####  13.2 LVM 磁盘卷的管理
 
-
-
-
-
   ```shell
-  # 磁盘卷
-  # 逻辑卷，redhat，lvm，
-  # sda1 sda2 >>>>>>  pv >>>>>> vg  >>>>>>> lv
-  准备7个分区
-  5  6  7 >>>>> 8e  转换成lvm
-  partprobe
-  pvcreate /dev/sda5{5..7}
-  pvs
-  pvdisplay
-  # 合成一个vg
-  vgcreate  qinvg /dev/sda5 /dev/sda6
-  vgs
-  lvcreate -L 500M  qingvg -n qinlv
-  lvs
-  lvdisplay
-  # 删除
-  lvremove /dev/qingvg/qinlv
-  vgremove qingvg
-  pvremove /dev/sda5 
+ Linux的LVM非常强大，可以在生产运行系统上面直接在线扩展硬盘分区，可以把分区umount以后收缩分区大小，还可以在系统运行过程中把一个分区从一块硬盘搬到另一块硬盘上面去等等，简直就像变魔术，而且这一切都可以在一个繁忙运行的系统上面直接操作，不会对你的系统运行产生任何影响，很安全。
+# 磁盘卷
+# 逻辑卷，redhat，lvm，
+# sda1 sda2 >>>>>>  pv >>>>>> vg  >>>>>>> lv
+# fdisk /dev/sdb
+#  5  6  7 >>>>> 8e  转换成lvm
+partprobe
+# 第一步：创建pv ,pvcreate
+pvcreate /dev/sda5{5..7}
+pvs
+pvdisplay
+# 第二步：创建vg ,vgcreate,合成一个vg
+vgcreate  stud01vg /dev/sda5 /dev/sda6
+vgs
+# 第三步：创建lv ,lvcreate
+lvcreate -L 500M  stud01vg -n stud01lv
+lvs
+lvdisplay
+# 删除
+lvremove /dev/stud01vg/stud01lv
+vgremove stud01vg
+pvremove /dev/sda5 
   ```
 
   ```shell
   # 在线扩容
   pvcreate /dev/sda{5..7}
-  vgcreate -s 32M qinvg  /dev/sda5 /dev/sda6
-  lvcreate -L 1G qinvg -n qinlv
+  vgcreate -s 32M stud01vg  /dev/sda5 /dev/sda6
+  lvcreate -L 1G stud01vg -n stud01lv
   # 格式化
-  mkfs.ext4 /dev/qinvg/qinlv
-  mkdir /mnt/qinlv
-  mount /dev/qinvg/qinlv  /mnt/qinlv/
+  mkfs.ext4 /dev/stud01vg/stud01lv
+  mkdir /mnt/stud01lv
+  mount /dev/stud01vg/stud01lv  /mnt/stud01lv/
   # 写入fstab
   blkid
-  <fstab>
-  UUID="22222"  /mnt/qinlv  ext4 defaults  0 0 
+  # vim /etc/fstab
+  UUID="22222"  /mnt/stud01lv  ext4 defaults  0 0 
+  # mount
   mount -a
-  
   df -Th
   # 扩充
-  lvresize  
-  vgextend qinvg /dev/sda7  # 把sda7加入到qinvg中
+  lvresize -L +5G /dev/stud01vg/stud01lv  
+  # 新建一个分区 sda7 加入
+  vgextend stud01vg /dev/sda7  # 把sda7加入到stud01vg中
   pvs
   vgs
-  lvresize -L 2G /dev/qinvg/qinlv 
+  lvresize -L 2G /dev/stud01vg/stud01lv 
   df -Th
-  resize2fs /dev/qinvg/qinlv  # ext4
+  resize2fs /dev/stud01vg/stud01lv  # ext4
   df -Th
   
   ```
 
+#### 13.3 XFS
+
   ```shell
+  # centos 7 全面转向 xfs
   # xfs的扩容，准备分区，如sda4
-  vgcreate qinvg /dev/sda4
-  lvcreate -L 1G qinvg -n qinlv
-  mkfs.xfs /dev/qinvg/qinlv
+  1、可扩展性ext4不如XFS
+  2.Ext4的单个目录文件超过200W个后，性能下降的就比较厉害。由于Ext4 的inode 个数限制(32位数)最多只能有大概40多亿文件。而且Ext4的单个文件大小最大只能支持到16T(4K block size) 的话，这些至少对于目前来说已经是瓶颈。
+  3.XFS使用64位管理空间，文件系统规模可以达到EB级别。
+  4.如果存储的小文件多就选择xfs,其他情况下两者性能差不多。
+  
+  vgcreate stud01vg /dev/sda4
+  lvcreate -L stud01vg -n stud01lv
+  mkfs.xfs /dev/std01vg/stud01lv
   blkid
-  mkdir /mnt/qinlv
+  mkdir /mnt/stud01lv
   vim fstab
   UUID =.........
   mount -a
-  touch /mnt/qinlv/qintest
+  touch /mnt/stud01lv/stud01test
   df -Th
-  lvresize -L 2G /dev/qinvg/qinlv
+  lvresize -L 2G /dev/stud01vg/stud01lv
   df -Th
-  xfs_growfs /mont/qinlv/
+  # 在线扩容
+  xfs_growfs /mont/stud01lv/
+   
   ```
 
-  * 磁盘配额：不能随便用，要给用户限制使用
+#### 13.4  磁盘配额
 
   ```shell
   # 准备分区，sda4 ,sda5
   mkfs.ext4 /dev/sda5
   mkdir /mnt/sda5
-  setenforce 0 # 关闭SElinux，vim /etc/selinux/config
+  setenforce 0 # 关闭SElinux，vim /etc/selinux/config ，不然扩容可能会失败
   blkid
   vim /etc/fstab
   UUID=333  /mnt/sda5  ext4   defaults,usrquota，grpquota 0 0
   mount -a
-  quotacheck -cugv /mnt/sda5
+  quotacheck -cugv /mnt/sda5  # 检查磁盘的使用空间与限制
   # 在sda5中多两个文件，aquota.group   aquot.user
-  setquota -u qin 10240 20480 5 6  /mnt/sda5/   # 10M报警，20M不让用了 ,5个文件警告，6不让用
+  setquota -u boss 10240 20480 5 6  /mnt/sda5/   # 10M报警，20M不让用了 ,5个文件警告，6不让用
   # 激活规则
   quotaon -ugv /mnt/sda5/
   
   history  # 历史命令
   
   # 测试：
-  dd if=/dev/zero/ of=/mnt/sda5/1 bs=1M count=9
+  dd if=/dev/zero/ of=/mnt/sda5/1 bs=1M count=21
   ```
 
  
@@ -1112,16 +1123,16 @@ ip link
     dd  if=/dev/zero of=/dev/sda  bs=446 count=1
     # 进入光盘救援模式
     fdisk -l
-    mkdir /qin   # 在光盘上建立个目录
-    mount /dev/sda2 /qin  #把根目录挂载到qin上
-    ls -l /qin
-    cp /qin/backup/fstab /qin/etc/fstab
+    mkdir /stud1   # 在光盘上建立个目录
+    mount /dev/sda2 /stud01  #把根目录挂载到stud01上
+    ls -l /stud01
+    cp /stud01/backup/fstab /stud01/etc/fstab
     exit
     reboot
     
-    mkdir /qin
-    mount /dev/cdrom /qin/
-    rpm -ivh /qin/Packages/kernel-2.xxxxxxxx  --root=/mnt/sysimage --force
+    mkdir /stud01
+    mount /dev/cdrom /stud1/
+    rpm -ivh /stud1/Packages/kernel-2.xxxxxxxx  --root=/mnt/sysimage --force
     ls -l /mnt/sysimage/boot/
     chroot /mnt/sysimage/   #挂载到根上
     grub-install /dev/sda   #恢复grub
@@ -1130,7 +1141,7 @@ ip link
     --------------------------
     default=0
     timeout=3
-    title  qin
+    title  stud01
     kernel /vmlinuz=2.6.32-642.e16.x86.64 ro root=/dev/sda2
     initrd /initramfs-2.6.32-642.e16.x86.64.img
     --------------------------------------
