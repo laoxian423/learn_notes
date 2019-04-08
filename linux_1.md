@@ -1,5 +1,5 @@
        1991年10月5日，还在上大学的Linus在一次UNIX实验后，对UNIX极度不满，决定自己写一个最好用操作系统，随后将第一个Linux 内核版本放到GNU。
-       GNU  自由软件基金会，由当时被成为第一黑客的richard stallman创建
+       （GNU  自由软件基金会，由当时被成为第一黑客的richard stallman创建）
 ### 1、linux 常见版本：
 
 * RedHat ：RHEL ，使用最广，全球最大。培训课程设计的最好。
@@ -18,19 +18,20 @@
 >
 > * 网易：http://mirrors.163.com/
 >
->   注：everythin 版本，包含所有的RPM和源码包。
+> 注：everythin 版本，包含所有的RPM和源码包。
 >
 > ```shell
 > # 部署虚拟机实验环境，最好虚拟两台，一台安装centos 6 ,一台安装centos 7,6 和 7有一部分系统管理不同，目前6和7是企业中使用最广的版本。其中6.8被称为6里面的终极稳定版。
 > # 安装过程比较简单，只需注意一下几点：
->   1、无关硬件都去掉，比如声卡、打印机等
->   2、在安装配置中不要启用SELinux,后期学习过以后再考虑启动
->   3、KDUMP 为系统崩溃转存功能，可关闭。
->   4、硬盘最好分区，不要一股脑分到一个区上，不利于后期实验，下面是建议：
->       /boot    启动相关的文件，还有内核，分配200M即可
->       swap     如果内存<8G ,就分配两倍内存的空间。如果内存很大比如256G，这个分区
->                不用过大，没有必要。
->       /        剩下的都可以给根。
+> 1、无关硬件都去掉，比如声卡、打印机等
+> 2、在安装配置中不要启用SELinux,后期学习过以后再考虑启动
+> 3、KDUMP 为系统崩溃转存功能，可关闭。
+> 4、硬盘最好分区，不要一股脑分到一个区上，不利于后期实验，下面是建议：
+>    /boot    启动相关的文件，还有内核，分配200M即可
+>    swap     如果内存<8G ,就分配两倍内存的空间。如果内存很大比如256G，这个分区
+>             不用过大，没有必要。
+>    /        剩下的都可以给根。
+> # 安装完毕后，对两台虚拟机建立快照，防止后期实验系统崩溃。
 > ```
 >
 > 
@@ -96,10 +97,16 @@
 > # 查看命令别名
 > alias
 > 
-> # 查找文件位置：
-> which rm   
-> find 
-> whereis 
+> # 重复上一次的某个命令
+> !cp
+> 
+> # 查看当前登陆用户
+> who
+> 
+> # 查看当前身份
+> whoami
+> 
+> 
 > ```
 
 ### 4、用户和组管理
@@ -292,6 +299,41 @@ setfacl -b /home/test/a
   # 创建硬链接
   ln /etc/passwd ./passwd3  # ls -l观察一下，属性后面的数字会加1,有多硬链接就加多少  
   ```
+
+#### 5.4、文件查找、压缩的命令
+
+```shell
+# 文件查找命令
+which rm
+whereis  touch
+locate passwd  # 第一次使用时需要执行 updatedb，后期不用做
+# find 命令
+find  /  -name  passwd  # 按名字查找，前面指定从哪里查找
+find / -name *passwd*   # 通配符查找
+find /etc/ -type d    # 按文件类型查找，d 找文件夹
+find / -user qin  # 按用户找
+find / -size +1M  # 按大小找
+find / -perm 777  # 按权限找
+find /etc/ -type f -and -size +1M  # 支持 .and  .or  等逻辑指令
+find / -user qin -exec cp -rf {}  /root/Desktop/qin/  \;  # 支持命令嵌套
+   
+# 文件里找内容
+grep   root  /etc/passwd
+grep -i ROOT /etc/passwd  #忽略大小写
+ 
+# 压缩解压  gzip  bzip2 
+# 通过打包程序 tar 实现压缩和解压缩
+tar czvf log.tar.gz /var/log/  #c建立tar包，z gzip v 要看到过程 f 保存的文件名
+tar czvf /root/Desktop/`date +%F`-log.tar.gz /var/log/
+
+# 如果不清楚文件的压缩类型，可以用file查看
+file <filename> #看文件类型
+
+# 解压
+tar xzvf /root/Desktop/sssss.tar.gz -C  /tmp/  #指定解压路径  
+```
+
+
 
 ### 6、目录管理：
 
@@ -551,15 +593,30 @@ kill -19 2978
 
 ```
 
+```shell
+# 其他系统信息查看命令
+# 查看CPU信息
+cat /proc/cpuinfo
+# 查看板卡信息或者敲入命令 lspci：
+cat /proc/pci
+lspci |grep Ethernet # 查看网卡型号
+# 查看内存信息
+cat /proc/meminfo
+#查看USB设备： 
+cat /proc/bus/usb/devices
+# 查看各设备的中断请求(IRQ):
+cat /proc/interrupts
+```
+
 * `dd if=/dev/zero of=/dev/null bs=1M count=10000000000000`  给CPU施加压力
 
 ### 11、服务与计划任务
 
 #### 11.1  systemv 和 sytemd
 
->**system V (Linux 6):**
+>**system V (Centos 6):**
 >
->* 大多数基于Linux的操作系统，使用的是System-V风格的init守护进程，换句话说，它们的启动处理由**init**进程管理，其管理功能在一定程度上继承了基于System V 的Unix操作系统。该守护进程根据运行级别(run level)的原则，系统的运行级别表示当前计算机的状态。
+>* 大多数基于 linux 的操作系统，使用的是System-V风格的init守护进程，换句话说，它们的启动处理由**init**进程管理，其管理功能在一定程度上继承了基于System V 的Unix操作系统。该守护进程根据运行级别(run level)的原则，系统的运行级别表示当前计算机的状态。
 >* runlevel0:  系统停机状态，系统默认运行级别不能设置为0，否则不能正常启动，机器关闭。 
 >  runlevel1:  单用户工作状态，root权限，用于系统维护，禁止远程登陆，就像Windows下的安全模式登录。 
 >  runlevel2:  多用户状态，没有NFS支持。 
@@ -570,7 +627,7 @@ kill -19 2978
 >* system V主要用 chkconfig, sevice,  update-rc.d 命令管理服务
 >* /etc/inittab
 >
->**systemd(Linux 7)**
+>**systemd(Centos 7)**
 >
 >* 守护进程是systemd。
 >* 在systemd的管理体系里面，以前的运行级别（runlevel）的概念被新的运行目标（target）所取代。target（相当于以前的默认运行级别）是通过软链来实现。如： 
@@ -578,7 +635,7 @@ kill -19 2978
 >* /etc/inittab 文件被废弃。
 >* systemd使用systemctl命令管理。
 
-#### 11.2  Linux 6 操作：
+#### 11.2  Centos 6 操作：
 
 * 使用 pstree 查看进程。`yum -y install psmisc`
 
@@ -598,7 +655,7 @@ init 6   # 重启
 init 5   # 从字符模式启动到图形模式
 ```
 
-#### 11.3 Linux 7 操作
+#### 11.3 Centos 7 操作
 
 * 使用pstree 查看进程。`yum -y install psmisc`
 
@@ -626,13 +683,13 @@ systemctl kill  crond   # 杀死服务
 * 一次性任务 at
 
   ```shell
-  # atd服务管理，Linux 6
+  # atd服务管理，Centos 6
   service atd start    # 启动服务
   service atd  stop    # 关闭服务
   service atd restart  # 重启服务
   service atd reload   # 重新载入配置
   service atd status   # 查看服务状态 
-  # atd服务管理，Linux 7
+  # atd服务管理Centosx 7
   systemctl  start atd.service  
   # 例子：
   at 2:05 tomorrow   # 在命令行下敲入命令后，回车进入at编辑模式
@@ -653,217 +710,273 @@ systemctl kill  crond   # 杀死服务
 
   
 
-* 
+* 周期任务 crontab
 
-* crond  周期任务
+  1. Centos  6 下 
 
-* crontab   -e -u root
-
-  ```
-  # 分时日月周
-  30  2 * * 1,3,5  /usr/bin/touch /root/Desktop/bing 
-  30 2 * * 1 /qin.sh
-  - 几号到几号
-  1,3,5  每周1,3,5
-  */2  每隔两天
-  ```
-
-* vim  /etc/cron.deny     把用户名写进去
-
-### 12、启动流程和故障恢复
-
-* linux  6
-
-![](\pic\1554035939501.png)
-
-* du  -sh    /boot/grub/
-
-* /boot/grub/grub.conf
-
-  ```
-  default=0   从第一个title 启动
+  ```shell
+  # 安装 crontab 
+  yum install crontabs
+  
+  # 管理服务:
+  service crond start   # 启动服务
+  service crond stop    # 关闭服务
+  service crond restart # 重启服务
+  service crond reload  # 重新载入配置
+  service crond status  # 查看crontab服务状态
+  
+  # 开机自启动管理，或者使用 ntsysv 管理随机启动项
+  chkconfig crond on  
+  chkconfig crond off
+  
+  # 设置周期任务：
+  #   第一种方法 crontab -e ,也可指定某用户 -u root 然后手动编辑，第二种 vi /etc/crontab 手动编辑
+  # 任务格式：Minute Hour Day Month DayofWeek CommandPath
+  # Minute：每个小时的第几分钟执行该任务；取值范围0-59
+  # Hour：每天几点执行该任务；取值范围0-23
+  # Day：每月的第几天执行该任务；取值范围1-31
+  # Month：每年的第几个月执行该任务；取值范围1-12
+  # DayOfWeek：每周的第几天执行该任务；取值范围0-6，0表示周末
+  # CommandPath：指定要执行的程序路径
+  
+  # 几个例子
+  Minute Hour Day Month DayofWeek CommandPath
+  30 21 * * * /etc/init.d/nginx restart             # 每晚的21:30重启 nginx。
+  45 4 1,10,22 * * /etc/init.d/nginx restart        # 每月1、10、22日的4:45重启nginx。
+  10 1 * * 6,0 /etc/init.d/nginx restart            # 每周六、周日的1:10重启nginx。
+  0,30 18-23 * * * /etc/init.d/nginx restart        # 每天18:00至23:00之间每隔30分钟重启nginx。
+  0 23 * * 6 /etc/init.d/nginx restart              # 每星期六的11:00 pm重启nginx。
+  * */1 * * * /etc/init.d/nginx restart             # 每一小时重启nginx
+  * 23-7/1 * * * /etc/init.d/nginx restart          # 晚上11点到早上7点之间，每隔一小时重启nginx
+  0 11 4 * mon-wed /etc/init.d/nginx restart        # 每月的4号与每周一到周三的11点重启nginx
+  0 4 1 jan * /etc/init.d/nginx restart             # 一月一号的4点重启nginx
+  */30 * * * * /usr/sbin/ntpdate 210.72.145.20      # 每半小时同步一下时间
+  
+  # * ：表示任意的时刻；如小时位 * 则表示每个小时
+  # n ：表示特定的时刻；如小时位 5 就表示5点
+  # n,m ：表示特定的几个时刻；如小时位 1,10 就表示1时和10时
+  # n－m ：表示一个时间段；如小时位 1-5 就表示1到5点
+  # */n : 表示每隔多少个时间单位执行一次；如小时位 */1 就表示每隔1个小时执行一次命令，也可以写成 1-23/1
   
   ```
 
-* blkid    查询uuid
-
-* 单用户模式破解密码
-
-* getenforce
-
-* setenforce 0  暂时关闭
-
-* passwd root
-
-* vim  /etc/rc.d/rc.sysinit
-
-* vim /etc/rc.d/rc脚本   k   s    用来决定开机是否启动
-
-* 删除grub文件后的恢复
-
-  ![](\pic\1554039459655.png)
-
-  * vim  /etc/fstab
-
-  * 系统恢复实验
-
-    ```shell
-    rm -rm /boot/*
-    rm -f /etc/fstab
-    rm -f /etc/inittab
-    rm -f /etc/rc.d/rc.sysinit
-    rm -f /etc/rc.d/rc.local
-    dd  if=/dev/zero of=/dev/sda  bs=446 count=1
-    # 进入光盘救援模式
-    fdisk -l
-    mkdir /qin   # 在光盘上建立个目录
-    mount /dev/sda2 /qin  #把根目录挂载到qin上
-    ls -l /qin
-    cp /qin/backup/fstab /qin/etc/fstab
-    exit
-    reboot
-    
-    mkdir /qin
-    mount /dev/cdrom /qin/
-    rpm -ivh /qin/Packages/kernel-2.xxxxxxxx  --root=/mnt/sysimage --force
-    ls -l /mnt/sysimage/boot/
-    chroot /mnt/sysimage/   #挂载到根上
-    grub-install /dev/sda   #恢复grub
-    ls -l /boot/grub/
-    vim /boot/grup/grub.conf
-    --------------------------
-    default=0
-    timeout=3
-    title  qin
-    kernel /vmlinuz=2.6.32-642.e16.x86.64 ro root=/dev/sda2
-    initrd /initramfs-2.6.32-642.e16.x86.64.img
-    --------------------------------------
-    rpm -qf /etc/inittab
-    rpm -qf /etc/rc.d/rc.sysinit
-    rpm -qf /etc/rc.d/rc.local
-    mount /dev/cdrom /mnt/cdrom
-    rpm -ivh /mnt/cdrom/Packages/initscripts-9.03xxxxxxx.rpm --force
-    
-    ```
-
-  * linux 7
-
-  * ll /boot/
-
-  * vmlinuz-0-rescue......
-
-  * cd /boot/grub2/
-
-  * /etc/grub.d/*
-
-
-
-### 13、系统文件查找与文件管理
+  2. Centos  7 下：
 
   ```shell
-which rm
-whereis  touch
-locate passwd  不能直接用，updatedb，后期不用做
-find  /  -name  passwd
-find / -name *passwd*
-find /etc/ -type d    #找文件夹
-find / -type b  #按文件类型找
-find / -user qin #按用户找
-find / -size +1M 
-find / -perm 777
-find /etc/ -type f -and -size +1M 
-find / -user qin -exec cp -rf {}  /root/Desktop/qin/  \;
-   
-# 文件里找内容
-grep   root  /etc/passwd
-grep -i ROOT /etc/passwd  #忽略大小写
- 
-# 压缩解压  gzip  bzip2 
-# tar 打包
-/var/log
-tar czvf log.tar.gz /var/log/  #c建立tar包，z gzip v 要看到过程 f 保存的文件名
-date +"%Y-%m-%d"
-tar czvf /root/Desktop/`date +%F`-log.tar.gz /var/log/
-file <filename> #看文件类型
-# 解压
-tar xzvf /root/Desktop/sssss.tar.gz -C  /tmp/  #指定解压路径  
+  # 安装 crontab
+  yum -y install vixie-cron
+  yum -y install crontabs
+  
+  # 管理服务：
+  systemctl start crond.service
+  systemctl stop crond.service
+  systemctl restart crond.service
+  systemctl status crond.service
+  # 开机自启动
+  systemctl enable crond.service
+  
+  # 其他和 centos 6 下的操作相同
   ```
 
-  ### 14、网络管理
+  * Centos默认所有用户都可以使用crond，如果要禁止某个用户使用，可以编辑 /etc/cron.deny,将禁止的用户写进去。
+
+  ### 12、网络管理
+
+#### 12.1 网卡管理
 
   ```shell
-# linux 6
-network   
+# Centos 6
+# 为了规范 systemV 和 systemd ，一般企业将 Centos 6 中的 systemd 关闭，只保留systemV：
 service NetworkManager stop
 chkconfig NetworkManager off
 service network start
 chkconfig network on
+
 # 查询网卡地址信息
 ifconfig
 ip addr show
+
+# 编辑网卡配置文件，Centos 6 和 Centos 7 网卡命名规则不同，eth? 是 Centos 6 的格式，也可以自己起名。
+# 新加网卡，系统不会自动创建这些文件，需要手动创建编辑。
 vim /etc/sysconfig/network-scripts/ifcfg-eth0
-service network restart
-!ser
-# 一个网卡可以有多个网卡
-cp /etc/sysconfig/network-scripts/ifcfg-eth0  /etc/sysconfig/network-scripts/ifcfg-eth0：0
-vim /etc/sysconfig/network-scripts/ifcfg-eth0:0
-#  DEVICE=eth0:0
-#  IPADDR=new ip
+# 网卡配置文件参数说明：
+DEVICE=eth0    # 网卡逻辑设备名
+HWADDr=00:0C:29:CC:60:B2    # 以太网卡硬件地址
+TYPE=Ethernet    # 上网类型，目前基本上都是以太网
+UUID=176582f6-d198-4e4f-aab0-34ab10d1724    #通用唯一识别码
+ONBOOT=NO    # 启动时是否激活
+NM_CONTROLLED=yes # 是否通过NetWorkManager管理网卡设备
+BOOTPROTO=none    # IP启动协议，获取配置方式，有:none|static|dhcp三种方式
+IPADDR=10.0.0.8    # IP地址
+NETMASK=255.255.255.0    # 子网掩码
+GATEWAY=10.0.0.254    # 网关地址;
+DNS1=202.206.0.20    # 主DNS，这里优先于/etc/resolv.conf的配置生效
+DNS2=8.8.8.8        # 备DNS
+IPV6INIT=no    #是否支持IPV6;
+
+# 重新启动网络服务，一般调整完网络参数需要执行：
 service network restart 
-  
   ```
 
   ```shell
-  # linux 7
-  NetworkManager
-  nmcli
-  systemctl
-  systemctl mask network
-  systemctl stop network
-  systemctl start NetworkManager
-  systemctl enable NetrokManager
-  
-  en以太网  wl无线  ww  o 集成  s PCI  p usb外置网卡
-  # 取消新的网卡名计算方法。
-  vim /etc/sysconfig/grub 
-  GRUB-CMDLINE_LINUX="rhgb quiet net.isnames=0 biosdevname=0"
-  grub2-mkconfig -o /boot/grub2/grub.cfg
-  
-  要去想办法适应技术
-  
-  
+# Centos 7
+# Centos 7 下使用systemctl进行管理
+systemctl mask network
+systemctl stop network
+
+systemctl start NetworkManager
+systemctl restart NetworkManager
+systemctl stop NetworkManager
+
+systemctl enable NetrokManager
+
+# Centos 下网卡命名规范
+# 网卡名变成了类似ens33 类型的名字，这个名字是系统计算出来的。
+#  其中 en 以太网 ， wl无线 ， o 集成网卡， s 标识PCI网卡 ， p 表示usb外置网卡等等。
+# 取消新的网卡名计算方法。
+
+
+# centos 7 下的网络管理工具 nmcli （网络管理命令行工具），网卡的配置全部由这个工具完成。
+# 查看连接的设备
+nmcli connection show
+# 查看特定设备的信息
+nmcli connection show ens33
+# 查看网络设备状态
+nmcli device status
+# 给网卡配置DHCP连接
+nmcli connection add con-name "dhcp" type ethernet ifname ens33
+# 给网卡配置固定IP
+nmcli connection add con-name "static" ifname ens33 autoconnect no type ethernet ip4 192.168.1.45 gw4 192.168.1.1
+# 启动或者关闭网卡
+nmcli connection up ens33
+nmcli connection down ens33
+# 单独配置地址,还有：ipv4.dns，ipv4.gateway
+nmcli connection modify ens33 ipv4.addresses '192.168.1.44'
+# 设置网卡开机自动连接
+nmcli connection modify ens33 connection.autoconnect yes
+# 重新加载配置
+nmcli connection reload
+# 重新启动网络
+systemctl restart network.service
   ```
 
-  ### 15、磁盘管理
+
+
+#### 12.2 常用命令：
+
+* ethtool   
+
+```shell
+# 查询网卡信息
+ethtool eth0
+
+# 设置网卡速率为100M
+# 需要永久生效的话，在网卡配置文件中：ETHTOOL_OPTS="speed 100 duplex full autoneg off"
+ethtool -s eth0 speed 100 duplex full autoneg off
+
+# 查看网卡收发包情况
+ethtool -S eth0
+ifconfig -s
+```
+
+* netstat (`yum install net-tools`)
+
+```shell
+# 列出所有端口
+netstat -a
+# 列出所有监听端口
+netstat -l
+# 按照协议列出所有端口的统计信息
+netstat -s 
+# 显示tcp链接及其进程
+netstat -pt
+# 显示路由信息
+netstat -r
+# 找出程序运行的端口
+netstat -ap | grep ssh
+netstat -an | grep ':80' # 运行在80端口上的程序
+# 链接某服务端口最多的IP地址
+netstat -ntu | grep :80 | awk '{print $5}' | cut -d: -f1 | awk '{++ip[$1]} END {for(i in ip) print ip[i],"\t",i}' | sort -nr
+```
+
+* route  路由管理
+
+```shell
+# 添加一条去往192.56.76.X网络的路由，从设备eth0发送
+route add -net 192.56.76.0 netmask 255.255.255.0 dev eth0
+
+# 添加一条去往192.1.3的主机路由，网关地址是172.16.0.1,从设备eth0发出
+route add -host 192.168.1.3 gw 172.16.0.1 dev eth0
+
+# 查看路由表
+route -n
+
+```
+
+* IP 
+
+```shell
+# 显示网卡收发信息
+ip -s link
+
+# 显示网卡状态,是up 还是 down
+ip addr 
+ip link 
+```
+
+
+
+  ### 13、磁盘管理
+
+#### 13.1 磁盘管理常用命令
 
   ```shell
-  # 磁盘查看和分区
-  fdisk -l  # 分区信息
-  /dev/sda
-  df -Th   #磁盘使用情况
+  # 磁盘分区信息查看
+  fdisk -l  
+  
+  # 磁盘使用情况查看
+  df -Th   
+  
+  # 磁盘分区
   fdisk /dev/sda 
+  partprobe  # 分区表有效
+  
   # 格式化分区
   mkfs.ext4 /dev/sda5
-  # 挂载
+  
+  # 挂载新的分区
   mkdir /mnt/sda5
   mount /dev/sda5 /mnt/sda5
   # 卸载
   unmount /mnt/sda5
-  vim /etc/fstab
-  blkid  # 查看UUID
+  
+  # 编辑  /etc/fstab 使其开机有效，  blkid 命令可以设备UUID，建议使用UUID
   /dev/sda5  /mnt/sda5  ext4  defaults  0  0
-  /建议UUID                            /访问方式  /是否检测
-  # 可以在fdisk 中修改磁盘类型 t                            
-  # 创建SWAP                            
-  mkswap /dev/sda6                            
+  UUID=332ad3d3311......  /mnt/sda5  ext4  defaults  0  0                          
+  
+  # 创建SWAP ,首先用fdisk -l 分一个swap分区，或者在fdisk 中修改磁盘类型 t                         
+  mkswap /dev/sda6
+  # 配置文件/etc/fstab
   UUID=，，，，，，    swap  swap defaults 0 0 
-  swapon -s  # 查看swap分区
-  swapoff /dev/sda6 # 卸载
-  swapon -a # 挂载通过fstab
-  mount -a # 挂载fstab中所有的配置
-  # 大于2T的硬盘
+  # 查看swap分区
+  swapon -s  
+  # 卸载
+  swapoff /dev/sda6 
+  # 挂载通过fstab
+  swapon -a 
+  # 挂载fstab中所有的配置
+  mount -a 
+  
+  
+  # fdisk 只能管理小于2T的硬盘，大于2T的硬盘用gdisk
   gdisk /dev/sdb
   ```
+
+####  13.2 LVM 磁盘卷的管理
+
+
+
+
 
   ```shell
   # 磁盘卷
@@ -955,6 +1068,90 @@ service network restart
   dd if=/dev/zero/ of=/mnt/sda5/1 bs=1M count=9
   ```
 
+ 
+
+###  14、启动流程和故障恢复
+
+- Centos  6
+
+- du  -sh    /boot/grub/
+
+- /boot/grub/grub.conf
+
+  ```
+  default=0   从第一个title 启动
   
+  ```
+
+- blkid    查询uuid
+
+- 单用户模式破解密码
+
+- getenforce
+
+- setenforce 0  暂时关闭
+
+- passwd root
+
+- vim  /etc/rc.d/rc.sysinit
+
+- vim /etc/rc.d/rc脚本   k   s    用来决定开机是否启动
+
+- 删除grub文件后的恢复
+
+  - vim  /etc/fstab
+
+  - 系统恢复实验
+
+    ```shell
+    rm -rm /boot/*
+    rm -f /etc/fstab
+    rm -f /etc/inittab
+    rm -f /etc/rc.d/rc.sysinit
+    rm -f /etc/rc.d/rc.local
+    dd  if=/dev/zero of=/dev/sda  bs=446 count=1
+    # 进入光盘救援模式
+    fdisk -l
+    mkdir /qin   # 在光盘上建立个目录
+    mount /dev/sda2 /qin  #把根目录挂载到qin上
+    ls -l /qin
+    cp /qin/backup/fstab /qin/etc/fstab
+    exit
+    reboot
+    
+    mkdir /qin
+    mount /dev/cdrom /qin/
+    rpm -ivh /qin/Packages/kernel-2.xxxxxxxx  --root=/mnt/sysimage --force
+    ls -l /mnt/sysimage/boot/
+    chroot /mnt/sysimage/   #挂载到根上
+    grub-install /dev/sda   #恢复grub
+    ls -l /boot/grub/
+    vim /boot/grup/grub.conf
+    --------------------------
+    default=0
+    timeout=3
+    title  qin
+    kernel /vmlinuz=2.6.32-642.e16.x86.64 ro root=/dev/sda2
+    initrd /initramfs-2.6.32-642.e16.x86.64.img
+    --------------------------------------
+    rpm -qf /etc/inittab
+    rpm -qf /etc/rc.d/rc.sysinit
+    rpm -qf /etc/rc.d/rc.local
+    mount /dev/cdrom /mnt/cdrom
+    rpm -ivh /mnt/cdrom/Packages/initscripts-9.03xxxxxxx.rpm --force
+    
+    ```
+
+  - Centos 7
+
+  - ll /boot/
+
+  - vmlinuz-0-rescue......
+
+  - cd /boot/grub2/
+
+  - /etc/grub.d/*
+
+
 
 
