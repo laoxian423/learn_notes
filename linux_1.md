@@ -108,6 +108,11 @@
 > 
 > # 查看历史命令
 > history
+> 
+> # 查看防火墙SELinux 状态
+> getenforce  # 可能返回结果有三种：Enforcing、Permissive 和 Disabled。Disabled 代表 SELinux 被禁用，Permissive 代表仅记录安全警告但不阻止可疑行为，Enforcing 代表记录警告且阻止可疑行为。
+> setenforce 0 # 暂时关闭
+> 
 > ```
 
 ### 4、用户和组管理
@@ -365,7 +370,7 @@ tar xzvf /root/Desktop/sssss.tar.gz -C  /tmp/  #指定解压路径
 # linux 下一切都是文件，所以针对文件的命令都适用于目录
 ```
 
-### 7、系统交互工具与编辑器 vim
+### 7、 vi 和vim  编辑器
 
 #### 7.1 vim 常用键盘操作
 
@@ -1079,90 +1084,134 @@ pvremove /dev/sda5
   dd if=/dev/zero/ of=/mnt/sda5/1 bs=1M count=21
   ```
 
- 
+####  13.5 文件系统性能分析
+
+https://www.cnblogs.com/sbaicl/p/4075679.html
+
+> 文件系统EXT3，EXT4和XFS的区别： 
+> 1. EXT3 
+>   （1）最多只能支持32TB的文件系统和2TB的文件，实际只能容纳2TB的文件系统和16GB的文件 
+>   （2）Ext3目前只支持32000个子目录 
+>   （3）Ext3文件系统使用32位空间记录块数量和i-节点数量 
+>   （4）当数据写入到Ext3文件系统中时，Ext3的数据块分配器每次只能分配一个4KB的块 
+> 2. EXT4 
+>   EXT4是Linux系统下的日志文件系统，是EXT3文件系统的后继版本。 
+>   （1）Ext4的文件系统容量达到1EB，而文件容量则达到16TB 
+>   （2）理论上支持无限数量的子目录 
+>   （3）Ext4文件系统使用64位空间记录块数量和i-节点数量 
+>   （4）Ext4的多块分配器支持一次调用分配多个数据块 
+> 3. XFS 
+>   （1）根据所记录的日志在很短的时间内迅速恢复磁盘文件内容 
+>   （2）采用优化算法，日志记录对整体文件操作影响非常小 
+>   （3） 是一个全64-bit的文件系统，它可以支持上百万T字节的存储空间 
+>   （4）能以接近裸设备I/O的性能存储数据
 
 ###  14、启动流程和故障恢复
 
-- Centos  6
+#### 14.1 Linux 启动流程
 
-- du  -sh    /boot/grub/
+![](pic\1554785210197.png)
 
-- /boot/grub/grub.conf
+![](pic\1554785324229.png)
 
-  ```
-  default=0   从第一个title 启动
+![](pic\1554785399392.png)
+
+#### 14.2 Centos  6 故障恢复
+
+##### 14.1.1 /boot/grub/grub.conf  详解
+
+```shell
+default=0   # 从第一个title 启动
+timeout=5   # 等待5秒，-1 为一直等待
+splashimage=(hd0,0)/gnjb/splash.xpm.gz  # 用来指定 GRUB 启动时的背景图像的保存位置。
+hiddenmenu  # 隐藏菜单，要看到菜单就注释掉
+title CentOS 6 (2.6.32-754.el6.x86_64)   #  菜单名称
+kernel /vmlinuz-2.6.32-279.el6.i686 ro root=UUID=b9a7a1a8-767f-4a87-8a2b-a535edb362c9 rd_NO_LUKS KEYBOARDTYPE=pc KEYTABLE=us rd_NO_MD crashkernel=auto LANG=zh_CN.UTF-8 rd_NO_LVM rd_NO_DM rhgb quiet
+initrd /initramfs-2.6.32-754.el6.x86_64.img
+# /vmlinuz-2.6.32-279.el6.i686 内核位置，/ 指的是 boot 分区
+# ro 只读打开内核
+# root=UUID=b9a7a1a8-767f-4a87 根文件系统的所在位置
+# rd_NO_LUKS  禁用LUKS（磁盘加密） ，这四个禁用是为了加速系统启动
+# rd_NO_MD    禁用软RAID
+# rd_NO_DM    禁用硬RAID
+# rd_NO_LVM   禁用LVM
+# KEYBOARDTYPE=pc KEYTABLE=us：键盘类型。
+# crashkernel=auto：自动为crashkernel预留内存。
+# LANG=zh_CN.UTF-8：语言环境。
+# rhgb：(redhatgraphics boot)用图片来代替启动过程中的文字信息。启动完成之后可以使用dmesg命令来查看这些文字信息。
+# quiet：隐藏启动信息，只显示重要信息。
+# initrd /initramfs-2.6.32-754.el6.x86_64.img：指定了initramfs虚拟文件系统镜像文件的所在位置。
+```
+
+<font size="4" color="yellow">注：在手动恢复这个文件时，最重要的三个字段是init (h0,0),kernel  , initrd 其他都可以省略</font> 
+
+##### 14.1.2 单用户模式下修改root密码
+
+* 必须在主机的控制台上，不能远程操作
+
+```shell
+# 1、重启电脑，进入菜单
+# 2、在菜单中按 a 键
+# 3、在行末输入 1 ，回车
+# 4、passwd root
+# 5、输入新密码OK
+```
+
+##### 14.1.3 系统恢复实验：
+
+- 先用 getenforce  查看 selinux 状态 , 如果是Enforcing，则用`setenforce 0`暂时关闭，否则实验容易失败。
+- <font color="red" >grub文件损害后的手动恢复</font>(记得备份好grun.conf或者做好虚拟机快照)
+
+```shell
+# 1、删除/boot/grub/grub.conf
+# 2、重新启动虚拟机
+# 3、重启后系统会停留在 grub> 提示符下，手动输入：
+root (hd0,0)  # 回车
+kernel /vmlinuz-2.6.32-754.el6.x86_64 ro  # tab 补齐，回车
+initrd /initramfs-2.6.32-754.el6.x86_64.img # 回车
+boot #回车
+
+```
+
+- vim  /etc/fstab
+
+- 系统恢复实验
+
+  ```shell
+  rm -rm /boot/*
+  rm -f /etc/fstab
+  rm -f /etc/inittab
+  rm -f /etc/rc.d/rc.sysinit
+  rm -f /etc/rc.d/rc.local
+  dd  if=/dev/zero of=/dev/sda  bs=446 count=1
+  # 进入光盘救援模式
+  fdisk -l
+  mkdir /stud01   # 在光盘上建立个目录
+  mount /dev/sda2 /stud01  #把根目录挂载到stud01上
+  ls -l /stud01
+  cp /stud01/backup/fstab /stud01/etc/fstab
+  exit
+  reboot
+  
+  mkdir /stud01
+  mount /dev/cdrom /stud1/
+  rpm -ivh /stud1/Packages/kernel-2.xxxxxxxx  --root=/mnt/sysimage --force
+  ls -l /mnt/sysimage/boot/
+  chroot /mnt/sysimage/   #挂载到根上
+  grub-install /dev/sda   #恢复grub
+  ls -l /boot/grub/
+  vim /boot/grup/grub.conf
+  --------------------------
+  default=0
+  timeout=3
+  title  stud01
+  kernel /vmlinuz=2.6.32-642.e16.x86.64 ro root=/dev/sda2
+  initrd /initramfs-2.6.32-642.e16.x86.64.img
+  --------------------------------------
+  rpm -qf /etc/inittab
+  rpm -qf /etc/rc.d/rc.sysinit
+  rpm -qf /etc/rc.d/rc.local
+  mount /dev/cdrom /mnt/cdrom
+  rpm -ivh /mnt/cdrom/Packages/initscripts-9.03xxxxxxx.rpm --force
   
   ```
-
-- blkid    查询uuid
-
-- 单用户模式破解密码
-
-- getenforce
-
-- setenforce 0  暂时关闭
-
-- passwd root
-
-- vim  /etc/rc.d/rc.sysinit
-
-- vim /etc/rc.d/rc脚本   k   s    用来决定开机是否启动
-
-- 删除grub文件后的恢复
-
-  - vim  /etc/fstab
-
-  - 系统恢复实验
-
-    ```shell
-    rm -rm /boot/*
-    rm -f /etc/fstab
-    rm -f /etc/inittab
-    rm -f /etc/rc.d/rc.sysinit
-    rm -f /etc/rc.d/rc.local
-    dd  if=/dev/zero of=/dev/sda  bs=446 count=1
-    # 进入光盘救援模式
-    fdisk -l
-    mkdir /stud1   # 在光盘上建立个目录
-    mount /dev/sda2 /stud01  #把根目录挂载到stud01上
-    ls -l /stud01
-    cp /stud01/backup/fstab /stud01/etc/fstab
-    exit
-    reboot
-    
-    mkdir /stud01
-    mount /dev/cdrom /stud1/
-    rpm -ivh /stud1/Packages/kernel-2.xxxxxxxx  --root=/mnt/sysimage --force
-    ls -l /mnt/sysimage/boot/
-    chroot /mnt/sysimage/   #挂载到根上
-    grub-install /dev/sda   #恢复grub
-    ls -l /boot/grub/
-    vim /boot/grup/grub.conf
-    --------------------------
-    default=0
-    timeout=3
-    title  stud01
-    kernel /vmlinuz=2.6.32-642.e16.x86.64 ro root=/dev/sda2
-    initrd /initramfs-2.6.32-642.e16.x86.64.img
-    --------------------------------------
-    rpm -qf /etc/inittab
-    rpm -qf /etc/rc.d/rc.sysinit
-    rpm -qf /etc/rc.d/rc.local
-    mount /dev/cdrom /mnt/cdrom
-    rpm -ivh /mnt/cdrom/Packages/initscripts-9.03xxxxxxx.rpm --force
-    
-    ```
-
-  - Centos 7
-
-  - ll /boot/
-
-  - vmlinuz-0-rescue......
-
-  - cd /boot/grub2/
-
-  - /etc/grub.d/*
-
-
-
-
