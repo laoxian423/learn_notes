@@ -654,8 +654,10 @@ id:5:initdefault
 chkconfig --list
 # 设置某个进程开机自启动或者关闭
 chkconfig httpd on
+chkconfig --list
+chkconfig --level 5 httpd on
 chkconfig iptables off
-
+ll /etc/rc.d/rc3.d/ | grep httpd
 # 重启机器或者从字符模式启动到图形模式
 init 6   # 重启
 init 5   # 从字符模式启动到图形模式
@@ -1166,7 +1168,7 @@ initrd /initramfs-2.6.32-754.el6.x86_64.img
 # 1、删除/boot/grub/grub.conf
 # 2、重新启动虚拟机
 # 3、重启后系统会停留在 grub> 提示符下，手动输入：
-root (hd0,0)  # 回车
+boot (hd0,0)  # 回车
 kernel /vmlinuz-2.6.32-754.el6.x86_64 ro  # tab 补齐，回车
 initrd /initramfs-2.6.32-754.el6.x86_64.img # 回车
 boot #回车
