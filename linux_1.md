@@ -788,7 +788,9 @@ systemctl kill  crond   # 杀死服务
 
   * Centos默认所有用户都可以使用crond，如果要禁止某个用户使用，可以编辑 /etc/cron.deny,将禁止的用户写进去。
 
-  ### 12、网络管理
+  
+
+### 12、网络管理
 
 #### 12.1 网卡管理
 
@@ -872,7 +874,7 @@ systemctl restart network.service
 
 #### 12.2 常用命令：
 
-* ethtool   
+* ethtool   （6，7）
 
 ```shell
 # 查询网卡信息
@@ -887,7 +889,7 @@ ethtool -S eth0
 ifconfig -s
 ```
 
-* netstat (`yum install net-tools`)
+* netstat (`yum install net-tools`)   （6，7）
 
 ```shell
 # 列出所有端口
@@ -907,7 +909,7 @@ netstat -an | grep ':80' # 运行在80端口上的程序
 netstat -ntu | grep :80 | awk '{print $5}' | cut -d: -f1 | awk '{++ip[$1]} END {for(i in ip) print ip[i],"\t",i}' | sort -nr
 ```
 
-* route  路由管理
+* route  路由管理   （6，7）
 
 ```shell
 # 添加一条去往192.56.76.X网络的路由，从设备eth0发送
@@ -921,7 +923,7 @@ route -n
 
 ```
 
-* IP 
+* ip  （6，7）
 
 ```shell
 # 显示网卡收发信息
@@ -930,6 +932,27 @@ ip -s link
 # 显示网卡状态,是up 还是 down
 ip addr 
 ip link 
+```
+
+* nmcli  （6，7）网络管理
+
+```shell
+# 功能很强大，自行百度
+nmcli connection show   # 显示设备连接情况
+nmcli connection show ens33  # 显示某个设备的信息
+```
+
+* mtr  （6，7）网络测试
+
+```shell
+mtr -rn www.baidu.com
+# Loss%   是显示的每个对应IP的丢包率。
+# snt   snt等于10，设置每秒发送数据包的数量，默认值是10 可以通过参数 -c来指定。
+# Last   显示的最近一次的返回时延
+# Avg   平均值，这个是发送ping包的平均时延。
+# Best 最好或者说时延最短的时间。
+# Wrst 最坏或者说时延最长的时间。
+# StDev  标准偏差。
 ```
 
 

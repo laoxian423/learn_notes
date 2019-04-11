@@ -2,15 +2,15 @@
 
 #### 1、我们用git的来做什么？
 
-* 最初是用来管理代码的
-* 现在啥人都来用：写小说、写日志、写日记、免费的存储空间、书籍翻译等等
-* 大牛们云集的地方，与其仰望大牛，不如github
+* 最初是用来管理代码的：分布式版本控制系统
+* 现在：写小说、写日志、写日记、免费的存储空间、书籍翻译等等
+* 大牛们云集的地方
 
 #### 2、github网站：
 
 ##### 2.1    浏览网站结构
 
-* 找个大牛的网站，了解git的主要概念。仓库、提交、工作态度等，比如Linus，看看一个50岁的人是如何工作的。大牛之所以成为大牛是有原因的。
+* linus。
 * git   Linux Kernel  perl  eclipse  gnome  kde  docker   react  ruby on rails  android  postgresql   debain 
 
 ##### 2.2、 创建自己的账户
@@ -117,7 +117,7 @@ git log --oneline
 
 # 查看是否和远程仓库建立了链接
 git remote -v
-# 增加远程仓库并命名
+# 增加远程仓库的链接并命名
 git remote add [shortname] [url]
 # 将本地的提交推送到远程仓库
 git push [remote] [branch]
