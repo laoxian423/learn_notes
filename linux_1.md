@@ -1148,6 +1148,8 @@ initrd /initramfs-2.6.32-754.el6.x86_64.img
 <font size="4" color="yellow">注：在手动恢复这个文件时，最重要的三个字段是init (h0,0),kernel  , initrd 其他都可以省略</font> 
 
 ##### 14.1.2 单用户模式下修改root密码
+- 先用 getenforce  查看 selinux 状态 , 如果是Enforcing，则用`setenforce 0`暂时关闭，否则实验容易失败。
+
 
 * 必须在主机的控制台上，不能远程操作
 
@@ -1168,6 +1170,7 @@ initrd /initramfs-2.6.32-754.el6.x86_64.img
 # 1、删除/boot/grub/grub.conf
 # 2、重新启动虚拟机
 # 3、重启后系统会停留在 grub> 提示符下，手动输入：
+# 如果不止一块硬盘，先执行一下setup(hd0)挂载一下
 boot (hd0,0)  # 回车
 kernel /vmlinuz-2.6.32-754.el6.x86_64 ro  # tab 补齐，回车
 initrd /initramfs-2.6.32-754.el6.x86_64.img # 回车
@@ -1175,9 +1178,9 @@ boot #回车
 
 ```
 
-- vim  /etc/fstab
+- /etc/fstab   这个文件在生产上最好备份下来
 
-- 系统恢复实验
+- <font color="red">系统恢复实验</font>
 
   ```shell
   rm -rm /boot/*
@@ -1195,14 +1198,15 @@ boot #回车
   exit
   reboot
   
+  # 由于恢复了fstab,这次rescue可以找到硬盘了，并且会挂载到/mnt/sysimage上
   mkdir /stud01
   mount /dev/cdrom /stud1/
-  rpm -ivh /stud1/Packages/kernel-2.xxxxxxxx  --root=/mnt/sysimage --force
+  rpm -ivh /stud01/Packages/kernel-2.xxxxxxxx  --root=/mnt/sysimage --force
   ls -l /mnt/sysimage/boot/
   chroot /mnt/sysimage/   #挂载到根上
-  grub-install /dev/sda   #恢复grub
+  grub-install /dev/sda   #恢复grub,但修复不了grub.conf
   ls -l /boot/grub/
-  vim /boot/grup/grub.conf
+  vim /boot/grup/grub.conf  # 如果有备份程序拷贝过来
   --------------------------
   default=0
   timeout=3
@@ -1217,3 +1221,52 @@ boot #回车
   rpm -ivh /mnt/cdrom/Packages/initscripts-9.03xxxxxxx.rpm --force
   
   ```
+
+#### 14.3 Centos 7 故障恢复
+
+* /boot/grub/grub.conf 弃用，改用/boot/grub2/grub.cfg
+* <font color="red">grub.cfg文件的恢复</font>
+
+```shell
+# 删除/boot/grub2/grub.cfg
+rm -f /boot/grub2/grub.cfg
+# 恢复文件
+grup2-mkconfig -o /boot/grub2/grub.cfg
+```
+
+* <font color="red"> 破解管理员密码</font>
+
+```shell
+# 在启动菜单按 e
+# 在 rhgb quiet 后添加 rd.break 中断启动，再添加 console=tty0
+rhgb quiet rd.break console=tty0
+# ctrl+x 继续启动
+ls -l /  # 此时显示的是一个救援模式的根，真正的根放在/sysroot/下
+mount -o remount,rw /sysroot/
+chroot /sysroot/
+passwd
+touch /.autorelabel  # 让SElinux重新打标，如果开了的话
+exit
+exit # 两次退出，否则数据不保存
+```
+
+* <font color="red">光盘恢复实验</font>
+
+```shell
+# 删除boot下文件
+rm /boot/* -rf
+dd if=/dev/zero of=/dev/sda bbs=446 count=1
+# 重新启动
+Troubleshooting
+rescue...
+chroot /mnt/sysimage/
+mkdir /stud01
+mount /dev/cdrom /stud1/
+rpm -ivh /stud01/Packages/kernel-3.xxxxxxxx   --force
+grub2-install /dev/sda
+grub2-mkconfig -o /boot/grub2/grub.cfg
+exit
+exit
+# 系统自动重启
+```
+
