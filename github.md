@@ -19,7 +19,7 @@
 
 * 所有命令在linux下是一样的。
 
-##### 2.4、一个简单的实验
+##### 2.4、一个简单的实验菜单。
 
 * 构建仓库
 * 本地下载仓库
@@ -147,6 +147,9 @@ git pull [remote] [branch]
 #### 5、git  配置
 
 * .gitignore    每一行代表一个或一类要忽略的文件，支持通配符
+* git rm -r --cached .     #  如果.gitignore 不起作用
+* git add .
+* git commit -m 'update .gitignore'
 * git  check-ignore  -v .project
 * git commit -am  "this is test"
 * warning: ..LF  ..  CRLF   （windows  换行问题）
@@ -192,14 +195,14 @@ git help -a
 # 逐行查看文件历史
 git blame  <filename>
 git blame -L 5,10 <filename>  # 从第5行开始查看到第10行
-# 清除修改
+# 清除修改（所有未提交、未加入缓冲区的文件）
 git clean -n    # 列出未add的文件
 git clean -f    # 清除掉
 git clean -x  -f  # 连.gitignore中的文件也清除掉
 # 输出信息简短提示
 git status -sb  
 
-# 删除,红色是工作去，绿色是缓冲区
+# 删除,红色是工作区，绿色是缓冲区
 git rm  <filename>
 git commit - m "delete"
 git log -5
@@ -220,13 +223,13 @@ git commit -m "delete a"
 git mv a b
 
 # 一个文件多个提交，一个文件中的不同修改做不同提交
-git diff # 查看变更  ，git diff --cached  查看暂存区变更。
-git add -p a  # 多次提交 ，
+git diff # 比较工作去和暂存区的区别  ，git diff --cached  查看暂存区和本地仓库的区别。
+git add -p a  # 多次提交 
 git show HEAD # 显示最后一次提交
 
 # ------------------  git commit -------------------------------------------
 #  提交的一些注意事项（经验）：1、以一个小功能、小改进或一个bug fix为单位  2、对应的unit test 程序在同一个commit   3、无相关的修改不在同一个提交   4、语法错误的半成品程序不能 commit
-# message 书写规范（安哥拉）：
+# message 书写规范（安哥拉Angular.js）：
 <type>(<scope>):<subject>
 //空一行
 <body>
@@ -241,7 +244,11 @@ test:增加测试
 chore:构建过程或辅助工具的变动
 
 # 关闭BUG,在message中：
-close #6
+git commit
+-----------------------
+fix(readme):repair a bug
+
+close #1
 
 ```
 
