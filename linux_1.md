@@ -684,9 +684,207 @@ systemctl start xxx.service  # 启动某服务
 systemctl stop xxx.service  # 停止某服务
 systemctl restart xxx.service # 重启某服务
 systemctl kill  crond   # 杀死服务
+
+# 查看启动耗时
+systemd-analyze                                                                                   
+# 查看每个服务的启动耗时
+systemd-analyze blame
+# 显示瀑布状的启动过程流
+systemd-analyze critical-chain
+# 显示指定服务的启动流
+systemd-analyze critical-chain atd.service
+
+# 查看本地化设置
+localectl
+# 设置本地化参数。
+localectl set-locale LANG=en_GB.utf8
+localectl set-keymap en_GB
+
+# 查看当前时区设置
+timedatectl
+# 显示所有可用的时区
+timedatectl list-timezones                                                                         # 设置当前时区
+timedatectl set-timezone America/New_York
+timedatectl set-time YYYY-MM-DD
+timedatectl set-time HH:MM:SS
+
+# 列出当前session
+loginctl list-sessions
+# 列出当前登录用户
+loginctl list-users
+# 列出显示指定用户的信息
+loginctl show-user ruanyf
+
+# 列出正在运行的 Unit
+systemctl list-units
+# 列出所有Unit，包括没有找到配置文件的或者启动失败的
+systemctl list-units --all
+# 列出所有没有运行的 Unit
+systemctl list-units --all --state=inactive
+# 列出所有加载失败的 Unit
+systemctl list-units --failed
+# 列出所有正在运行的、类型为 service 的 Unit
+systemctl list-units --type=service
+
+# 显示系统状态
+systemctl status
+# 显示单个 Unit 的状态
+sysystemctl status bluetooth.service
+# 显示远程主机的某个 Unit 的状态
+systemctl -H root@rhel7.example.com status httpd.service
+
+# 显示某个 Unit 是否正在运行
+systemctl is-active application.service
+# 显示某个 Unit 是否处于启动失败状态
+systemctl is-failed application.service
+# 显示某个 Unit 服务是否建立了启动链接
+systemctl is-enabled application.service
+
+# 立即启动一个服务
+systemctl start apache.service
+# 立即停止一个服务
+systemctl stop apache.service
+# 重启一个服务
+systemctl restart apache.service
+# 杀死一个服务的所有子进程
+systemctl kill apache.service
+# 重新加载一个服务的配置文件
+systemctl reload apache.service
+# 重载所有修改过的配置文件
+systemctl daemon-reload
+# 显示某个 Unit 的所有底层参数
+systemctl show httpd.service
+# 显示某个 Unit 的指定属性的值
+systemctl show -p CPUShares httpd.service
+# 设置某个 Unit 的指定属性
+systemctl set-property httpd.service CPUShares=500
+
+# Unit 之间存在依赖关系：A 依赖于 B，就意味着 Systemd 在启动 A 的时候，同时会去启动 B。
+systemctl list-dependencies nginx.service
+systemctl list-dependencies --all nginx.service
+
+# 查看所有日志（默认情况下 ，只保存本次启动的日志）
+journalctl
+# 查看内核日志（不显示应用日志）
+journalctl -k
+# 查看系统本次启动的日志
+journalctl -b
+journalctl -b -0
+# 查看上一次启动的日志（需更改设置）
+journalctl -b -1
+# 查看指定时间的日志
+journalctl --since="2012-10-30 18:17:16"
+journalctl --since "20 min ago"
+journalctl --since yesterday
+journalctl --since "2015-01-10" --until "2015-01-11 03:00"
+journalctl --since 09:00 --until "1 hour ago"
+# 显示尾部的最新10行日志
+journalctl -n
+# 显示尾部指定行数的日志
+journalctl -n 20
+# 实时滚动显示最新日志
+journalctl -f
+# 查看指定服务的日志
+journalctl /usr/lib/systemd/systemd
+# 查看指定进程的日志
+journalctl _PID=1
+# 查看某个路径的脚本的日志
+journalctl /usr/bin/bash
+# 查看指定用户的日志
+journalctl _UID=33 --since today
+# 查看某个 Unit 的日志
+journalctl -u nginx.service
+journalctl -u nginx.service --since today
+# 实时滚动显示某个 Unit 的最新日志
+journalctl -u nginx.service -f
+# 合并显示多个 Unit 的日志
+journalctl -u nginx.service -u php-fpm.service --since today
+# 查看指定优先级（及其以上级别）的日志，共有8级
+# 0: emerg
+# 1: alert
+# 2: crit
+# 3: err
+# 4: warning
+# 5: notice
+# 6: info
+# 7: debug
+journalctl -p err -b
+# 日志默认分页输出，--no-pager 改为正常的标准输出
+journalctl --no-pager
+# 以 JSON 格式（单行）输出
+journalctl -b -u nginx.service -o json
+# 以 JSON 格式（多行）输出，可读性更好
+journalctl -b -u nginx.serviceqq -o json-pretty
+# 显示日志占据的硬盘空间
+journalctl --disk-usage
+# 指定日志文件占据的最大空间
+journalctl --vacuum-size=1G
+# 指定日志文件保存多久
+journalctl --vacuum-time=1years
 ```
 
-#### 11.4 计划任务管理
+#### 11.4 systemd 常见用法：
+
+* 开机启动：支持systemd的软件，会在安装时在/usr/lib/systemd/system添加配置文件
+
+```shell
+systemctl enable httpd
+#上面的命令相当于在/etc/systemd/system目录添加一个符号链接，指向/usr/lib/systemd/system里面的httpd.service文件。
+```
+
+* 启动服务：
+
+```shell
+systemctl start httpd
+systemctl status httpd
+```
+
+* 停止服务：
+
+```shell
+systemctl stop httpd.service
+# 如果停不下来就杀进程
+systemctl kill httpd.service
+systemctl restart httpd.service
+```
+
+* 读懂配置文件
+
+```shell
+$ systemctl cat sshd.service
+
+[Unit] # 启动顺序和依赖关系
+Description=OpenSSH server daemon  #  简单描述
+Documentation=man:sshd(8) man:sshd_config(5) # 文档位置
+After=network.target sshd-keygen.service # sshd.service应该在这两个之后启动
+Wants=sshd-keygen.service  # 依赖关系，弱依赖，如果这个值启动失败，不影响sshd.service继续使用
+
+[Service]  # 启动行为
+EnvironmentFile=/etc/sysconfig/sshd   # 软件的环境参数文件
+ExecStart=/usr/sbin/sshd -D $OPTIONS  # 启动进程时执行的命令，$OPTIONS的值就是来自与envionmentFile
+ExecReload=/bin/kill -HUP $MAINPID  # 启动重新加载配置文件时执行的命令
+Type=simple  # 自动类型
+KillMode=process  # 如何停止服务，杀主进程还是连子进程一起杀
+Restart=on-failure # 重启方式，
+RestartSec=42s # 重启服务时，需要等待的时间
+
+[Install]
+WantedBy=multi-user.target  # 服务所在的Target
+#---------------------------------------------------------------------
+systemctl cat multi-user.target
+[Unit]
+Description=Multi-User System
+Documentation=man:systemd.special(7)
+Requires=basic.target  # 冲突字段，如果这个值在运行，它就不能运行
+Conflicts=rescue.service rescue.target
+After=basic.target rescue.service rescue.target  # 表示之后运行
+AllowIsolate=yes  # 允许使用systemctl isolate切换到multi-user.target
+
+```
+
+
+
+#### 11.5 计划任务管理
 
 * 一次性任务 at
 
