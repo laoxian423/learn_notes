@@ -365,7 +365,7 @@ git push origin :refs/tags/v0.0
 # 显示所有分支
 git branch
 git branch -v  # 显示分支并显示每个分支的当前提交
-# 合并操作，注意：要把 A 合并 到 B 上，必须在B上操作，比如把hotfix合并到master，必须到master上操作
+# 前向合并操作（简单的移动指针），注意：要把 A 合并 到 B 上，必须在B上操作，比如把hotfix合并到master，必须到master上操作
 git checkout master
 git merge hotfix
 # 删除分支
@@ -423,6 +423,10 @@ git stash lish
 # 删除stash列表
 git stash clear
 ```
+
+
+
+### github 团队协作
 
 
 
