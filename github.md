@@ -147,22 +147,40 @@ git pull [remote] [branch]
 #### 5、git  配置
 
 * .gitignore    每一行代表一个或一类要忽略的文件，支持通配符
+
 * git rm -r --cached .     #  如果.gitignore 不起作用
+
 * git add .
+
 * git commit -m 'update .gitignore'
+
 * git  check-ignore  -v .project
+
 * git commit -am  "this is test"
+
 * warning: ..LF  ..  CRLF   （windows  换行问题）
+
 * Linux  :换行\n    windows  换行\r\n   MAC  :  换行  \r
+
 * git config --global core.autocrlf true    默认设置，提交时LF ,检出时CRLF
+
 * git config --global core.safecrlf  false    允许提交混合换行符的文件。
+
 * 别名
+
 * git log --pretty=format:'%h %ad | %s%d [%an]'  --graph --date=short
+
 * git config --global alias.ci commit 
+
 * cd ~
+
 * vim .gitconfig
+
 * 存储凭证
-* git  config  --global  credential.helper  wincred
+
+* git  config  --global  credential.helper  wincred   # windows 
+
+  git config --global credential.helper store --file=git_credentails #存放在文件里
 
 #### 6、git 协议
 
