@@ -77,7 +77,7 @@ $$
 \frac{-b\pm\sqrt{b^2-4ac}}{2a}
 $$
 
-​      行内公式：一元二次方程的可能实根公式是$ \frac{-b\pm\sqrt{b^2-4ac}}{2a} $。
+行内公式：一元二次方程的可能实根公式是  $ \frac{-b\pm\sqrt{b^2-4ac}}{2a} $ (Typora中需要在偏好设置中打开）。
 
 https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference
 

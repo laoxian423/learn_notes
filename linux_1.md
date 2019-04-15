@@ -113,6 +113,8 @@
 > getenforce  # 可能返回结果有三种：Enforcing、Permissive 和 Disabled。Disabled 代表 SELinux 被禁用，Permissive 代表仅记录安全警告但不阻止可疑行为，Enforcing 代表记录警告且阻止可疑行为。
 > setenforce 0 # 暂时关闭
 > 
+> # 查看当前环境变量
+> export
 > ```
 
 ### 4、用户和组管理

@@ -1,12 +1,14 @@
 ### 一、简单体验
 
-#### 1、我们用git的来做什么？
+#### 1、git是什么？
 
-* 最初是用来管理代码的：分布式版本控制系统
+* 最初是用来管理代码：分布式版本控制系统
 * 现在：写小说、写日志、写日记、免费的存储空间、书籍翻译等等
-* 大牛们云集的地方
+* github大牛们云集的地方
 
 #### 2、github网站：
+
+ https://github.com
 
 ##### 2.1    浏览网站结构
 
@@ -15,172 +17,184 @@
 
 ##### 2.2、 创建自己的账户
 
-##### 2.3、安装windows客户端gitbash
+* 大致了解仓库、提交、设置等等
 
-* 所有命令在linux下是一样的。
+##### 2.3、本地安装git 客户端：
 
-##### 2.4、一个简单的实验菜单。
+> * windows下安装：
+>
+>   https://git-scm.com/
+>
+> * centos 7 下安装：
+>
+>   yum -y install git
 
-* 构建仓库
-* 本地下载仓库
-* 编写点内容
-* push，最大100M限制，可配置
+##### 2.4、一个简单的实验。
+
+* 构建仓库：在github上面创建一个仓库testgit
+
+* 本地下载仓库：git clone htts://github.com/zhangsan/testgit
+
+* 在本地编写点内容:
+
+  touch -a
+
+  git add .
+
+  git commit -m "first commit"
+
+* (push，最大100M限制，可配置) 可以将github当作一个云端网盘
 
 #### 3、git、github、gitlab
 
 * git：是一个开源的分布式版本控制系统，作者linus,bitkeeper,samba,two weeks。
 * github：是一个网站，来管理git项目（仓库）,最著名的开源网站
-* gitlab：是一个基于git的开源项目
+* gitlab：是一个基于git系统的开源项目
 
 ### 二、git   bash的使用
 
-#### 1、重要概念：
+#### 2.1、重要概念：
 
 > ![](/pic/1554078515520.png)
 >
 > - Workspace：工作区，工作目录，我们在本地的仓库（项目）目录。我们修改、创建文件等操作都是先在工作区中操作。
-> - Index / Stage：暂存区，工作区修改确认的文件添加到暂存区里，可以多次加入，分批或者一次提交到本地仓库，为了项目颗粒度的管理。
+> - Index / Stage：暂存区，工作区修改确认的文件添加到暂存区里，可以多次加入，分批或者一次提交到本地仓库，为了项目颗粒度的管理，只有进了暂存区的文件，git才会去跟踪。
 > - Repository：仓库区（或本地仓库），把暂存区或工作区提交状态保存起来。
 >
 > ![](/pic/1554078562914.png)
 >
 > * Remote：远程仓库，与本地仓库进行交换，分工协作的目的，分布式代码管理。
 
-#### 2、创建仓库：
-
-> * 创建仓库的命令：
->
->   ```shell
->   # 从本地创建
->   mkdir <Reposistory name>    # 创建一个仓库目录
->   git init   # 在创建好的目录中，初始化仓库
->   # 直接克隆远程仓库
->   git clone <url>
->   ```
->
-> * 例子
->
->   ```shell
->   # 我们计划在 D 盘 （都是在Windows上实验，如果你是linux，请忽略某某盘的语句），创建一个myRepository 的目录，作为后面所有实验用的总目录，以后所有的仓库都放在这个目录里。
->   $ mkdir /d/myRepository
->   # 创建第一个式样仓库，testgit
->   $ mkdir /d/myRepository/testgit
->   # 初始化这个仓库
->   $ cd /d/myRepository/testgit
->   $ git init
->   # 查看testgit的目录结构，观察里面多了些什么
->   $ ls -l -a
->   # 看看目录中.git子目录中的文件,.git目录实际就是本地仓库
->   $ ls -l -a ./.git
->   ```
->
->   
 
 
-
-
-
-#### 2、命令示例：
+#### 2.2、常用命令：
 
 ```shell
-# git 安装，直接去官网，有详细步骤。 
-https://git-scm.com/
-
-git config --list
-git config --global user.name "laoxian423"
-git config --global user.email "362293069@qq.com"
-git version
+git version  # 查看版本
+git config --list   # 显示全局配置
+git config --global user.name "laoxian423"   # 配置用户名
+git config --global user.email "362293069@qq.com" # 配置邮箱
 ```
 
 ```shell
-# 在当前目录新建一个Git代码库
-git init
-# 下载一个项目和他的整个代码历史
-git clone [url]
+git add f1  #  添加文件到暂存区,f1是示例文件
+git add .   # 全部进暂存区
+git reset f1  # 从暂存区回退到工作区
+git rm f1 # 删除工作区文件，并且将这次删除放入暂存区（该文件必须已经提交）
+git mv f1 # 改名文件，并且将这个改名放入暂存区（该文件必须已经提交）
+git commit -m "this is a commit" #提交暂存区到本地仓库
+git commit -am "11111" #直接从工作区提交到仓库（前提是该文件已经有仓库中的历史版本）
+git status #查看当前仓库状态
+git status -sb #查看当前仓库状态(简略显示)
+git log  # 显示当前分支的历史版本
+git log --oneline  # 简略显示
+git clone https://github.com/zhangsna/testgit  # 克隆远程仓库到本地
+git remote -v  # 查看和远程仓库建立的链接信息
+git remote add [shortname] [url] # 增加远程仓库的链接并命名
+git push  # 将本地的提交推送到远程仓库
+git pull  # 将远程仓库拉到本地仓库
+```
+#### 2.3、常用命令实例：
 
-#添加文件到暂存区
-git add [file1] [file2]
-# 删除工作区文件，并且将这次删除放入暂存区
-git rm [file1] [file2]
-# 改名文件，并且将这个改名放入暂存区
-git mv [file-origin] [file-renamed]
 
-#提交暂存区到仓库
-git commit -m [message]
-#直接从工作区提交到仓库（前提该文件已经有仓库中的历史版本）
-git commit -a -m [message]
-#现实变更信息
-git status
-# 显示当前分支的历史版本
-git log
-git log --oneline
-
-# 查看是否和远程仓库建立了链接
+* 创建第一个仓库
+```shell
+# 环境：
+#   我们在 D 盘 （以下都是在Windows上实验，如果你是linux，请忽略某某盘的语句，除了盘符其他操作都一样），创建一个my_repositories 的目录，作为后面所有实验用的总目录，以后所有的仓库都放在这个目录里。
+# 1、在github上创建一个仓库testgit
+# 2、本地操作：
+mkdir /d/my_repositories
+cd /d/my_reposistories/
+# 3、将远程仓库克隆下来
+git clone https://github.com/zhangsan/testgit
+# 4、查看testgit的目录结构，观察里面多了些什么
+ls -la
+# 5、看看目录中.git子目录中的文件,.git目录实际就是本地仓库
+$ ls -la ./.git
+# 6、查看连接的远程仓库
 git remote -v
-# 增加远程仓库的链接并命名
-git remote add [shortname] [url]
-# 将本地的提交推送到远程仓库
-git push [remote] [branch]
-# 将远程仓库的提交拉下到本地
-git pull [remote] [branch]
-
-# 闯关游戏
-1 https://try.github.io/
-2 安装nodeJS,npm install git-it-g 
-
 ```
 
-#### 三、git  简介
+* 管理第一个文件
 
-* 发明人  linux  Trovalds 
-* ![](/pic/1554080537699.png)
-* git   Linux Kernel  perl  eclipse  gnome  kde  docker   react  ruby on rails  android  postgresql   debain 
-* 三个区域四个状态
+```shell
+touch fix_list        # 创建一个空文件，文件名为 fix_list
+git status            # 查看当前仓库状态
+git status -sb        # 查看状态（简略方式）
+vim fix_list          # 编辑 fix_list
+#-------------- fix_list 内容  ---------------------------------
+1 ： 自选股行情列表变形，存在适配问题。
+#-----------------  内容结束 -----------------------------------
+git status            # 查看仓库状态
+git status -sb        # 查看仓库状态
+git add .             # 将工作区中未提交暂存区的改变都加入暂存区中
+git status            # 查看仓库状态
+git status -sb        # 查看仓库状态
+vim fix_list          # 编辑 fix_list
+#-------------- fix_list 内容  ---------------------------------
+1 ： 自选股行情列表变形，存在适配问题。
+2 :  行情数据不准确。
+#-----------------  内容结束 -----------------------------------
+git status            # 查看仓库状态
+git status -sb        # 查看仓库状态
 
-#### 4、git 图形界面工具
+git add .             # 将工作区中未提交暂存区的改变都加入暂存区中
+git status            # 查看仓库状态
+git status -sb        # 查看仓库状态
+
+git commit -m "this is my first commit"  # 提交本地仓库
+git status            # 查看仓库状态
+git status -sb        # 查看仓库状态
+
+git log               # 查看提交历史
+# 设置易读的历史日志格式
+vim ~/.gitconfig
+#  ------------------ ~/.gitconfig 新增内容 ---------------------------------
+[alias]
+	hi =  log --pretty=format:'%h %ad | %s%d [%an]'  --graph --date=short
+# -----------------------------------------------------------------------------
+git hi               # 自定义显示历史日志，给 log 起了个别名
+
+git push             # 将本地仓库推送到远程仓库
+```
+
+
+
+#### 2.4、git 图形界面工具
 
 * git gui
-* SourceTree  https://www.sourcetreeapp.com/        https://bitbucket.org/
-* EGIT
-* git log --oneline
 
-#### 5、git  配置
+  ![](./pic/1555308754239.png)
+
+  
+
+#### 2.5、git  配置文件
+
+* ~/.gitconfig  配置文件，Linux下/etc/gitconfig （全局配置文件）
+
+```shell
+git config --list  # 查看配置
+git config --global user.name "user_name"  # 用户名
+git config --global user.email zhangsan@qq.com   # 邮箱
+git config --global core.editor emacs   # 配置默认编辑器
+git config --global core.autocrlf false  # 回车换行的处理，如果程序只在windows上开发运行，就设置为false
+git config --global alias.ci commit # 增加别名
+git config --global credential.helper store --file=git_credentails # 保存用户凭证，免得每次输密码
+# 日志格式化，lg 更漂亮一些：
+[alias]
+	hi =  log --pretty=format:'%h %ad | %s%d [%an]'  --graph --date=short
+    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+```
+
+
 
 * .gitignore    每一行代表一个或一类要忽略的文件，支持通配符
 
 * git rm -r --cached .     #  如果.gitignore 不起作用
 
-* git add .
-
-* git commit -m 'update .gitignore'
-
 * git  check-ignore  -v .project
 
-* git commit -am  "this is test"
-
-* warning: ..LF  ..  CRLF   （windows  换行问题）
-
-* Linux  :换行\n    windows  换行\r\n   MAC  :  换行  \r
-
-* git config --global core.autocrlf true    默认设置，提交时LF ,检出时CRLF
-
-* git config --global core.safecrlf  false    允许提交混合换行符的文件。
-
-* 别名
-
-* git log --pretty=format:'%h %ad | %s%d [%an]'  --graph --date=short
-
-* git config --global alias.ci commit 
-
-* cd ~
-
-* vim .gitconfig
-
-* 存储凭证
-
-* git  config  --global  credential.helper  wincred   # windows 
-
-  git config --global credential.helper store --file=git_credentails #存放在文件里
+  
 
 #### 6、git 协议
 
