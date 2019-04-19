@@ -499,6 +499,23 @@ git pull  --rebase
 
 git rebase --continue
 
+协作着在push的时候（centos）需要配置一下本地仓库目录下的.git/config：
+
+
+
+```shell
+# 修改 
+[remote "origin"]
+	url = https://github.com/wangz/example.git
+
+# 为：
+
+[remote "origin"]
+	url = https://wangz@github.com/wangz/example.git   # wangz是协作者账号
+```
+
+
+
 #### 5.2、功能分支工作流
 
 #### 5.3、Gitflow工作流
