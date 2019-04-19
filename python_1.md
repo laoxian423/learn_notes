@@ -367,17 +367,64 @@
   > """
   > %中可以指定宽度  %10d  数字右对齐  字符串也是右对齐
   > %中可以指定精度  %.3f  三位小数
-  >                %.5s  只显示前5个字符
-  >                %8.3f  宽度8小数3位
+  >             %.5s  只显示前5个字符
+  >             %8.3f  宽度8小数3位
   > """
   > ```
   >
   > {}   占位符  
   >
+  > format
+  >
+  > ```python
+  > book = '《数据结构》'
+  > s = '买了一本书:{}'.format(book)
+  > print(s)
+  > price = 68.88
+  > s = '花了{},买了一本书:{}'.format(price,book)
+  > s = '花了{0},买了一本书:{1},只花了{0}'.format(price,book)
+  > s = '花了{p},买了一本书:{b},只花了{p}'.format(p=price,b=book)
+  > s = '花了{0},买了一本书:{1},只花了{0}'.format(price,book)
+  > 
+  > print('{:d}'.format(58))  # 10进制整数
+  > print('{:b}'.format(58))  # 二进制
+  > print('{:x}'.format(58))  # 小写16进制
+  > print('{:X}'.format(58))  # 大写16进制
+  > print('{:f}'.format(58))  # 浮点数
+  > print('{:,}'.format(12345678))  # 千位分割
+  > print('{0:b}'.format(58))  # 二进制
+  > print('{num:b}'.format(num=58))  # 二进制
+  > print('{:10}'.format(58))  # 宽度  右对齐
+  > print('{:10}'.format(’58‘))  # 宽度 左对齐
+  > print('{:10.3}'.format(58))  # 宽度,总共3位
+  > print('{:10.3f}'.format(58))  # 宽度,精度小数位3位
+  > from datetime import datetime
+  > print('{:%Y-%m-%d %H:%M:%S}'.format(datetime(2018,8,18,18,18,18))) 
+  > # 内置函数format()
+  > format(58,'b')
+  > format(3.1415926,'8.3f')
+  > ```
+  >
   > $   占位符  
   >
+  > string类Template
+  >
+  > ```python
+  > from string import Template
+  > price = 68.88
+  > book = '<<data struct>>'
+  > tmpl=Template('cost $p,buy a book:$b')
+  > s = tmpl.substitute(p=price,b=book)
+  > s = tmpl.substitute({'p':price,'b':book})
+  > s = tmpl.safe_substitute(p=price) # 参数不足时不会抛出错误
+  > 
+  > 
+  > ```
+  >
+  > 
+  >
   > 
   >
   > 
   >
-  >    
+  > 
