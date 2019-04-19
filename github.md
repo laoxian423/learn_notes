@@ -10,9 +10,9 @@
 
 https://github.com   github 网站
 
-https://gitstar-ranking.com/repositories    git 开源项目排行榜
+https://gitstar-ranking.com/repositories    github 开源项目排行榜
 
-free-programming-books          git 上一个免费书籍项目
+free-programming-books          github 上一个免费书籍项目
 
 ##### 1.2.1    浏览网站结构
 
@@ -340,12 +340,8 @@ git reset HEAD --soft
 # 回撤提交，放弃变更,HEAD可以是任意一个提交
 git reset HEAD  --hard
 
-# 回撤远程操作，团队协作时不能这样做
+# 回撤远程操作，团队协作时不能这样做,其实是强制推送
 git push -f
-
-# 回撤上一次提交
-git add .
-git commit --amend -m "messages"
 
 # 变基操作，改写历史提交
 git rebase -i HEAD~3
@@ -380,7 +376,7 @@ git push origin :refs/tags/v0.0
 
 ```
 
-#### 9、分支操作
+### 四、分支操作
 
 ![](pic\1554269674384.png)
 
@@ -455,9 +451,59 @@ git stash lish
 git stash clear
 ```
 
+### 五、github 团队协作
 
+#### 5.1、集中式工作流
 
-### github 团队协作
+![](./pic/1555632518763.png)
+
+中央仓库（远程仓库），本地仓库，开发者自行决定push
+
+以中央仓库作为中心，容易版本冲突,只用一个master分支，不用其他分支
+
+![1555633175564](F:\myRepositraies\learn_notes\pic\1555633175564.png)
+
+![1555633191135](F:\myRepositraies\learn_notes\pic\1555633191135.png)
+
+![1555633202557](F:\myRepositraies\learn_notes\pic\1555633202557.png)
+
+新建仓库
+
+邀请协作者，push权限
+
+被邀请者，右上角铃铛，有人邀请，接收或拒绝
+
+git clone https://github.com/zhangsan/test01
+
+User1:  touch  a     push
+
+user2:   touch b      push    拒绝   先pull
+
+user1,user2:git hi
+
+user2:git pull  
+
+user2:三方合并,避免，太乱
+
+user2:git push
+
+git reset 939d --hard
+
+git push -f
+
+git pull  --rebase
+
+--rebase 可以避免分叉太多。
+
+冲突，都编辑了一个文件。
+
+git rebase --continue
+
+#### 5.2、功能分支工作流
+
+#### 5.3、Gitflow工作流
+
+#### 5.4、Forking工作流
 
 
 
