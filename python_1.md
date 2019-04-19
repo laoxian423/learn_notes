@@ -261,6 +261,123 @@
   >
   > r'\tC:\\Program Files'     原始字符串 R大写也可以 ，最后不能是一个反斜杠\
   >
+  > 跨多行：三个引号 print("""  zhangsan 
+  >
+  > lisi 
+  >
+  > wangwu  """)
+  >
+  > 断句：末尾\
+  >
+  > 字符串加法：print('hello' + 'world')   # hello world
+  >
+  > s = 'hellow' ', ' 'world'
+  >
+  > print(s)  # hellow world
+  >
+  > print('hello' * 3)  # 重复3遍
+  >
+  > 查：可看作列表
+  >
+  > index find  rfind  rindex
+  >
+  > s ='5739182186'
+  >
+  > s.index('18')  # 4  返回第一个
+  >
+  > s.find('18')  # 4 返回第一个
+  >
+  > s.rindex('18') # 7   从右查找
+  >
+  > s.rfind('18') # 7  从右查找
+  >
+  > s.index('18',1,5)   valueError
+  >
+  > s.rindex('18',1,5)
+  >
+  > 子串不存在时，index,rindex抛出错误，find,rfind返回-1
+  >
+  > 字符串是不可变类型，无改、增、删操作
+  >
+  > * 字符串比较：
+  >
+  > 与列表比较规则差不多
+  >
+  > 比较的是字符的ordinal vlaue,内置ord()
+  >
+  > 对应的是chr()
+  >
+  > is 类型判断
+  >
+  > a=b='Hello'
+  >
+  > c='Hello'
+  >
+  > a is c      True    字符串常量和常数会被缓存
+  >
+  > * 字符串的反转
+  >
+  > reversed() 内置函数，没有reverse方法，字符串不可变
+  >
+  > s = 'Hello World'
+  >
+  > iterator =reversed(s) # reversed object
+  >
+  > print(list(iterator))
+  >
+  > * 排序
+  >
+  > sorted(s,reverse = True)  返回字符串
+  >
+  > sorted(s,key = 函数名或类名.方法)  key 自定义排序方法
+  >
+  > stored(s,key = str.lower) ,对字符串中的每一个字符调用str.lower,全部转成小写后，进行排序，只是排序规则变了，字符串该是大写还是大写
+  >
+  > 元组和列表也可以使用key
+  >
+  > 不止是内置函数可以使用key,方法也可以
+  >
+  > * 格式化字符串：
+  >
+  > `‘2018-08-18 18:18:18'  '%Y-%m-%d %H​:%M:%​S'`
+  >
+  > 常见方式有三种：
+  >
+  > %  占位符  `%Y-%m-%d %H:%M:%S`  
+  >
+  > `from datetime import datetime`
+  >
+  > `print(datetime(2018,8,18,18,18,18).strftime('%Y-%m-%d %H:%M:%S'))`
+  >
+  > %s   字符串  会把任何类型转换为字符串
+  >
+  > %i 或 %d   整数
+  >
+  > %f   浮点数
+  >
+  > %使用百分号进行转义：`'完成了%d%%'` % 80
+  >
+  > ```python
+  > book = '《数据结构》'
+  > s = 'a book: %s ' %  book
+  > print (s)
+  > 
+  > price = 68.99
+  > '花了%f,买了一本书:%s' % (price,book) # 超过一个变量，需要放在一个元组中 
+  > """
+  > %中可以指定宽度  %10d  数字右对齐  字符串也是右对齐
+  > %中可以指定精度  %.3f  三位小数
+  >                %.5s  只显示前5个字符
+  >                %8.3f  宽度8小数3位
+  > """
+  > ```
+  >
+  > {}   占位符  
+  >
+  > $   占位符  
+  >
   > 
   >
   > 
+  >
+  >    
