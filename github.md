@@ -518,9 +518,129 @@ git rebase --continue
 
 #### 5.2、功能分支工作流
 
+引入了工作分支 fetch
+
+加强合作，减少沟通
+
+所有的功能开发都在新的分支上开发，不放在master
+
+pull request  管理合并
+
+功能分支工作流依然是利用中央仓库，克隆到本地操作
+
+```shell
+u1:
+git checkout -b feat-dialog
+git branch
+touch c
+echo 1111 >> c
+git status
+git add .
+git commit -m "add c"
+echo 2222 >> c
+git commit -am "edit c"
+git push origin feat-dialog
+git checkout master
+ls -l
+git checkout feat-dialog
+echo 333 >> c
+git commit -am "finished feature dialog"
+git push -u origin feat-dialog   # 建立分支关联
+git push
+pull request:
+准备merge
+open a pull request
+
+u2:
+pull request（PR）
+看到
+code review
+每一行代码都可以评论，可要求必须改代码
+
+u1：
+可以讨论，可以@ 
+vim c
+2222 => 4444
+git commit -am "edit c"
+git push
+
+其实都有合并权限的
+u2:
+merge
+master 里有了c
+git br -r  
+
+
+```
+
+上两种的缺点就是太灵活，协作者的权限过大
+
+master   分支，和临时分支
+
 #### 5.3、Gitflow工作流
 
-#### 5.4、Forking工作流
+分支比较有规划，除了master长期分支外，还有开发分支等长期分支
 
+master   版本
 
+开发分支（历史分支）Develop
+
+功能分支从开发分支上分出  feature
+
+hotfix分支
+
+* 历史分支（开发分支，master分支）
+
+  master只放稳定版本
+
+  开发围绕Develp 来开发
+
+前面3中前提是有一个集中的中央仓库，一步步增加复杂性
+
+#### 5.4、Forking工作流（开源社区）
+
+开源社区中不可能让每一个人都成为协作者，操作代码库
+
+![1555735304339](F:\myRepositraies\learn_notes\pic\1555735304339.png)
+
+![1555735367039](F:\myRepositraies\learn_notes\pic\1555735367039.png)
+
+fork过来的，建立维护一个远程的连接
+
+pull request
+
+可以没有协作者
+
+![1555735816758](F:\myRepositraies\learn_notes\pic\1555735816758.png)
+
+```shell
+仓库所有者：
+git clone https://git......
+mkdir say-hello
+cd say-hello/
+touch wangding.md
+echo "hello everyone,I am wangding" >> wangding.md
+git add .
+git commit -m "docs(say-hello):add wangding.md"
+git push
+
+其他人：
+1 fork
+2 clone
+3 cd say-hello
+touch wangding2.md
+echo "hell everyone,i am wangding2" >> wangding2.md
+git add .
+git commit -m "docs(say-hello):add wangding.md"
+git push  # push 到自己的仓库里
+
+创建一个 new pull-request
+
+仓库所有者：
+多了一个pull-request
+合并merge
+
+git remote add upstream git@github.com:wangding/git-demo   # 与元仓库建立连接
+git pull upstream master
+```
 

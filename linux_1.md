@@ -1155,7 +1155,7 @@ mtr -rn www.baidu.com
 # StDev  标准偏差。
 ```
 
-
+host ,dig , nslookup :yum install bind-utils
 
   ### 13、磁盘管理
 
