@@ -1,267 +1,299 @@
-       1991年10月5日，还在上大学的Linus在一次UNIX实验后，对UNIX极度不满，决定自己写一个最好用操作系统，随后将第一个Linux 内核版本放到GNU。
-       （GNU  自由软件基金会，由当时被成为第一黑客的richard stallman创建）
-### 1、linux 常见版本：
+### 一、系统
 
-* RedHat ：RHEL ，使用最广，全球最大。培训课程设计的最好。
-* centos：redhat的克隆版本，几乎就是RHEL，与RHEL唯一的技术差异就是品牌。
-* Fedora  ：Redhat将其新的修改，首先放到Fedora供用户使用，被称之为Redhat的小白鼠。
-* Ubuntu : 号称界面最精美，最受欢迎的桌面Linux发行版
-* Debian :有史以来最大的协作软件项目，它由1000多名志愿者开发。
-* SUSE: Novell公司旗下产品，由于其与微软在Linux知识产权纠纷事件被大量客户放弃
-* 中标麒麟：国产Linux，一个民用，一个军用，合并而成。
+*  $ 表示普通用户， # 表示root用户
 
-### 2、系统安装:
+* ~ 表示home目录。
 
-> 以下实验都在Centos上操作，可通过下列镜像网站下载：
->
-> * 阿里： https://opsx.alibaba.com/mirror
->
-> * 网易：http://mirrors.163.com/
->
-> 注：everythin 版本，包含所有的RPM和源码包。
->
-> ```shell
-> # 部署虚拟机实验环境，最好虚拟两台，一台安装centos 6 ,一台安装centos 7,6 和 7有一部分系统管理不同，目前6和7是企业中使用最广的版本。其中6.8被称为6里面的终极稳定版。
-> # 安装过程比较简单，只需注意一下几点：
-> 1、无关硬件都去掉，比如声卡、打印机等
-> 2、在安装配置中不要启用SELinux,后期学习过以后再考虑启动
-> 3、KDUMP 为系统崩溃转存功能，可关闭。
-> 4、硬盘最好分区，不要一股脑分到一个区上，不利于后期实验，下面是建议：
->    /boot    启动相关的文件，还有内核，分配200M即可
->    swap     如果内存<8G ,就分配两倍内存的空间。如果内存很大比如256G，这个分区
->             不用过大，没有必要。
->    /        剩下的都可以给根。
-> # 安装完毕后，对两台虚拟机建立快照，防止后期实验系统崩溃。
-> ```
->
-> 
+* root家目录是 /root
 
-### 3、基础操作
+* 查看系统支持的shell
 
-> * 命令：
->
-> ```shell
-> # 提示符 $ 表示普通用户， # 表示root用户
-> # ~ 表示home目录，对于root来说，它的家目录在 /root
-> 
-> # 列出目录列表：
-> ls -l /boot      # -l 使用长列表方式
-> ls -l -a /boot   # -a 显示所有文件，包括隐藏属性
-> ls -la -h /boot  # -h 以人类方式显示，就是文件大小显示为 K,M,G
-> 
-> # 创建目录：
-> mkdir /home/zhangsan/test 
-> 
-> # 改变当前目录
-> cd /home/zhangsan/test
-> cd -  # 回到上一次的目录
-> cd ~  # 改变目录到家目录home
-> 
-> # 查看当前目录
-> pwd
-> 
-> # 创建一个文本文件：
-> touch ex01     # 创建一个0字节大小的文件，文件名为ex01
-> echo "this is a test" > ex02 # 利用重定向生成一个文件ex02
-> echo "second line" >> ex02  # 在文件ex02末尾追加一行内容
-> vi /home/zhangsan/ex03  # 用编辑程序 vi 创建文件ex03
-> vim /home/zhangsan/ex04  # 用编辑程序 vim 创建文件ex04
-> 
-> # 查看文件内容
-> cat ex02    # 列出ex02文件内容
-> tail ex02   # 从文件末尾显示
-> tail -n 5 /etc/passwd  # 显示最后5行
-> tail -f /var/log/messages  # 不停的现实最后内容，适合监控日志
-> head ex02   # 从文件头开始显示，支持指定行数，-n 5
-> vi  vim   more   
-> 
-> # 拷贝文件：
-> cp /etc/passwd /home/zhangsan/test/  # 把/etc下的文件passed拷贝到test下
-> cp -r /etc  /home/zhangsan/test/  # 把/etc下的所有文件包含子目录全拷贝过来
-> 
-> # 删除文件：
-> rm ex03     # 删除文件ex03
-> rm -f ex03  # 强制删除ex03
-> rm -rf /home/zhangsan/test  # 强制删除目录test及其下所有目录文件
-> 
-> # 移动文件（可当作改名命令）
-> mv /home/zhangsan/test/ex02  /home/zhangsan/test/ex30
-> 
-> # 查看当前系统支持的shell  
-> cat /etc/shells
-> 
-> # 查看Linux内核版本
-> uname -a 
-> ls -l /boot/
-> 
-> # 查看命令别名
-> alias
-> 
-> # 重复上一次的某个命令
-> !cp
-> 
-> # 查看当前登陆用户
-> who
-> 
-> # 查看当前身份
-> whoami
-> 
-> # 查看历史命令
-> history
-> 
-> # 查看防火墙SELinux 状态
-> getenforce  # 可能返回结果有三种：Enforcing、Permissive 和 Disabled。Disabled 代表 SELinux 被禁用，Permissive 代表仅记录安全警告但不阻止可疑行为，Enforcing 代表记录警告且阻止可疑行为。
-> setenforce 0 # 暂时关闭
-> 
-> # 查看当前环境变量
-> export
-> ```
+  ```bash
+  cat /etc/shells
+  ```
 
-### 4、用户和组管理
+* 查看Linux内核版本
 
-#### 4.1 passwd 和 shadow
+  ```bash
+  uname -a 
+  ls -l /boot/   # boot目录下的vmlinuz......就是内核文件
+  ```
 
-* /etc/passwd 文件：
+* 查看别名
 
-> ```shell
-> root: x : 0 : 0: root:/root:/bin/bash
-> 1 : 2 : 3 : 4:  5  : 6   :  7
-> ```
->
-> > 1  用户名
-> >
-> > 2  口令
-> >
-> > 3  uid  用户ID，root 的UID 是0,**应该说uid等于0的root用户**，普通用户在1000以后
-> >
-> > 4  gid  组ID
-> >
-> > 5  描述
-> >
-> > 6  家目录
-> >
-> > 7  login后的动作，/bin/bash 表示登陆后进入shell，如果是nologin 则禁止登陆
+  ```bash
+  alias
+  ```
 
-* 口令文件：/etc/shadow
+* 重复执行上一次执行过的某个命令
 
->
-> ```shell
-> root:k1KrZUNStssQ1.....: 17810 : 0 : 99999 : 7 :   :  :
-> 1 :       2            :   3   : 4 :  5    : 6 : 7 : 8
-> ```
->
-> > 1  用户名  2   口令
-> >
-> > 3  密码创建日期，自1970.1.1起计算，每过一天加1
-> >
-> > 4   和3相比两次密码的修改间隔时间，也就是多少天改一次密码
-> >
-> > 5   和3相比，密码有效期
-> >
-> > 6   密码过期多少天开始提醒
-> >
-> > 7   过期多少天后禁用
-> >
-> > 8   账号失效时间
+  ```bash
+  !   # 比如前面执行过的cp,现在还需要执行一遍，就敲入!cp
+  !!  # 执行上一条
+  ```
 
-#### 4.2 用户管理常用命令：
+* 查看历史命令
 
-```shell
-# 增加新用户 zhangsan 
-useradd xiaomin
+  ```bash
+  # home 目录用户家目录下的".bash_history"记录了历史命令和历史信息
+  history # 显示历史命令
+  history 5 # 显示最后5条
+  !2   # 执行第2个历史名利
+  ```
 
-# 新增用户并指定uid
-useradd -u 888 boss
+* 查看SELinux状态
 
-# 为用户设置密码
-passwd xiaomin
+  ```bash
+  getenforce  
+  # 可能返回结果有三种：Enforcing、Permissive 和 Disabled。Disabled 代表 SELinux 被禁用，Permissive 代表仅记录安全警告但不阻止可疑行为，Enforcing 代表记录警告且阻止可疑行为。
+  setenforce 0 # 暂时关闭
+  ```
 
-# 管理用户密码时效，密码60天失效
-chage -E 60 xiaomin 
-# 查看用户密码策略
-chage -l xiaomin
+* 查看和设置环境变量
 
-# 修改用户账号信息
-usermod -d /home/xm xiaomin   # 修改家目录
-usermod -g class2 xiaomin     # 修改组信息  
+  ```bash
+  # 查看环境变量
+  export    
+  # 定义环境变量并赋值
+  export MYENV=7
+  ```
 
-# 切换账户,exit 退出
-su - xiaomin
+  
 
-# 删除用户,-r 删除小明的相关资源，如家目录
-userdel -r xiaomin  
-```
-#### 4.3 组管理命令
+### 二、文件和目录相关
 
->   * 组配置文件： /etc/group    /etc/gshadow
->
->   ```shell
->   # 增加新组，可以 -g  指定组ID
->   groupadd class1
->   # 分配组成员,把xiaomin加到class1组里
->   gpasswd -a xiaomin class1
->   # 从组中删除一个成员
->   gpasswd -d xiaomin class1
->   # 删除组（里面不能有成员）
->   groupdel class1
->   ```
+* 查看目录列表
 
-### 5、文件管理
+  ```shell
+  ls -l /boot      # -l 使用长列表方式
+  ls -l -a /boot   # -a 显示所有文件，包括隐藏属性
+  ls -la -h /boot  # -h 以人类方式显示，就是文件大小显示为 K,M,G
+  ```
 
-* Linux 中一切都是文件,包括硬件设备
+* 创建目录
 
-* linux 文件名长度限制在256个字节。
+  ```bash
+  mkdir /home/zhangsan/test 
+  ```
 
-* 文件名前加点表示隐藏文件，如`.git`
+* 改变当前目录位置
 
-#### 5.1 文件类型说明：
-```shell
-$ ls -l /etc 
-...
-drwxr-xr-x  2  root  root   244,  0  4月   4  18:26 pts
-...
-```
-```shell
-# 第1位，文件类型说明：
-- 普通文件
-d 目录
-b 块设备，接口设备，比如硬盘、光驱
-c 字符设备，串行端口的接口设备，比如键盘、鼠标
-l 链接文件，类似windows的快捷方式。
-# 第2,3,4为代表user(u)的权限，第5,6,7位代表group(g)的权限，第8,9,10位代表other（o）的权限。
-r  表示读,对应的10进制数值为4
-w  表示写，对应的10进制数值为2
-X  对于文件来说表示执行，对目录来说就是搜索，对应的10进制数值为1
-- 表示无权限
-```
+  ```shell
+  cd /home/zhangsan/test
+  cd -  # 回到上一次的目录
+  cd ~  # 改变目录到家目录home
+  ```
+
+* 查看当前目录
+
+  ```bash
+  pwd
+  ```
+
+* 创建一个文本文件
+
+  ```bash
+  touch ex01     # 创建一个0字节大小的文件，文件名为ex01
+  echo "this is a test" > ex02 # 利用重定向生成一个文件ex02
+  echo "second line" >> ex02  # 在文件ex02末尾追加一行内容
+  vi /home/zhangsan/ex03  # 用编辑程序 vi 创建文件ex03
+  vim /home/zhangsan/ex04  # 用编辑程序 vim 创建文件ex04
+  ```
+
+* 查看文件内容
+
+  ```bash
+  cat ex02    # 列出ex02文件内容
+  tail ex02   # 从文件末尾显示
+  tail -n 5 /etc/passwd  # 显示最后5行
+  tail -f /var/log/messages  # 不停的现实最后内容，适合监控日志
+  head ex02   # 从文件头开始显示，支持指定行数，-n 5
+  vi  filename  # 用vi编辑器查看编辑
+  vim filename  # 用Vim编辑器查看编辑
+  more   filename  # 用more查看编辑，可上下翻页
+  ```
+
+* 拷贝文件
+
+  ```bash
+  cp /etc/passwd /home/zhangsan/test/  # 把/etc下的文件passwd拷贝到test下
+  cp -r /etc  /home/zhangsan/test/  # 把-r 递归，/etc下的所有文件包含子目录全拷贝过来
+  ```
+
+* 删除文件
+
+  ```bash
+  rm ex03     # 删除文件ex03
+  rm -f ex03  # 强制删除ex03
+  rm -rf /home/zhangsan/test  # 强制删除目录test及其下所有目录文件
+  ```
+
+* 移动和改名
+
+  ```bash
+  mv /home/test01   /home/lisi/test01  # 移动
+  mv /home/zhangsan/test/ex02  /home/zhangsan/test/ex30   # 改名
+  ```
+
+* 文件列表属性说明
+
+  ```bash
+  $ ls -l /etc 
+  ...
+  drwxr-xr-x  2  root  root   244,  0  4月   4  18:26 pts
+  ...
+  ```
+
+  ```bash
+  # 第1位，文件类型说明：
+  - 普通文件
+  d 目录
+  b 块设备，接口设备，比如硬盘、光驱
+  c 字符设备，串行端口的接口设备，比如键盘、鼠标
+  l 链接文件，类似windows的快捷方式。
+  
+  # 第2,3,4为代表user(u)的权限，第5,6,7位代表group(g)的权限，第8,9,10位代表other（o）的权限。
+  r  表示读,对应的10进制数值为4
+  w  表示写，对应的10进制数值为2
+  X  对于文件来说表示执行，对目录来说就是搜索，对应的10进制数值为1
+  - 表示无权限
+  ```
+
+* 文件属性管理
+
+  ```bash
+  # 将指定文件的拥有者改为其他用户或组 chown
+  chown root:root /home/test/ex0  # 把文件ex0的拥有者修改为root，组修改为root
+  chown root /home/test/ex0  # 文件给root
+  chown :root /home/test/ex0  # 文件给root组
+  chown -R root /home/test/   # 包含子目录
+  
+  # 修改文件访问权限，-R 迭代目录
+  chmod o+w ex0    # 给其他人授予写这个文件的权限
+  chmod go-rw ex0  # 删除群组和其他人对这个文件的读和写的权限
+  chmod go-w+x <dir> # 拒绝组成员和其他人创建或删除目录 dir（go-w）中文件的权限，允许组成员# 和其他人搜索 dir，或在路径名(go+x)中使用它.
+  # 只有拥有者能够操作
+  chmod u+t ex0 
+  # 让用户能够执行他无权执行的程序
+  chmod u+s /usr/bin/vim
+  
+  # 用数字修改文件访问权限，-R 迭代目录
+  chmod 700 ex0   #  user拥有最大权限（rwx 4+2+1=7)，组和其他人无权限
+  
+  # 两个文件属性查看命令：
+  file ex01    # file 辨识文件类型
+  stat ex01    # 文件/文件系统的详细信息显示,诸如访问时间，修改时间等
+  
+  # 查看默认文件权限掩码
+  umask 
+  ```
+
+  
+
+
+
+### 三、用户权限相关
+
+* 查看当前登陆用户
+
+  ```bash
+  who  # 当前登陆用户
+  w    # 当前登陆用户
+  whoami  # 查看当前身份
+  ```
+
+* passwd用户文件说明
+
+  ```bash
+  # 文件位置
+  /etc/passwd
+  # 格式说明（共7个字段）
+           root : x : 0 : 0 : root  :  /root  :  /bin/bash
+             1  : 2 : 3 : 4 :  5    :    6    :  7
+  # 1  用户名
+  # 2  口令
+  # 3  UID 用户ID，root的UID是0，应该说UID=0的用户才是root
+  # 4  GID 组ID
+  # 5  描述
+  # 6  家目录路径
+  # 7  登陆后执行的脚本，nologin禁止登陆
+  ```
+
+* shadow口令文件
+
+  ```bash
+  # 文件位置：
+  /etc/shadow
+  # 格式说明（共8个字段）
+      root  :  k1KrZUNStssQ1..... : 17810 : 0 : 99999 :  7 :    :    :
+        1   :       2             :   3   : 4 :  5    : 6  : 7  :  8
+  #  1  用户名  
+  #  2  口令
+  #  3  密码创建日期，自1970.1.1起计算，每过一天加1
+  #  4  和3相比两次密码的修改间隔时间，也就是多少天改一次密码
+  #  5  和3相比，密码有效期
+  #  6  密码过期多少天开始提醒
+  #  7  过期多少天后禁用
+  #  8  账号失效时间 
+  ```
+
+* 用户管理
+
+  ```bash
+  # 增加新用户 zhangsan 
+  useradd xiaomin
+  
+  # 新增用户并指定uid
+  useradd -u 888 boss
+  
+  # 为用户设置密码
+  passwd xiaomin
+  
+  # 管理用户密码时效，密码60天失效
+  chage -E 60 xiaomin 
+  # 查看用户密码策略
+  chage -l xiaomin
+  
+  # 修改用户账号信息
+  usermod -d /home/xm xiaomin   # 修改家目录
+  usermod -g class2 xiaomin     # 修改组信息  
+  
+  # 切换账户,exit 退出
+  su - xiaomin
+  
+  # 删除用户,-r 删除小明的相关资源，如家目录
+  userdel -r xiaomin  
+  ```
+
+* 组管理
+
+  ```bash
+  # 组配置文件： /etc/group    /etc/gshadow
+  
+  # 增加新组，可以 -g  指定组ID
+  groupadd class1
+  
+  # 分配组成员,把xiaomin加到class1组里
+  gpasswd -a xiaomin class1
+  
+  # 从组中删除一个成员
+  gpasswd -d xiaomin class1
+  
+  # 删除组（里面不能有成员）
+  groupdel class1
+  ```
+
+  
+
+
+
+
+
+
 
 #### 5.2  文件管理常用命令
-
 ```shell
-# 将指定文件的拥有者改为指定的用户或组 chown
-chown root:root /home/test/ex0  # 把文件ex0的拥有者修改为root，组修改为root
-chown root /home/test/ex0  # 文件给root
-chown :root /home/test/ex0  # 文件给root组
-chown -R root /home/test/   # 包含子目录
 
-# 修改文件访问权限，-R 迭代目录
-chmod o+w ex0    # 给其他人授予写这个文件的权限
-chmod go-rw ex0  # 删除群组和其他人对这个文件的读和写的权限
-chmod go-w+x <dir> # 拒绝组成员和其他人创建或删除目录 dir（go-w）中文件的权限，允许组成员# 和其他人搜索 dir，或在路径名(go+x)中使用它.
-# 只有拥有者能够操作
-chmod u+t ex0 
-# 让用户能够执行他无权执行的程序
-chmod u+s /usr/bin/vim
-
-# 用数字修改文件访问权限，-R 迭代目录
-chmod 700 ex0   #  user拥有最大权限（rwx 4+2+1=7)，组和其他人无权限
-
-# 两个文件属性查看命令：
-file ex01    # file 辨识文件类型
-stat ex01    # 文件/文件系统的详细信息显示,诸如访问时间，修改时间等
-
-# 查看默认文件权限掩码
-umask 
 
 ```
 
@@ -1040,7 +1072,7 @@ systemctl stop NetworkManager
 
 systemctl enable NetrokManager
 
-# Centos 7 下网卡命名规范
+# Centos 下网卡命名规范
 # 网卡名变成了类似ens33 类型的名字，这个名字是系统计算出来的。
 #  其中 en 以太网 ， wl无线 ， o 集成网卡， s 标识PCI网卡 ， p 表示usb外置网卡等等。
 # 取消新的网卡名计算方法。
@@ -1394,7 +1426,7 @@ initrd /initramfs-2.6.32-754.el6.x86_64.img
 # 2、重新启动虚拟机
 # 3、重启后系统会停留在 grub> 提示符下，手动输入：
 # 如果不止一块硬盘，先执行一下setup(hd0)挂载一下
-boot (hd0,0)  # 回车 可能是root
+boot (hd0,0)  # 回车
 kernel /vmlinuz-2.6.32-754.el6.x86_64 ro  # tab 补齐，回车
 initrd /initramfs-2.6.32-754.el6.x86_64.img # 回车
 boot #回车
@@ -1415,7 +1447,7 @@ boot #回车
   # 进入光盘救援模式
   fdisk -l
   mkdir /stud01   # 在光盘上建立个目录
-  mount /dev/sda3 /stud01  #把根目录挂载到stud01上
+  mount /dev/sda2 /stud01  #把根目录挂载到stud01上
   ls -l /stud01
   cp /stud01/backup/fstab /stud01/etc/fstab
   exit
@@ -1424,7 +1456,7 @@ boot #回车
   # 由于恢复了fstab,这次rescue可以找到硬盘了，并且会挂载到/mnt/sysimage上
   mkdir /stud01
   mount /dev/cdrom /stud1/
-  rpm -ivh /stud01/Packages/kernel-3.xxxxxxxx  --root=/mnt/sysimage --force
+  rpm -ivh /stud01/Packages/kernel-2.xxxxxxxx  --root=/mnt/sysimage --force
   ls -l /mnt/sysimage/boot/
   chroot /mnt/sysimage/   #挂载到根上
   grub-install /dev/sda   #恢复grub,但修复不了grub.conf
