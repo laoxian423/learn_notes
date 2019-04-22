@@ -367,8 +367,8 @@
   > """
   > %中可以指定宽度  %10d  数字右对齐  字符串也是右对齐
   > %中可以指定精度  %.3f  三位小数
-  >          %.5s  只显示前5个字符
-  >          %8.3f  宽度8小数3位
+  >       %.5s  只显示前5个字符
+  >       %8.3f  宽度8小数3位
   > """
   > ```
   >
@@ -424,18 +424,215 @@
   > * 大小写转换
   >
   > ```python
-  > # upper 大写
-  > # lower  小写
-  > # swapcase: 交换大小写
-  > # capitalize:首字母大写
-  > # title : 每个单词首字母大写，剩余小写
+  > # s.upper() 大写
+  > # s.lower()  小写
+  > # s.swapcase(): 交换大小写
+  > # s.capitalize():首字母大写
+  > # s.title() : 每个单词首字母大写，剩余小写
+  > 
+  > # s.isupper(): 是否都是大写
+  > # s.islower(): 是否都是小写
+  > # s.istitle(): 是否每一个单词首字母是大写，剩余是小写
   > 
   > ```
   >
-  > 
+  > * 字符串对齐
   >
+  > ```python
+  > # s.center(18,'*')   第一个参数是宽度，第二个是填充字符,第二个省略是空格填充
+  > # s.ljust(18,'*')
+  > # s.rjust(18,'*')
+  > # s.zfill(6)  右对齐，左边用零对齐，只接受一个宽度参数
   > 
+  > ```
   >
+  > * 字符串的子串替换
+  >
+  > ```python
+  > s = 'Hello-Hello-Hello'
+  > # s.replace(‘hello',‘hi’)   第一个参数是被替换的子串，第二个是替换后的子串，返回替换后的字符串,
+  > # s.replace(‘hello',‘hi’,1)   第一个参数是被替换的子串，第二个是替换后的子串，返回替换后的字符串,第三个最大替换次数
   > 
+  > ```
   >
+  > * 字符串字符转换
+  >
+  > ```python
+  > # maketrans  translate      对字符串的某些字符进行转换
+  > # 先用maketrans 创建转换表
+  > table = str.maketrans('bcd','234')  # 静态方法,对应转换，b->2,c_3
+  > print(table) # {98:50,99:51,100:52}
+  > table = str.maketrans({'b':2,'c':3,'d':4})
+  > table = str.maketrans({98:50,99:51,100:52})
+  > s.translate(table)
+  > table = str.maketrans('bcd','234','ie') # 把i和e都删掉
+  > s.translate(table)
+  > table = str.maketrans('','','ie') # 把i和e都删掉
+  > 
+  > ```
+  >
+  > * 字符串的劈分和合并
+  >
+  > ```python
+  > # s.split()  从左劈分,默认分隔符是空格，返回值都是list
+  > # s.rplit()  从右劈分,默认分隔符是空格，返回值都是list
+  > s = 'Python  Swift  kotlin'
+  > s.split()  # ['Python','swift','kotlin']
+  > s = 'python|swift|kotlin'
+  > s.split(sep='|')
+  > s = 'Python  Swift  kotlin java'
+  > s.split(maxsplit = 2) # 最大劈分次数
+  > 
+  > # partition  劈分，必须指定劈分符
+  > # rpartition 将字符串分为三部分
+  > 第一部分：劈分符前
+  > 第二部分：劈分符
+  > 第三部分：劈分符后面
+  > s='hello-world-'
+  > s.partition('-')  # ('hello','-','world-)
+  > 
+  > # join 合并，列表和元组都可以
+  > s = '|'.join(['python','swift','kotlin']) 合并用’|‘分隔
+  > s = '|'.join('python') # p|y|t|h|o|n
+  > 
+  > ```
+  >
+  > * 以is开头的方法
+  >
+  > ```python
+  > """
+  > ’123'.isidentifier():是否是合法的标识符
+  > ‘\t \r \n’.isspace()：是否由空白字符组成，指标符、回车、换行等
+  > 'abcd'.isalpha():是否全部是字母
+  > '123'.isdecimal():是否全部是十进制数组成
+  > '233'.isnumeric():是否全部是数字,汉字数字和罗马数字都是数字
+  > '111abc'.isalnum():是否全部有字母和数字组成
+  > """
+  > """
+  >   keyword 关键字检查模块
+  > """
+  > import keyword
+  > print(keyword.iskeyword('if'))
+  > ```
+  >
+  > * 取出前导字符串或后续字符串
+  >
+  > ```python
+  > # s.lstrip()  默认都是取空格
+  > # s.rstrip()
+  > # s.strip()
+  > s='    hello  world    '
+  > s='www.example.com'
+  > s.lstrip('cmowz.')  # example.com
+  > s.rstrip('cmowz.')  # www.example
+  > s.strip('cmowz.') # example
+  > ```
+
+  * 字典
+
+  > ```python
+  > pbook={'zhangsan':'122222222','lisi':'133333333','wangwu':'144444444'}
+  > print(pbook['zhangsan'])
+  > ```
+  >
+  > * 字典元素都是key-value对
+  > * key是唯一的
+  > * 元素是无序存放的
+  > * key必须是不可变对象
+  > * 字典是空间换时间，比较占内存。
+  >
+  > ```python
+  > # 字典的创建
+  > dict1 = {'key1':'value1','key2':'value2'}
+  > dict2 = {} # 空字典 
+  > 
+  > dict({'key1':'value1','key2':'value2'})
+  > dict(name='jack',age='18')
+  > dict([('name','jack'),('age',18)])
+  > dict(zip(range(3),'ABC'))
+  > 
+  > dict.fromKeys(['name','age']) #{'name':None,'age':None}
+  > dict.fromKeys(['name','age'],'N/A') # 指定一个默认值
+  > 
+  > ```
+  >
+  > ```python
+  > # 查
+  > d = {'name':'jack','age':18}
+  > print(d['name'])
+  > 
+  > print(d.get('name'))
+  > print(d.get('zhangsan','nan'))  # 设置不存在的key时返回的value
+  > 
+  > print('age' in d)  # 有这个key吗
+  > print('age' not in d)
+  > ```
+  >
+  > ```python
+  > # 改
+  > d = {'name':'jack','age':18,'gender':'man'}
+  > d['age'] = 20
+  > 
+  > d.update({'name':'tom','age':20})
+  > d.update([('name','mike'),('age',20)])
+  > d.update(name='mike',age=20)
+  > 
+  > ```
+  >
+  > ```python
+  > # 增
+  > d = {'name':'jack','age':18}
+  > d['gender']='man'   # 新增一个key-value
+  > 
+  > d.update({'gender':'man','score':90})
+  > d.update([('gender','man'),('score',90)])
+  > d.update(gender='man',score=90)
+  > ```
+  >
+  > ```python
+  > # 删
+  > d = {'name':'jack','age':18,'gender':'man'}
+  > value = d.pop('age') # 返回key对应value的值
+  > value = d.pop('score',90) # key 不存在时，可以返回一个设定值
+  > 
+  > del d['age']
+  > 
+  > key_value = d.popitem()   # 删除任意一个k-value对
+  > d.clear()  # 清空字典
+  > ```
+  >
+  > ```python
+  > # 为key设置默认value值
+  > d = {}
+  > print(d.setdefault('name','defaultName'))
+  > >>>defaultName
+  > d==>{'name':'defaultName'}
+  > ```
+  >
+  > ```python
+  > # 字典的视图，视图会随着字典变化
+  > # keys  返回所有的key
+  > # values  返回所有的value
+  > # items  返回所有的key-value对
+  > d = {'name':'jack','age':18,'gender':'man'}
+  > keys = d.keys()
+  > print(list(keys))
+  > # d.items  返回一个列表，元素是列表
+  > ```
+  >
+  > ```python
+  > # 借助字典格式化字符串
+  > pbook={'zhangsan':'1111111','lisi':'22222222','wangwu':'3333333'}
+  > print('wangwu number:%s,zhangsan number:%s' %(pbook['wangwu'],pbook['zhangsan']))
+  > # %(key)s
+  > print('wangwu number:%(wangwu)s,zhangsan number:%()zhangsan' % pbook )
+  > 
+  > print('wangwu number:{},zhangsan number:{}'.format(pbook['wangwu'],pbook['zhangsan']))
+  > # {key}
+  > print('wangwu number:{wangwu},zhangsan number:{zhangsan}'.format_map(pbook))
+  > 
+  > ```
+
+  * 集合
+
   > 
