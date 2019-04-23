@@ -661,4 +661,111 @@
   > set() # 空集合
   > ```
   >
+  > * 集合间的关系
+  >
+  > ```python
+  > # 两个集合是否相等
+  > s1 = {1,3,5,7,9}
+  > s2 = {3,7,9,5,1}
+  > s1 == s2  # True
+  > s1 != s2  # False
   > 
+  > # 判断一个集合是否是另一个集合的子集
+  > s1 = {1,3,5,7,9}
+  > s2 = {2,3,6,7,10}
+  > s2 = {1,3,5,6,7,9}
+  > s1.issubset(s2)  # False
+  > s1.issubset(s3)  # True
+  > 
+  > # 一个集合是否是另一个集合的超集
+  > print(s2.issuperset(s1)) # False
+  > print(s3.issuperset(s1)) # True
+  > 
+  > # 两个集合是否没有交集
+  > s1 = {1,3,5,7,9}
+  > s2 = {2,3,6,7,10}
+  > s3 = {2,4,6,8,10}
+  > s1.isdisjoint(s2)   # False
+  > s1.isdisjoint(s3)   # True
+  > 
+  > ```
+  >
+  > * 集合的数学操作
+  > * ![1556023210423](/home/morgan/myRepositray/learn_notes/pic/1556023210423.png)
+  >
+  > ```python
+  > # 交集
+  > s1 = {1,3,5,7,9}
+  > s2 = {2,3,6,7,10}
+  > print(s1.intersection(s2))
+  > print(s1 & s2)
+  > # 计算交集并更新值
+  > s1.intersection_update(s2)  # s1 ={3,7}
+  > 
+  > # 并集
+  > s1 = {1,3,5,7,9}
+  > s2 = {2,3,6,7,10}
+  > s1.union(s2)
+  > print(s1 | s2)
+  > 
+  > # 差集
+  > s1 = {1,3,5,7,9}
+  > s2 = {2,3,6,7,10}
+  > print(s1.difference(s2))
+  > print(s1 -s2)
+  > print(s1.difference_update(s2))
+  > 
+  > # 对称差集（并集-交集）
+  > s1 = {1,3,5,7,9}
+  > s2 = {2,3,6,7,10}
+  > s1.symmetric_difference(s2)
+  > s1.symmetric_difference_update(s2)
+  > print(s1 ^ s2)
+  > ```
+  >
+  > * 集合的查操作
+  >
+  > ```python
+  > s = {3,4,5,6,7}
+  > print(5 in s)
+  > ```
+  >
+  > * 集合的增操作
+  >
+  > ```python
+  > s = {3,4,5,6,7}
+  > s.add(8)
+  > 
+  > s.update({2,8})
+  > s.update([2,8])
+  > s.update((2,8))
+  > ```
+  >
+  > * 集合的删操作
+  >
+  > ```python
+  > s = {3,4,5,6,7}
+  > s.remove(5)  # key不存在，抛出keyError
+  > s.discard(5) # key不存在，不抛出错误
+  > s.pop(5) # 有返回值5
+  > s.pop() # 任意一个被删除
+  > s.clear() #清空集合
+  > ```
+  >
+  > * 不可变集合frozenset
+  >
+  > ```python
+  > # 存在hash值
+  > # 可以作为字典的key
+  > # 可以作为set中的元素
+  > print(frozenset())
+  > print(frozenset(range(1,6)))
+  > print(frozenset([2,3,5,7,6]))
+  > print(frozenset((3,5,6,7,8)))
+  > print(frozenset('abcdef'))
+  > print(frozenset({3,5,6,7,8,9}))
+  > 
+  > ```
+
+* 流程控制
+
