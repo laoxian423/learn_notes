@@ -769,3 +769,91 @@
 
 * 流程控制
 
+> 1996年，计算机科学家证明了任何简单或复杂的算法，都可以有顺序结构，选择结构和循环结构组合而成。
+>
+> ```python
+> # 所有对象都有布尔值。
+> # False  数值零，None，空字符串，空列表，空元组，空字典,空集合的布尔值为>False
+> bool(False)  
+> bool(0)
+> bool(None)
+> bool('')
+> bool([])
+> bool(())
+> bool(tuple())
+> bool({})
+> 
+> 
+> # 选择结构 if
+> if score >= 60 :
+> print('hello')
+> else :
+> print('world')
+> 
+> 
+> # elif
+> if score >=90 :
+> print('90')
+> elif score >=80:
+> print('80')
+> elif score >=60:
+> print('60')
+> [else] :
+> print('<60')        
+> 
+> ```
+
+* 条件表达式
+
+> ```python
+> score = 88
+> result = '及格了' if score >= 60 else '没及格'
+> ```
+
+* 循环结构
+
+> ```python
+> i=1
+> while i< 11:
+>     print(i)
+>     i += 1
+> while True:
+>     print(i)
+>     i += 1
+>     if i >=100 :
+>         break
+>        
+> for i in range(1,11):   # for i in 可迭代对象：列表，元组
+>     print(i)
+> for _ in range(1,11):
+>     print('hello')
+> 
+> words = ['java','python','kotlin','swift']
+> for word in words[:]: # 通过切片操作生成一份列表的拷贝
+>     if len(word)<5:
+>         words.remove(word)
+>         
+> # 遍历集合和字典
+> s = {2,3,1}
+> for number in s:
+>     print(number)    # 打印出的顺序是没有顺序的
+> 
+> for number in sorted(s):
+>     print(number)
+> 
+> d = {'fruits':86,'books':88,'videos':83}
+> for elem in d:
+>     print(elem)    # 会打印所有的key
+> for elem in d:
+>     print(d[elem])
+> for key in d.keys():
+>     print(key)
+> for value in d.values():
+>     print(key)
+> for key,value in d.items():
+>     print(key,values)
+>     
+> ```
+>
+> 
+
