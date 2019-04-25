@@ -285,6 +285,27 @@
 
   
 
+### 四、系统监控
+
+* sysstat  Linux系统运行监控命令
+
+  `yum -y install sysstat`
+
+  第一次使用会报“无法打开 /var/log/sa/sa17: 没有那个文件或目录”   17是当天日期:执行`sar -o 17`让其生成
+
+```shell
+# 查看网卡流量
+sar -n DEV  
+sar -n DEV 1 5  # 1秒显示一次，显示5次
+sar -n DEV -f /var/log/sa/sa17  # 查看某一天的流量
+
+# 查看历史负载
+sar -q
+
+# 查看磁盘
+sar -b
+```
+
 
 
 
