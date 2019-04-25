@@ -815,44 +815,95 @@
 > ```python
 > i=1
 > while i< 11:
->     print(i)
->     i += 1
+>  print(i)
+>  i += 1
 > while True:
->     print(i)
->     i += 1
->     if i >=100 :
->         break
->        
+>  print(i)
+>  i += 1
+>  if i >=100 :
+>      break
+>     
 > for i in range(1,11):   # for i in 可迭代对象：列表，元组
->     print(i)
+>  print(i)
 > for _ in range(1,11):
->     print('hello')
+>  print('hello')
 > 
 > words = ['java','python','kotlin','swift']
 > for word in words[:]: # 通过切片操作生成一份列表的拷贝
->     if len(word)<5:
->         words.remove(word)
->         
+>  if len(word)<5:
+>      words.remove(word)
+>      
 > # 遍历集合和字典
 > s = {2,3,1}
 > for number in s:
->     print(number)    # 打印出的顺序是没有顺序的
+>  print(number)    # 打印出的顺序是没有顺序的
 > 
 > for number in sorted(s):
->     print(number)
+>  print(number)
 > 
 > d = {'fruits':86,'books':88,'videos':83}
 > for elem in d:
->     print(elem)    # 会打印所有的key
+>  print(elem)    # 会打印所有的key
 > for elem in d:
->     print(d[elem])
+>  print(d[elem])
 > for key in d.keys():
->     print(key)
+>  print(key)
 > for value in d.values():
->     print(key)
+>  print(key)
 > for key,value in d.items():
->     print(key,values)
+>  print(key,values)
+>  
+> # 带索引的序列遍历
+> L = ['java','python','swift','kotlin']
+> index = 0
+> for item in L:
+>     print('L[{}]={}'.format(index,item))
+>     index += 1
+> 
+> for index in range(len(L)):
+>     print('L[{}]={}'.format(index,L[index]))
 >     
+> index=0
+> while index < len(L):
+>     print('L[{}]={}'.format(index,L[index]))
+>     index += 1
+> 
+> # 将要遍历的对象转换为enumerate()对象    
+> print(list(enumerate(L)))
+> print(list(enumerate(L,1)))  # 索引从1开始
+> 
+> for index,item in list(enumerate(L)):
+>     print('L[{}]={}'.format(index,item)   
+>           
+> for index,item in enumerate(L):
+>     print('L[{}]={}'.format(index,item)   
+>           
+> # 循环中的break-else,
+> isBreak = False
+> n = 0
+> while n<5:
+>    if n == 6:
+>        isBreak = True
+>        break
+>    n += 1
+> if not isBreak:
+>    print('正常结束')
+>     
+> isBreak = False
+> for n in range(5):
+>    if n == 6:
+>        isBreak = True
+>        break
+> if not isBreak:
+>    print('正常结束')
+>           
+> n = 0
+> while n<5:
+>    if n == 6:
+>        break
+>    n += 1
+> else:
+>    print('正常结束')          
 > ```
 >
 > 
