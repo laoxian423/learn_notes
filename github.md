@@ -453,80 +453,67 @@ git stash clear
 
 ### 五、github 团队协作
 
-#### 5.1、集中式工作流
+#### 5.1、Git集中式工作流
 
 ![](./pic/1555632518763.png)
 
-中央仓库（远程仓库），本地仓库，开发者自行决定push
+* 工作方式：
 
-以中央仓库作为中心，容易版本冲突,只用一个master分支，不用其他分支
+  集中式工作流以**中央仓库**作为项目所有修改的单点实体。相比`SVN`缺省的开发分支`trunk`，`Git`叫做`master`，所有修改提交到这个分支上。该工作流只用到`master`这一个分支。
 
-![1555633175564](F:\myRepositraies\learn_notes\pic\1555633175564.png)
+* 集中式工作流示例
 
-![1555633191135](F:\myRepositraies\learn_notes\pic\1555633191135.png)
+```bash
+# 1、user1:新建一个仓库 concentrated_flow
+# 2、user1:邀请协作者
+# 3、user2:接收邀请,会收到邮件和页面上的提醒（右上角铃铛）
+# 4、user1,user2:
+git clone https://github.com/user1/concentrated_flow
+# 5、user1:
+touch a 
+echo "大家好，我是用户1" >> a
+git add .
+git commit -m "user1 add"
+git push
+# 6、user2 :
+git pull --rebase   # 无论那个用户都用这种方式pull中央仓库，防止三方合并，避免分叉太多。
+vim a 
+# ------- a ----------
+大家好，我是用户1
+大家好，我是用户2
+#----------------------
+git add .
+git commit -m "user2 add"
+git push
 
-![1555633202557](F:\myRepositraies\learn_notes\pic\1555633202557.png)
+```
 
-新建仓库
-
-邀请协作者，push权限
-
-被邀请者，右上角铃铛，有人邀请，接收或拒绝
-
-git clone https://github.com/zhangsan/test01
-
-User1:  touch  a     push
-
-user2:   touch b      push    拒绝   先pull
-
-user1,user2:git hi
-
-user2:git pull  
-
-user2:三方合并,避免，太乱
-
-user2:git push
-
-git reset 939d --hard
-
-git push -f
-
-git pull  --rebase
-
---rebase 可以避免分叉太多。
-
-冲突，都编辑了一个文件。
-
-git rebase --continue
-
-协作着在push的时候（centos）需要配置一下本地仓库目录下的.git/config：
-
-
+* 如果各个用户都编辑同一个文件，就会出现冲突，需要解决冲突，就是编辑引起冲突的文件。
+* 在这种方式下，首先要先保证自己本地仓库和中央仓库的一致后，再开始本地的推送push。
+* centos下协作者在push的时候，如果提示错误，需要配置一下本地仓库目录下的.git/config：
 
 ```shell
-# 修改 
+# 将.git/config 的 
 [remote "origin"]
 	url = https://github.com/wangz/example.git
-
-# 为：
-
+# 修改为：
 [remote "origin"]
 	url = https://wangz@github.com/wangz/example.git   # wangz是协作者账号
 ```
 
+* 集中式工作流的缺点：
 
+  协作者权限过大，过于灵活，用户过多的情况下，中央仓库可能时刻在变化，本地仓库无法同步。
 
 #### 5.2、功能分支工作流
 
-引入了工作分支 fetch
+* 工作方式：
 
-加强合作，减少沟通
+  为了提高效率，减少不必要的沟通，功能分支工作流引入了分支的机制。所有的功能开发都在新的分支上开发，不放在master。
 
-所有的功能开发都在新的分支上开发，不放在master
+  功能分支工作流依然是利用中央仓库，克隆到本地操作。只不过合并代码，解决冲突不在由每个人解决，而是通过发起  pull request  来管理合并。
 
-pull request  管理合并
-
-功能分支工作流依然是利用中央仓库，克隆到本地操作
+  除了master作为长期分支外，其他所有分支都是临时分支，合并后可以删除。
 
 ```shell
 u1:
