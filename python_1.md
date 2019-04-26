@@ -815,95 +815,221 @@
 > ```python
 > i=1
 > while i< 11:
->  print(i)
->  i += 1
+> print(i)
+> i += 1
 > while True:
->  print(i)
->  i += 1
->  if i >=100 :
->      break
->     
+> print(i)
+> i += 1
+> if i >=100 :
+>   break
+>  
 > for i in range(1,11):   # for i in 可迭代对象：列表，元组
->  print(i)
+> print(i)
 > for _ in range(1,11):
->  print('hello')
+> print('hello')
 > 
 > words = ['java','python','kotlin','swift']
 > for word in words[:]: # 通过切片操作生成一份列表的拷贝
->  if len(word)<5:
->      words.remove(word)
->      
+> if len(word)<5:
+>   words.remove(word)
+>   
 > # 遍历集合和字典
 > s = {2,3,1}
 > for number in s:
->  print(number)    # 打印出的顺序是没有顺序的
+> print(number)    # 打印出的顺序是没有顺序的
 > 
 > for number in sorted(s):
->  print(number)
+> print(number)
 > 
 > d = {'fruits':86,'books':88,'videos':83}
 > for elem in d:
->  print(elem)    # 会打印所有的key
+> print(elem)    # 会打印所有的key
 > for elem in d:
->  print(d[elem])
+> print(d[elem])
 > for key in d.keys():
->  print(key)
+> print(key)
 > for value in d.values():
->  print(key)
+> print(key)
 > for key,value in d.items():
->  print(key,values)
->  
+> print(key,values)
+> 
 > # 带索引的序列遍历
 > L = ['java','python','swift','kotlin']
 > index = 0
 > for item in L:
->     print('L[{}]={}'.format(index,item))
->     index += 1
+>  print('L[{}]={}'.format(index,item))
+>  index += 1
 > 
 > for index in range(len(L)):
->     print('L[{}]={}'.format(index,L[index]))
->     
+>  print('L[{}]={}'.format(index,L[index]))
+>  
 > index=0
 > while index < len(L):
->     print('L[{}]={}'.format(index,L[index]))
->     index += 1
+>  print('L[{}]={}'.format(index,L[index]))
+>  index += 1
 > 
 > # 将要遍历的对象转换为enumerate()对象    
 > print(list(enumerate(L)))
 > print(list(enumerate(L,1)))  # 索引从1开始
 > 
 > for index,item in list(enumerate(L)):
->     print('L[{}]={}'.format(index,item)   
->           
+>  print('L[{}]={}'.format(index,item)   
+>        
 > for index,item in enumerate(L):
->     print('L[{}]={}'.format(index,item)   
->           
+>  print('L[{}]={}'.format(index,item)   
+>        
 > # 循环中的break-else,
 > isBreak = False
 > n = 0
 > while n<5:
->    if n == 6:
->        isBreak = True
->        break
->    n += 1
+> if n == 6:
+>     isBreak = True
+>     break
+> n += 1
 > if not isBreak:
->    print('正常结束')
->     
+> print('正常结束')
+>  
 > isBreak = False
 > for n in range(5):
->    if n == 6:
->        isBreak = True
->        break
+> if n == 6:
+>     isBreak = True
+>     break
 > if not isBreak:
->    print('正常结束')
->           
+> print('正常结束')
+>        
 > n = 0
 > while n<5:
->    if n == 6:
->        break
->    n += 1
+> if n == 6:
+>     break
+> n += 1
 > else:
->    print('正常结束')          
+> print('正常结束')          
+> ```
+>
+> ```python
+> # 循环中的break和continue
+> for i in range(1,5):
+>     if i == 3:
+>         break
+>     print('i=',i)
+> 
+> for i in range(1,5):
+>     if i==3:
+>         continue
+>     print('i=',i)
+> # 在嵌套的循环语句中，break和continue默认作用域当前循环
+> for i in range(1,4):
+>     for j in range(1,4):
+>         if i == j:
+>             break
+>         print('i=',i,'j=',j)
+> 
+> ```
+>
+> ```python
+> # 并行遍历。同时遍历多个可迭代对象
+> names = ['jack','mike','tom']
+> ages = [16,32,43]
+> for in in range(len(names)):
+>     print(names[i],'的年龄是:',ages[i])
+>     
+> # 使用zip打包多个可迭代对象为zip对象
+> zip(names,ages)
+> for name,age in list(zip(names,ages)):
+>     print(name,'的年龄是:',age)
+>     
+> for name,age in zip(names,ages):
+>     print(name,'的年龄是:',age)
+> 
+> # 如果多个可迭代对象长度不同，回向短的看齐
+> # 可以使用*对zip对象解压缩
+> x = [1,2,4]
+> y = [4,5,6]
+> print(list(zip(x,y)))
+> 
+> print(list(zip(*zip(x,y))))
+> x2,y2 = zip(*zip(x,y))
+> ```
+>
+> ```python
+> # map 和 filter
+> # map(函数名，可迭代对象）
+> result = map(ord,'abcd')
+> print(list(result))
+> result = map(str.upper,'abcd')
+> 
+> # filter(函数名，可迭代对象）
+> result = filter(str.isalpha,'123abc')
+> # 屏蔽掉结果为假的结果
+> 
+> ```
+
+* 列表生成式
+
+> ```python
+> # [元素表达式 for 变量  in  可迭代对象]
+> L = [i * i for i in range(1,7)] 
+> print(L)
+> 
+> # 满足条件才给元素表达式
+> L = [i * i for i in range(1,7) if not i % 2]  
+> print(L)
+> 
+> # 使用双重循环
+> L = [(i,j) for i in range(1,4) for j in range(1,4)]
+> # 相当于
+> L = []
+> for i in range(1,4):
+>     for j in range(1,4):
+>         L.append((i,j))
+> 
+> # 双重加if
+> L = [(i,j) for i in range(1,4) for j in range(1,4) if i != j]
+>  
+>     
+> # 列表生成式的嵌套
+> matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+> L = [[row[i] for row in matrix] for i in range(4)]
+> # 相当于
+> L = []
+> for i in range(4):
+>     L.append([row[i] for row in matrix])
+>     
+> # 还相当于
+> L = []
+> for i in range(4):
+>     l_row = []
+>     for row in matrix:
+>         l_row.append([row[i]])
+>     L.append([l_row])
+>     
+> ```
+
+* 集合生成式
+
+> ```python
+> # {元素表达式 for 变量  in  可迭代对象}
+> s = {i * i for i in range(1,7)} 
+> print(L)
+> 
+> # 和列表生成式基本一样，只是换成集合符号
+> ```
+
+* 字典生成式
+
+> ```python
+> items = ['Fruits','books','others']
+> prices = [96,78,83]
+> # ==> {'FRUITS':96,'BOOKs':78....}
+> # {字典key的表达式:value的表达式 for key ,value in 可迭代对象}
+> d = {item.upper():price for item,price in zip(items,prices)}
+> 
+> # if 从句
+> d = {item.upper():price 
+>      for item,price in zip(items,prices) 
+>      if price > 80 }
+> # 双重循环：
+> {i:j for i in range(1,4) for j in range(1,4)}
 > ```
 >
 > 
