@@ -503,7 +503,7 @@ git push
 
 * 集中式工作流的缺点：
 
-  协作者权限过大，过于灵活，用户过多的情况下，中央仓库可能时刻在变化，本地仓库无法同步。
+  协作者权限过大，过于灵活，用户过多的情况下，中央仓库可能时刻在变化，本地仓库无法同步，此外，可能需要大量的沟通协调，才能保证代码的一致性问题。
 
 #### 5.2、功能分支工作流
 
@@ -511,25 +511,26 @@ git push
 
   为了提高效率，减少不必要的沟通，功能分支工作流引入了分支的机制。所有的功能开发都在新的分支上开发，不放在master。
 
-  功能分支工作流依然是利用中央仓库，克隆到本地操作。只不过合并代码，解决冲突不在由每个人解决，而是通过发起  pull request  来管理合并。
+  功能分支工作流依然是利用中央仓库，克隆到本地操作。只不过合并代码，解决冲突不在由每个人自行解决，而是通过发起  pull request  来管理合并。
 
   除了master作为长期分支外，其他所有分支都是临时分支，合并后可以删除。
 
 ```shell
-u1:
-git checkout -b feat-dialog
-git branch
-touch c
+# 一个示例：
+user1:
+git checkout -b feat-dialog   # 创建一个分支feat-dialog，并进入分支
+git branch # 查看目前分支
+touch c  
 echo 1111 >> c
 git status
 git add .
 git commit -m "add c"
 echo 2222 >> c
 git commit -am "edit c"
-git push origin feat-dialog
-git checkout master
-ls -l
-git checkout feat-dialog
+git push origin feat-dialog  # 将分支feat-dialog推送的远程仓库
+git checkout master  # 切换到master主分支
+ls -l  # 看一下当前文件列表的变化情况
+git checkout feat-dialog  
 echo 333 >> c
 git commit -am "finished feature dialog"
 git push -u origin feat-dialog   # 建立分支关联
