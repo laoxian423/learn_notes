@@ -1026,11 +1026,118 @@
 > 
 > # if 从句
 > d = {item.upper():price 
->      for item,price in zip(items,prices) 
->      if price > 80 }
+>   for item,price in zip(items,prices) 
+>   if price > 80 }
 > # 双重循环：
 > {i:j for i in range(1,4) for j in range(1,4)}
 > ```
+>
+
+* 函数
+
+> ```python
+> # 函数定义,推荐函数名命名规范动宾格式。
+> def 函数名([形式参数1,形式参数2,...,形式阐述n]):
+>     函数体
+> ```
+>
+> ```python
+> # 函数如果直接用return返回，也是有返回值的：None
+> def decide_args(arg1,arg2):
+>     if arg1 and arg2 :
+>         return arg1,arg2
+>     elif (not arg1) and (not arg2):
+>         return
+>     else:
+>         result = arg1 or arg2
+> print(decide_args)
+> print(type(decide_args))
+> ```
+>
+> ```python
+> # 位置实参
+> def f(a,b,c):
+>     print('a=',a,'b=',b,'c=',c)
+>     
+> f(2,5,8) #实参对应相应形参    
+> ```
+>
+> ```python
+> # 关键字形参
+> def f(a,b,c):
+>     print('a=',a,'b=',b,'c=',c)
+>     
+> f(a=2,b=5,c=8) # 指定形参名称，
+> f(2,5,c=8) # 位置实参和关键字实参，位置实参必须在关键字实参之前
+> ```
+>
+> ```python
+> #如果实参对象是可变类型，那么对形参的修改就是对实参的修改
+> def f(arg1,arg2):
+>     print('初始化形参后：arg1=',arg1,'arg2',arg2)
+>     arg1 = arg1 * 2
+>     arg2.append(4)
+>     print('修改形参后：arg1=',arg1,'arg2',arg2)
+> i = 10
+> L = [1,2,3]
+> print('调用函数前:i=',i,'L=',L)
+> f(i,L)
+> print('调用函数后:i=',i,'L=',L)
+> 
+> f(i,L[:])  # 利用切片仅仅把可变类型的值拷贝进去，变量相当于标签
+> print('调用函数后:i=',i,'L=',L)
+> ```
+>
+> ```python
+> # 多个返回值，利用return元组
+> def classify_numbers(numbers):
+>     odds = []
+>     evens = []
+>     for number in numbers:
+>         if number % 2 :
+>             odds.append(number)
+>         else:
+>             evens.append(number)
+>      return odds,evens
+> classify_numbers([15,86,39,26,53,68])
+> #([],[])
+> 
+> def lookup_min_max(numbers):
+>     if len(numbers) == 0:
+>         return
+>     min_num = numbers[0]
+>     max_num = numbers[0]
+>     for number in numbers[1:len(numbers)]:
+>         if number < min_num :
+>             min_num = number
+>         elif number > max_num:
+>             max_num = number
+>     return min_num,max_num
+> ```
+>
+> ```python
+> # 带默认值的形参
+> def f1(a,b=5):
+>     print('a=',a,'b=',b)
+>     
+> f1(2,6)
+> f1(2)
+> 
+> def f2(a,b=5,c=8):
+>     print(a,b,c)
+> f2(2,6,9)
+> f2(2)
+> f2(2,c=9)
+> 
+> # 定义形参默认值时，如果使用了可变类型，并且在函数体中改变了这个值，那么
+> # 下次调用函数时，默认值会变成改变后的值。变量就是标签
+> # 要使用可变类型对象时要多考虑这些影响。
+> 
+> ```
+>
+> 
+>
+> 
 >
 > 
 
