@@ -1038,18 +1038,18 @@
 > ```python
 > # 函数定义,推荐函数名命名规范动宾格式。
 > def 函数名([形式参数1,形式参数2,...,形式阐述n]):
->     函数体
+>  函数体
 > ```
 >
 > ```python
 > # 函数如果直接用return返回，也是有返回值的：None
 > def decide_args(arg1,arg2):
->     if arg1 and arg2 :
->         return arg1,arg2
->     elif (not arg1) and (not arg2):
->         return
->     else:
->         result = arg1 or arg2
+>  if arg1 and arg2 :
+>      return arg1,arg2
+>  elif (not arg1) and (not arg2):
+>      return
+>  else:
+>      result = arg1 or arg2
 > print(decide_args)
 > print(type(decide_args))
 > ```
@@ -1057,16 +1057,16 @@
 > ```python
 > # 位置实参
 > def f(a,b,c):
->     print('a=',a,'b=',b,'c=',c)
->     
+>  print('a=',a,'b=',b,'c=',c)
+>  
 > f(2,5,8) #实参对应相应形参    
 > ```
 >
 > ```python
 > # 关键字形参
 > def f(a,b,c):
->     print('a=',a,'b=',b,'c=',c)
->     
+>  print('a=',a,'b=',b,'c=',c)
+>  
 > f(a=2,b=5,c=8) # 指定形参名称，
 > f(2,5,c=8) # 位置实参和关键字实参，位置实参必须在关键字实参之前
 > ```
@@ -1074,10 +1074,10 @@
 > ```python
 > #如果实参对象是可变类型，那么对形参的修改就是对实参的修改
 > def f(arg1,arg2):
->     print('初始化形参后：arg1=',arg1,'arg2',arg2)
->     arg1 = arg1 * 2
->     arg2.append(4)
->     print('修改形参后：arg1=',arg1,'arg2',arg2)
+>  print('初始化形参后：arg1=',arg1,'arg2',arg2)
+>  arg1 = arg1 * 2
+>  arg2.append(4)
+>  print('修改形参后：arg1=',arg1,'arg2',arg2)
 > i = 10
 > L = [1,2,3]
 > print('调用函数前:i=',i,'L=',L)
@@ -1091,40 +1091,40 @@
 > ```python
 > # 多个返回值，利用return元组
 > def classify_numbers(numbers):
->     odds = []
->     evens = []
->     for number in numbers:
->         if number % 2 :
->             odds.append(number)
->         else:
->             evens.append(number)
->      return odds,evens
+>  odds = []
+>  evens = []
+>  for number in numbers:
+>      if number % 2 :
+>          odds.append(number)
+>      else:
+>          evens.append(number)
+>   return odds,evens
 > classify_numbers([15,86,39,26,53,68])
 > #([],[])
 > 
 > def lookup_min_max(numbers):
->     if len(numbers) == 0:
->         return
->     min_num = numbers[0]
->     max_num = numbers[0]
->     for number in numbers[1:len(numbers)]:
->         if number < min_num :
->             min_num = number
->         elif number > max_num:
->             max_num = number
->     return min_num,max_num
+>  if len(numbers) == 0:
+>      return
+>  min_num = numbers[0]
+>  max_num = numbers[0]
+>  for number in numbers[1:len(numbers)]:
+>      if number < min_num :
+>          min_num = number
+>      elif number > max_num:
+>          max_num = number
+>  return min_num,max_num
 > ```
 >
 > ```python
 > # 带默认值的形参
 > def f1(a,b=5):
->     print('a=',a,'b=',b)
->     
+>  print('a=',a,'b=',b)
+>  
 > f1(2,6)
 > f1(2)
 > 
 > def f2(a,b=5,c=8):
->     print(a,b,c)
+>  print(a,b,c)
 > f2(2,6,9)
 > f2(2)
 > f2(2,c=9)
@@ -1135,9 +1135,191 @@
 > 
 > ```
 >
+> ```python
+> # 定义关键字形参,只能接受关键字实参
+> def f(a,b,*,c,d):
+>     print('a=',a,'b=',b,'c=',c,'d',d)    
+> f(1,2,c =3 ,d =4)    
 > 
+> ```
 >
+> ```python
+> # 定义个数可变的位置形参,会将实参初始化为一个元组
+> def f(*args):
+>     print(args)
+> f()
+> f(1)
+> f(1,2,3)
+> # 通常*放到最后一个形参
+> def f(a,b,*c):
+>     print(a,b,c)
+> # 如果个数可变的位置形参只能放在前面，那么后面的位置形参必须都是关键字形参
+> def fun2(a,*b,c,d):
+>     print(a,b,c,d)
+> fun2(1,2,3,4,c=5,d=9)
 > 
+> ```
 >
+> ```python
+> # 使用 * 将序列中的每个元素都转换为位置实参
+> def f(a,b,c):
+>     print(a,b,c)
+> f(1,2,3)
+> L = [1,2,3]
+> f(*L)
 > 
+> def fun(*args):
+>     print(args)
+> fun(L) # ([1,2,3],)
+> fun(*L) # (1,2,3)
+> ```
+>
+> ```python
+> # 使用 ** 定义个数可变的关键字形参
+> def f(**kwargs):
+>     print(kwargs)
+> f()
+> f(a=1)
+> f(a=1,b=2,c=3)  #  {'a':1,'b':2,'c':3}
+> 
+> def fun(*args,**args): # 位置形参必须在关键字形参之前。
+> ```
+>
+> ```python
+> # 使用 ** 将字典中的每个k-value对转换为关键字形参
+> D = {'a':1,'b':2,'c':3}
+> def f(a,b,c):
+>     print(a,b,c)
+> f(**D)
+> 
+> def fun(**args):
+>     print(args)
+> fun(**D)  
+> # 输出：{'a':1,'b':2,'c':3}
+> 
+> ```
+>
+> ```python
+> # 函数参数总结
+> def f1(a,b=5,*args,**kwargs):
+>     print(a,b,args,kwargs)
+>     
+> f1(2,6,7,8,c=9)
+> 
+> def f2(a,b=5,*,c,**kwargs):
+>     print(a,b,c,kwargs)
+> f2(*(3,6),**{'c':8,'d':10})
+> ```
+>
+> ```python
+> # pass 占位符
+> def f1():
+>     pass
+> 
+> if a>0:
+>     pass
+> 
+> for i in range(1,10):
+>     pass
+> ```
+>
+> ```python
+> # 文档字符串，对函数、模块、类、或方法进行解释说明
+> # 可以使用工具根据字符串自动生成文档
+> # 通过属性__doc__可以访问文档字符串
+> # 调用内置函数help()得到的信息中会包含文档字符串
+> 文档、函数体、类的第一行：
+> """函数的定义之文档字符串"""
+> print(len.__doc__)
+> print(help(len))
+> # 格式约定
+> 1.第一行是简明扼要的总结
+> 2.第一行的首字母大写，第一行以句号结尾。
+> 3.如果文档字符串包含多行，第二行是空行，从第三行开始是详细的描述
+> def form_complex(real = 0.0,imag = 0.0):
+>     """Form a complex number.
+>     
+>     Keyword arguments:
+>     real  -- the real part(default 0.0)
+>     imag  -- the imaginary part(default 0.0)
+>     """
+>     pass
+> PEP 257
+> 
+> ```
+>
+> ```python
+> # 函数注解
+> # 说明形参或返回值的类型和作用，帮助函数文档化
+> PEP 3107
+> def f(a:'stirng type',b: int) -> 'join a with b':
+>     return a + str(b)
+> # 通过属性__annotations__可以访问函数注解
+> print(f.__annotations__)
+> # 通过help()包含函数注解
+> ```
+>
+> ```python
+> # 函数递归(递推 回归)
+> # 递归函数包含一种隐式循环，因此，必须有一个明确的递归结束条件
+> # 递归解决的问题必须满足两个条件：
+> 1.可以通过递归调用来缩小问题的规模，且新问题与原问题有着相同的形式
+> 2.存在一种简单情景，可以是递归在简单情景下退出
+> # 递归计算阶乘
+>    n! = 1*2*3.....*n=(n-1)! *n ,且1!=1
+>    如果用函数fac(n)表示n!,那么fac(n) = fac(n-1) * n = n * fac(n-1)
+> 且fac(1)=1
+> def fac(n):
+>     """使用递归结算阶乘"""
+>     if n ==1 :
+>         return 1
+>     return n * fac(n-1)
+> print(fac(6))
+> 
+> # 递归计算菲薄纳妾数列
+> F0 = 0,F1=1,Fn=F(n-1)+F(n-2) (n>=2)
+> 如果用函数fib(n)表示Fn，那么fib(n) = fib(n-1) + fib(n-2)
+> 且fib(0) = 0,fib(1)=1
+> def fib(n):
+>     if n == 0:
+>         return 0
+>     if n ==1 :
+>         return 1
+>     return fib(n-1) + fib(n-2)
+> print(fib(6))
+> ```
+
+* 舍含王赏麦：
+
+```python
+# 设计思路：
+def shehanwang(n):
+    t = 1  # 当前格子的麦子数
+    s = 1  # 当前所有格子的麦子数之和
+    for _ in range(2,n+1):
+        t *= 2
+        s += t
+    return s
+print(shehanwang(64))
+
+print(sum([2 ** i for i in range(64)]))
+```
+
+* 不重复的三位数：
+
+```python
+# 设计思路
+排列组合：0-9不重复的三位数 9 * 9 * 8 = 648
+设百位、十位、个位分别是a,b,c，取值范围是[1,9][0,9][0,9]
+通过三重循环穷举
+counter = 0
+for a in range(1,10):
+    for b in range(10):
+        for c in range(10):
+            if a != b and b!=c and c!=a :
+                counter += 1
+print(counter) 
+```
+
+
 
