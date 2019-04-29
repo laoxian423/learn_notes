@@ -495,10 +495,10 @@ git push
 ```shell
 # 将.git/config 的 
 [remote "origin"]
-	url = https://github.com/wangz/example.git
+	url = https://github.com/zhangsan/example.git
 # 修改为：
 [remote "origin"]
-	url = https://wangz@github.com/wangz/example.git   # wangz是协作者账号
+	url = https://wangwu@github.com/zhangsan/example.git   # wangwu是协作者账号
 ```
 
 * 集中式工作流的缺点：
@@ -517,7 +517,8 @@ git push
 
 ```shell
 # 一个示例：
-user1:
+# user2 创建仓库，并邀请user1为协作者。
+# user1 操作步骤:
 git checkout -b feat-dialog   # 创建一个分支feat-dialog，并进入分支
 git branch # 查看目前分支
 touch c  
@@ -535,74 +536,64 @@ echo 333 >> c
 git commit -am "finished feature dialog"
 git push -u origin feat-dialog   # 建立分支关联
 git push
-pull request:
-准备merge
-open a pull request
+# 登陆 user2的github仓库，由于你已经是协作者，所以对该仓库有了编辑的权限
+# 1、点击 "pull request",创建新的 PR
 
-u2:
-pull request（PR）
-看到
-code review
-每一行代码都可以评论，可要求必须改代码
+# user2操作步骤:
+# 点击 "pull request",可以看到user1用户的提交的PR
+# 注：通过 code review，可对每一行代码进行评论，可要求必须改代码
 
-u1：
-可以讨论，可以@ 
+# user1操作步骤：
+# 点击PR，可在此区域讨论问题，可以@某个人 
+# 按照user2的要求修改代码:
 vim c
 2222 => 4444
 git commit -am "edit c"
 git push
 
-其实都有合并权限的
-u2:
-merge
-master 里有了c
-git br -r  
+# user2操作步骤:
+# 检查代码，进行合并
+# 删除分支
 
-
+# 注：成为协作者后，所有的协作者对仓库都有修改权限，也就是不通过PR，自行可以合并，因此这种方式其实依赖于管理的要求，集中式工作流、分支工作流、Gitflow工作流都是如此，所以这些工作流一般用于小企业内部。
+# 分支工作流的主要特点就是，除了master分支，其他分支都是临时分支。
 ```
-
-上两种的缺点就是太灵活，协作者的权限过大
-
-master   分支，和临时分支
 
 #### 5.3、Gitflow工作流
 
-分支比较有规划，除了master长期分支外，还有开发分支等长期分支
+​       Git flow工作流和分支工作流在形式上是一样的，只是对分支的管理有了规范。在分支的规划上，除了master长期分支外，还增加了一个长期分支：开发分支（Develop），另外还增加了几个临时分支：功能分支(feature),BUG分支(hotfix)等，除了master和develop分支作为长期分支存在外，其余都是临时分支。此外，对各分支的功能也做了规范：
 
-master   版本
+master：长期分支，任何时候在这个分支拿到的都是稳定版本。
 
-开发分支（历史分支）Develop
+develop：长期分支，历史分支，所有的临时分支都从开发分支创建。
 
-功能分支从开发分支上分出  feature
+feature：临时分支，功能分支，新增的系统功能在feature分支中开发，然后合并到开发分支里
 
-hotfix分支
+hotfix：临时分支，补丁分支，完成后合并到master和develop分支中
 
-* 历史分支（开发分支，master分支）
+release:临时分支，预发分支。
 
-  master只放稳定版本
+![1556511868143](F:\myRepositraies\learn_notes\pic\1556511868143.png)
 
-  开发围绕Develp 来开发
-
-前面3中前提是有一个集中的中央仓库，一步步增加复杂性
+**注，前面3种工作流，都是围绕中央仓库，一步步增加复杂性**
 
 #### 5.4、Forking工作流（开源社区）
 
-开源社区中不可能让每一个人都成为协作者，操作代码库
+上游优先原则：只有一个master分支，它是其他所有分支的上游，只有上游分支采纳的代码，才能应用到其他分支。
+
+开源社区中不可能让每一个人都成为协作者，操作代码库。一般都是fork过来的，然后建立维护一个远程的连接，提交通过 pull request （Gitlab里面叫做 Merge Request）来合并代码，可以没有协作者。
 
 ![1555735304339](F:\myRepositraies\learn_notes\pic\1555735304339.png)
 
 ![1555735367039](F:\myRepositraies\learn_notes\pic\1555735367039.png)
 
-fork过来的，建立维护一个远程的连接
 
-pull request
 
-可以没有协作者
-
-![1555735816758](F:\myRepositraies\learn_notes\pic\1555735816758.png)
+![1556513690897](F:\myRepositraies\learn_notes\pic\1556513690897.png)
 
 ```shell
-仓库所有者：
+# 示例：
+# 仓库所有者在github上创建一个空仓库（官方仓库），然后：
 git clone https://git......
 mkdir say-hello
 cd say-hello/
@@ -615,20 +606,116 @@ git push
 其他人：
 1 fork
 2 clone
-3 cd say-hello
+3 git remote add upstream git@github.com:wangding/git-demo   # 与元仓库建立连接
+  git pull upstream master  # 用于平时同步官方仓库
+cd say-hello
 touch wangding2.md
 echo "hell everyone,i am wangding2" >> wangding2.md
 git add .
 git commit -m "docs(say-hello):add wangding.md"
 git push  # push 到自己的仓库里
 
-创建一个 new pull-request
-
-仓库所有者：
-多了一个pull-request
-合并merge
-
-git remote add upstream git@github.com:wangding/git-demo   # 与元仓库建立连接
-git pull upstream master
+# 在github上创建一个 new pull-request
+# 仓库所有者：
+  多了一个pull-request
+  合并merge
 ```
 
+### 六、git 使用规范
+
+![1556515079025](F:\myRepositraies\learn_notes\pic\1556515079025.png)
+
+* 第一步 新建分支
+
+  每次开发新功能，都应该新建一个单独的分支
+
+  ```shell
+  git checkout master
+  git pull
+  git checkout -b myfeature
+  ```
+
+* 第二步 提交分支
+
+  分支修改好后，进行提交
+
+  ```shell
+  git add .
+  git commit
+  ```
+
+* 第三步 撰写提交信息
+
+  ```bash
+  # ----------   提交信息的一个范本 ----------------
+  Present-tense summary under 50 characters
+  
+  * More information about commit (under 72 characters).
+  * More information about commit (under 72 characters).
+  
+  http://project.management-system.com/ticket/123
+  #--------------------------------------------------------
+  # 第一行是不超过50个字的提要，然后空一行，罗列出改动原因、主要变动、以及需要注意的问题。最后，提供对应的网址。
+  ```
+
+* 第四步 与主干同步
+
+  ```bash
+  git branch -r # 查看远程分支
+  git branch -a # 查看本地和远程所有分支
+  git branch -vv # 查看分支有没有映射到远程分支上
+  # git fetch origin 远程分支:本地分支
+  git fetch origin mast_1:addtest  
+  # 拉取远程分支mast_1，并创建本地分支addtest，不切换分支.采用此种方法建立的本地分支不会和远程分支建立映射关系.
+  
+  # git checkout -b 本地分支 origin/远程分支
+  git checkout -b brantest origin/fan 
+  # 拉取远程分支fan，创建切换到本地分支brantest ,采用此种方法建立的本地分支会和远程分支建立映射关系.
+  
+  git rebase origin/master 
+  ```
+
+* 第五步  合并 commit
+
+  ```shell
+  # 本地分支上可能有多个commit，当我们准备合并到主干上时，希望只有一个提交：
+  git rebase -i origin/master
+  #-------------------- 一个例子----------------------
+  pick 07c5abd Introduce OpenPGP and teach basic usage
+  pick de9b1eb Fix PostChecker::Post#urls
+  pick 3e7ee36 Hey kids, stop all the highlighting
+  pick fa20af3 git interactive rebase, squash, amend
+  
+  # Rebase 8db7e8b..fa20af3 onto 8db7e8b
+  #
+  # Commands:
+  #  p, pick = use commit  正常选中
+  #  r, reword = use commit, but edit the commit message  选择并且修改提交信息
+  #  e, edit = use commit, but stop for amending 选中允许你在暂停时修改
+  #  s, squash = use commit, but meld into previous commit  选中，会与上面一个合并
+  #  f, fixup = like "squash", but discard this commit's log message  合并，不保存提交信息
+  #  x, exec = run command (the rest of the line) using shell 执行其他 shell 命令
+  #
+  # These lines can be re-ordered; they are executed from top to bottom.
+  #
+  # If you remove a line here THAT COMMIT WILL BE LOST.
+  #
+  # However, if you remove everything, the rebase will be aborted.
+  #
+  # Note that empty commits are commented out
+  # ----------------------------------------------------------------
+  
+  # 也可以先撤销过去的某几个提交，然后再建一个新的：
+  git reset HEAD~5
+  git add .
+  git commit -am "kdkdkdk closes #28"
+  git push --force
+  ```
+
+* 第六步  推送到远程仓库
+
+  ```bash
+  git push --force origin myfeature
+  ```
+
+* 第七步 发出 Pull Request
