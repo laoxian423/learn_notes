@@ -1321,5 +1321,60 @@ for a in range(1,10):
 print(counter) 
 ```
 
+* 角谷猜想
 
+```python
+def jiaogu(n):
+    """验证角谷猜想"""
+    nc = n
+    while nc !=1 :
+        nc = nc*3 +1 if nc % 2 else nc/2
+    
+    print(n)
+            
+jiaogu(18)        
+```
+
+* 鸡兔同笼
+
+```python
+# 设鸡和兔的只数为x,y：
+#  x + y = h     (1)  x 的取值范围是[1,h-1] y = h -x
+#  2x + 4y = f   (2)  
+# 通过穷举x，只要x满足方程（2)，则得到了符合条件的解
+def chicken_rabbit(h,f):
+    for x in range(1,h):
+        y = h - x
+        if 2 * x + 4*y == f:
+            print(x,y)
+            return
+chicken_rabbit(35,94)            
+```
+
+* 百钱买百鸡
+
+```python
+# 100文钱买100只鸡，其中攻击5文1只，母鸡3文钱1只，小鸡1文3只，求各买了几只公鸡、母鸡、小鸡
+# 思路1: 
+  设公鸡、母鸡、小鸡分别数量为 x,y,z 
+    x + y + z = 100
+    5x + 3y + z/3 = 100
+  x 的取值范围是 [0,20]  100/5=20
+  y 的取值范围是 [0,33]
+  z 的取值范围是 [0,100]  因为最多只能买100,并且z能被3整除
+for x in range(0,21):
+    for y in range(0,34):
+        for z in range(0,101,3):
+            if x + y + z == 100 and  5 * x + 3 * y + z/3 == 100 :
+                print(x,y,z)
+                return
+# 思路二：
+通过两重循环，z = 100 -x -y , z >=0 and z 能被3整除 ，5x+3y+z/3=100
+for x in range(0,21):
+    for y in range(0,34):
+        z = 100 -x -y
+        if z >= 0 and z % 3 == 0 and 5*x + 3*y + z/3 ==100 :
+            print (x,y,z)
+        
+```
 
