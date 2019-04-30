@@ -1,4 +1,4 @@
-       1991年10月5日，还在上大学的Linus在一次UNIX实验后，对UNIX极度不满，决定自己写一个最好用操作系统，随后将第一个Linux 内核版本放到GNU。
+    1991年10月5日，还在上大学的Linus在一次UNIX实验后，对UNIX极度不满，决定自己写一个最好用操作系统，随后将第一个Linux 内核版本放到GNU。
        （GNU  自由软件基金会，由当时被成为第一黑客的richard stallman创建）
 ### 1、linux 常见版本：
 
@@ -38,8 +38,8 @@
 
 ### 3、基础操作
 
-> * 命令：
->
+#### 3.1 常用命令：
+
 > ```shell
 > # 提示符 $ 表示普通用户， # 表示root用户
 > # ~ 表示home目录，对于root来说，它的家目录在 /root
@@ -78,6 +78,11 @@
 > # 拷贝文件：
 > cp /etc/passwd /home/zhangsan/test/  # 把/etc下的文件passed拷贝到test下
 > cp -r /etc  /home/zhangsan/test/  # 把/etc下的所有文件包含子目录全拷贝过来
+> # 只拷贝新的或者不存在的文件
+> cp -u *.html destination
+> # 覆盖前提问
+> cp -i file1 fiel2
+> 
 > 
 > # 删除文件：
 > rm ex03     # 删除文件ex03
@@ -87,8 +92,11 @@
 > # 移动文件（可当作改名命令）
 > mv /home/zhangsan/test/ex02  /home/zhangsan/test/ex30
 > 
+> # 读取文件并复制到表春输出
 > # 查看当前系统支持的shell  
 > cat /etc/shells
+> # 将所有txt文件合并为一个1.txt
+> cat *.txt > 1.txt    
 > 
 > # 查看Linux内核版本
 > uname -a 
@@ -96,6 +104,8 @@
 > 
 > # 查看命令别名
 > alias
+> alias foo='cd /usr;ls;cd -'  # 自定义一条别名命令 foo
+> unalias foo   # 删除别名
 > 
 > # 重复上一次的某个命令
 > !cp
@@ -115,7 +125,36 @@
 > 
 > # 查看当前环境变量
 > export
+> 
+> # 显示命令类型
+> type command
+> type test   # 可以使用type查看系统中是否有同名命令
+> 
+> # 显示系统支持的内核命令
+> info coreutils
+> 
+> # sort 排序文本行
+> ls /bin /usr/bin | sort | less
+> 
+> # 查看环境变量
+> printenv
 > ```
+
+#### 3.2 通配符
+
+```bash
+*     # 匹配任意多个字符
+?     # 匹配任意一个字符
+[characters]  # 匹配任意一个属于字符集中的字符
+[!characters]  # 匹配任意一个不属于字符集中的字符
+[:alnum:] # 匹配任意一个字母或数字
+[:alpha:] # 匹配任意一个字母
+[:digit:] # 匹配任意一个数字
+[:lower:] # 匹配任意一个小写字母
+[:upper:] # 匹配任意一个大写字母
+```
+
+
 
 ### 4、用户和组管理
 
@@ -305,7 +344,10 @@ setfacl -b /home/test/a
   ln -s /etc/passwd  ./passwd2
   
   # 创建硬链接
-  ln /etc/passwd ./passwd3  # ls -l观察一下，属性后面的数字会加1,有多硬链接就加多少  
+  ln /etc/passwd ./passwd3 
+  # ls -l观察一下，属性后面的数字会加1,有多硬链接就加多少
+  # 硬链接不能引用不在同一磁盘分区的文件
+  # 无法引用目录
   ```
 
 #### 5.4、文件查找、压缩的命令
@@ -412,6 +454,8 @@ o    # 下插一行
 # 将输出到屏幕的内容输出到文件，覆盖原有内容
 ls -l > list.txt
 find / -user boss  > ofboss.txt
+> output.txt  # 创建一个空文件或者删除已存在的文件
+
 
 ```
 
@@ -432,6 +476,8 @@ ls -l /etc >> list.txt
 find / -user boss > right 2> error
 # 把标准输出和标准错误输出一起输出
 find / -user boss &> all
+# 不希望有输出
+ls -l /bin/usr 2> /dev/null
 ```
 
 #### 8.2 输入重定向
@@ -1491,5 +1537,70 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 exit
 exit
 # 系统自动重启
+```
+
+### 15、shell 
+
+#### 15.1  常用命令
+
+```bash
+# uniq  忽略文件中重复的行
+# sort 文本行排序
+ls /bin /usr/bin | sort | uniq | less
+# 查看重复行
+ls /bin /usr/bin | sort | uniq -d | less
+
+# wc 打印行数、字数、字节数
+wc test.txt
+ls /bin /usr/bin | sort | uniq | wc -l
+
+# grep 打印匹配行
+ls /bin /usr/bin | sort | uniq | grep zip
+
+# head/tail 打印文件的开头和结尾部分
+head -n 5 test01.txt
+tail -n 5 test01.txt
+# 实时查看文件
+tail -f /var/log/messages
+
+# tee 从stdin读取数据，并同时输出到stdout和文件
+ls /usr/bin | tee ls.txt | grep zip
+
+# echo 的扩展
+# 显示当前目录文件列表
+echo *  
+echo D*
+echo *s
+# 当作计算器来使用
+echo $((2+2))
+
+# 算数运算符
++
+-
+* 
+/
+% 取余
+** 取冥
+echo $(($((5**2)) * 3))
+echo $(((5**2) * 3))
+echo with $((5%2)) left over.
+
+# {} 花括号扩展
+echo Front-{A,B,C}-Back
+echo Number_{1..5}
+echo {Z..A}
+echo a{A{1,2},B{3,4}}b
+mkdir {2009..2011}-0{1..9}
+
+# 命令替换
+echo $(ls)
+file $(ls /usr/bin/* | grep zip)
+
+# 单引号和双引号
+# 单引号抑制所有的扩展
+
+# \ 转义字符，来源于 c 语言
+# echo 中加上 -e 参数，就可以解释转义字符了
+sleep 10 ; echo -e "Time's up\a"
 ```
 
