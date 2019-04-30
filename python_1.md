@@ -1378,3 +1378,40 @@ for x in range(0,21):
         
 ```
 
+* 谁家孩子跑的最慢
+
+![](./pic/1556631871631.png)
+
+```python
+# 思路：
+# 由1可知，各家三个孩子的总分都是:(1+2+3+....+9)/3=15
+# 由2可知，设李家孩子分数分别为9, x,15-(9+x),即 9,x,6-x,其中x[1,5]
+# 因为第二名是王家的孩子，所以可设王家孩子：8,y,15-(8+y),即8,y,7-y,其中
+# y [1,6]
+# 由3和4可知：
+# x - (6-x) >1 ,y - (7-y)>1
+# 通过循环穷举李家三个孩子的分数和王家三个孩子的分数，
+# 在穷举的过程中，定义一个列表存放所有名次对应的分数
+# 每穷举一次李家三个孩子的分数，就把李家三个孩子的分数从列表中删除
+# 每穷举一次王家三个孩子的分数，就把王家三个孩子的分数从列表中删除
+# 列表中剩余的元素即为张家三个孩子的分数，从大到小分表为zhang[2] zhang[1] zhang[0]
+# 因为张家三个孩子的名次也没有相连的，
+# 所以zhang[2] - zhang[1] > 1,并且 zhang[1] - zhang[0] > 1
+def slowest_child():
+    """求最后一名是谁家的孩子"""
+    for li in [[9, x, 6-x] for x in range(1,6) if x - (6- x) > 1]:
+        scores = list(range(1,10))
+        for score in li:
+            scores.remove(score)
+        for wang in [[8, y, 7-y] 
+                     for y in scores 
+                     if 7-y in scores and  y - (7- y) > 1]:
+            for score in wang:
+                scores.remove(score)
+            zhang = scores
+            if zhang[2] - zhang[1] > 1 and zhang[1] -zhang[0] >1 :
+                print("li's family",li)
+                print("wang's family",wang)
+                print("zhang's family",zhang)
+```
+
