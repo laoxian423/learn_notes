@@ -4,7 +4,7 @@
 
 ### 1、   markdown  整理
 
-> * Markdown.md     markdown常用
+> * Markdown.md     :diamond_shape_with_a_dot_inside: markdown常用
 
 ### 2、linux 学习整理
 
