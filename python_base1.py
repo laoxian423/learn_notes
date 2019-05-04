@@ -1,3 +1,6 @@
+from datetime import datetime
+from string import Template
+
 def t_is():
     """ 对不可变数据类型使用 is 比较 """
     int1 = 188
@@ -121,10 +124,184 @@ def t_list():
     L[:] = [] 
     print('L[:] = [] or L.clear(),列表清空 :',L)
     
+    print('\n\n-列表的加法和乘法操作')
+    L1 = [1,2,3]
+    L2 = [4,5,6]
+    print('L1 = ',L1)
+    print('L2 = ',L2)
+    print('L1 + L2 = ',L1 + L2)
 
+    print('\n\n-列表的加法不会对原有的值进行修改')
+    L1 = L2 = [1,2,3]
+    L1 = L1 + [4,5,6]
+    print('L1 = L2 = [1,2,3]')
+    print('L1 = L1 + [4,5,6]')
+    print('L1 , L2 ：',L1,L2)   
+    print('L1 的值发生了变化，而 L2 还是原有的值')
 
+    print('\n\n-参数赋值运算符会对列表本身进行修改')
+    L1 = L2 = [1,2,3]
+    L1 += [4,5,6]
+    print('L1 = L2 = [1,2,3]')
+    print('L1 += [4,5,6]')
+    print('L1 , L2 ：',L1,L2)   
+    print('L1 和 L2 的值都发生了变化')
 
+    print('\n\n-列表的乘法')
+    L1 = [1,2,3]
+    L1 = L1 * 3
+    print('L1 = [1,2,3] ;L1 = L1 * 3 =>',L1)
+    
+    print('\n\n-列表的比较')
+    print('[2,3,4]<[2,3,5] =>',[2,3,4]<[2,3,5])
+    print('[7,[2,6]] > [7,[2,5]]',[7,[2,6]] > [7,[2,5]])
+    a = b = [1,2,3]
+    c = [1,2,3]
+    print('a = b = [1,2,3];c = [1,2,3]:')
+    print('a == b ?:',a == b)
+    print('a == c ?:',a == c)
+    print('a is b ?:',a is b)
+    print('a is c ?:',a is c)
 
+    print('\n\n-列表的反转')
+    L = [1,2,3,4,5]
+    L.reverse()
+    print('L = ',L)
+    print('列表的类方法 L.reverse() = >',L)
+    L = [1,2,3,4,5]
+    iterator = reversed(L)
+    print('内置函数(返回一个迭代器)  reversed(L) = >',list(iterator))
+
+    print('\n\n-列表的排序 ')
+    L = [3,5,1,2,3,9,10]
+    L.sort()
+    print('列表的类方法 L.sort(),L.sort(reverse = True) ',L)
+    L = [3,5,1,2,3,9,10]
+    print('内置的排序函数 sorted(),sorted(reverse = True) ',sorted(L))
+    
+def t_tuple():
+  """元组的使用
+
+  元组是不可变类型，不可在运行时修改
+  元组中至少有一个逗号(18,)
+  """
+  print('\n\n-元组赋值时可以省略小括号：')
+  t = "python",18,True
+  print('t = "python",18,True =>',t)    
+  
+  t = (5,[1,3],8)
+  print('元组不可修改，但是元组中的可变类型数据是可以修改的：')  
+  print('t = (5,[1,3],8) \nt[1][0] = 10 ')
+  t[1][0] = 10
+  print('t = ',t)
+
+def t_string():
+  """字符串就是字符的列表
+
+  python 没有字符数据，字符就是长度1的字符串
+  转义字符： 
+     换行：\n  回车:\r  制表符:\t  退格:\t
+  """
+  print('\n\n-原始字符串,python会忽略转义：')
+  print("s = r'c:\dos' =>",r'c:\dos')
+  s1 ="Hello"
+  s2 = "world"
+  print('s1 = "Hello" ;s2 = "world";print(s1+s2) =>',(s1+s2))
+
+  print('\n\n-字符串乘法:')
+  s1 = "A"
+  # 因为字符串就是列表，所以列表能用的方法字符串也能用
+  print('s1 = "A";print(s1*3) => ' ,s1 * 3) 
+
+  print('\n\n-字符串的查找：')
+  s = '18*18*18*'
+  print('s ="18*18*18*"')
+  print('s.index("18"),返回第一个18的索引 =>',s.index('18'))
+  print('s.find("18"),返回第一个18的索引 =>',s.find('18')) 
+  print('s.rindex("18"),从右查找，返回第一个18的索引 =>',s.rindex('18'))
+  print('注：子串不存时，index,rindex会抛出异常，find,rfind返回-1')
+  print('字符串是不可变类型，无改，增，删操作')
+  
+  print('\n\n-字符串的几个常用函数：')
+  print('字符串的 ordinal value: ord("A") =>',ord('A'))
+  print('根据 ordinal value 求对应字符：chr(65) =>',chr(65))
+
+  print('\n\n-字符串常量和常数常量通常会被缓存：')
+  print('a=b="Hello" ; c="Hello" ;')
+  a = b = "Hello"
+  c = "Hello"
+  print("a is c ? =>" ,a is c)
+
+  print('\n\n-字符串的反转：')
+  s = 'Hello World'
+  iterator = reversed(s)
+  print("s = 'Hello World' ; iterator = reversed(s) =>",list(iterator))
+  
+  print('\n\n-字符串的排序（按照ordinal value)：')
+  sort_s = sorted(s,reverse=True)
+  print('sort_s = sorted(s,reverse=True) =>',sort_s) 
+  print('sorted(s,key = 函数名或类名.方法)')
+  sort_s_f = sorted(s,key = str.lower)
+  print('key 转换成小写后比较，然后按照原值返回结果')
+  print('sort_s_f = sorted(s,key = str.lower)',sort_s_f)
+  print('元组和列表也可以使用 key ')
+
+def t_format_string():
+  """格式化字符串的方法一般有三种：
+
+  1、 % 百分号占位符
+  2、 {} 花括号占位符
+  3、 $ 美元占位符
+  """
+  print('\n\n-格式化时间字符串，需导入 datetime')
+  s1 = datetime(2018,8,18,18,18,18).strftime('%Y-%m-%d %H:%M:%S')
+  print("datetime(2018,8,18,18,18,18).strftime('%Y-%m-%d %H:%M:%S')=>",s1)
+  # %s 字符串；  %i or %d  整数；  %f 浮点数 ；
+  book = '《数据结构》'
+  s = '完成了一本书: %s' % book
+  print("book = '《数据结构》';s = '完成了一本书: %s' % book =>",s)
+  price = 68.99
+  # 超过一个变量，需要放到元组里
+  s1 = '花了%6.2f,买了一本书：%s' % (price,book)
+  print(s1)
+   
+  print('\n\n-{}占位符')
+  book = '《数据结构解析》'
+  s = '买了一本书:{}'.format(book)
+  print(s)
+  price = 68.99
+  s1 = '花了{},买了一本书:{}'.format(price,book)
+  s2 = '花了{0},买了一本书:{1},只花了{0}'.format(price,book)
+  s3 = '花了{p},买了一本书:{b},只花了{p}'.format(p=price,b=book)
+  print("'花了{},买了一本书:{}'.format(price,book)",s1)
+  print("'花了{0},买了一本书:{1},只花了{0}'.format(price,book)",s2)
+  print("'花了{p},买了一本书:{b},只花了{p}'.format(p=price,b=book)",s3)
+  print("\n花括号的一些格式：")
+  print('10进制整数 {{:d}} :{:d}'.format(58)) 
+  print('二进制 {{:b}} :{:b}'.format(58))  
+  print('小写16进制 {{:x}} :{:x}'.format(58))
+  print('大写16进制 {{:X}} :{:X}'.format(58))
+  print('浮点数 {{:f}} :{:f}'.format(58)) 
+  print('千位分割 {{:,}} :{:,}'.format(12345678))  
+  print('二进制 {{0:b}} :{0:b}'.format(58))  
+  print('二进制 {{num:b}} :{num:b}'.format(num=58)) 
+  print('宽度10,右对齐 {{:10}} :{:10}'.format(58)) 
+  print('宽度10,左对齐 {{:10}}:{:10}'.format('58')) 
+  print('宽度10,包含小数共占3位 {{:10.3}} :{:10.3}'.format(58.00))  
+  print('宽度10,精度小数位3位 {{:10.3f}}:{:10.3f}'.format(58)) 
+  print('注：内置函数format(),s1 = format(3.13433,"8.3f"')
+
+  print('\n\n- $ 占位符 ，String包中的Template类：')
+  price = 88.88
+  book = '《不高兴就去看大海》'
+  tmpl = Template('花了 $p, 买了一本书：$b')
+  s1 = tmpl.substitute(p=price,b=book)
+  print(s1)
+  s1 = tmpl.substitute({'p':price,'b':book})
+  print(s1)
+  # 参数不足时，不会抛出错误
+  s1 = tmpl.safe_substitute(p=price)
+  print(s1)
 
 
 
@@ -134,6 +311,9 @@ if __name__ == '__main__' :
     #t_lianshi()       # 链式比较
     #t_logic()         # and 和 or 的优先级
     #t_range()         # range()的用法
-    t_list()          # list的用法
+    #t_list()          # list列表的用法
+    #t_tuple()         # tuple元组的用法
+    #t_string()        # 字符串的用法
+    t_format_string()  # 格式化字符串 
     #pass
     
