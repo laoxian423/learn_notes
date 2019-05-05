@@ -379,9 +379,73 @@ def t_upper_string():
   print('s2.rstrip("cmowz.") =>',s2.rstrip('cmowz.'))
   print('s2.strip("cmowz.") =>',s2.strip('cmowz.'))
 
+def t_dict():
+  """字典的操作
+
+  字典元素都是以 key - value 键值对的方式存在
+  其中，key 具有唯一性，不可重复
+  字典中的元素都是无序存放的
+  key 必须是不可变对象
+  字典是用空间换取时间，速度快，但比较占内存
+  """
+  print('\n\n-字典的创建：')
+  d = dict({'key1':'value1','key2':'value2'})
+  print("d = dict({'key1':'value1','key2':'value2'}) => ",d)
+  d = dict(name='jack',age='18')
+  print("d = dict(name='jack',age='18') => ",d)
+  d = dict([('name','jack'),('age',18)])
+  print("d = dict([('name','jack'),('age',18)]) =>",d)
+  d = dict(zip(range(3),'ABC'))
+  print("d = dict(zip(range(3),'ABC')) => " ,d)
+  d = dict.fromkeys(['name','age']) 
+  print("d = dict.fromkeys(['name','age']) => ",d)
+  d = dict.fromkeys(['name','age'],'N/A')
+  print("d = dict.fromkeys(['name','age'],'N/A') =>",d)
+  
+  print('\n\n-字典的查询操作')
+  d = {'name':'jack','age':18}
+  print(d,"d['name']=>",d['name'])
+  print(d,"d.get('name')) =>",d.get('name'))
+  print("'age' in d => ",'age' in d)
+
+  print('\n\n-字典值的修改：')
+  print('d = ',d)
+  d.update({'name':'tom','age':20})
+  print("d.update({'name':'tom','age':20}) => ",d)
+  d.update(name='mike',age=30)
+  print("d.update(name='mike',age=30)",d)
+
+  print('\n\n-字典增加')
+  print('d = ',d)
+  d['sex'] = 'man'
+  print("d['sex'] = 'man' ; d = ",d)
+
+  print('\n\n-字典的删除')
+  print('d = ',d)
+  value = d.pop('age')
+  print("value = d.pop('age') =>",d,value)
+  value = d.pop('income',100)
+  print("当键值不存在时返回一个默认值 value = d.pop('income',100) =》",d,value)
+  print('d.popitem() 删除任意一个key-value')
+  print('del d["age"]')
+  print('d.clear() 清空字典')
+
+  print('\n\n-字典的视图：')
+  print('d =',d)
+  print('d.keys = ',list(d.keys()))  
+  print('d.values = ',list(d.values()))
+  print('d.items = ',list(d.items()))
+  
+  print('\n\n-借助字典格式化字符串')
+  book = {'book1':'《python》','book2':'《C++》','book3':'《java》'}
+  print('book = ',book)
+  print('我周一看的{book1},周二看的{book2},周三看的{book3}.'.format_map(book))
+  
 
 
 
+  
+  
 
 
 if __name__ == '__main__' :
@@ -394,6 +458,7 @@ if __name__ == '__main__' :
     #t_tuple()            # tuple元组的用法
     #t_string()           # 字符串的用法
     #t_format_string()    # 格式化字符串 
-    t_upper_string()     # 字符串大小写转换、劈分、合并、判断等等
+    #t_upper_string()     # 字符串大小写转换、劈分、合并、判断等等
+    t_dict()              # 字典的操作
     #pass
     

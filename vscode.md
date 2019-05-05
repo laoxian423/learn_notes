@@ -126,4 +126,9 @@ vsCode配置代码缩略图：
 　　文件--首选项--设置 搜索 "editor.minimap.enabled"    true 打开 false 关闭
 ```
 
+##### 0006 跳出右括号
+
+```bash
+# 在vscode中安装 tabout 插件
+```
 
