@@ -119,3 +119,11 @@ python3 -m pip install matplotlib
 
 ```
 
+##### 0005 打开关闭代码缩略图
+```
+vsCode配置代码缩略图：
+
+　　文件--首选项--设置 搜索 "editor.minimap.enabled"    true 打开 false 关闭
+```
+
+

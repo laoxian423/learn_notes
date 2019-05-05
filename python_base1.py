@@ -2,7 +2,7 @@ from datetime import datetime
 from string import Template
 
 def t_is():
-    """ 对不可变数据类型使用 is 比较 """
+    """ is 判断对象 """
     int1 = 188
     tuple1 =  (1,2,3)
 
@@ -303,17 +303,97 @@ def t_format_string():
   s1 = tmpl.safe_substitute(p=price)
   print(s1)
 
+def t_upper_string():
+  """ 字符串常用方法和内置函数
+
+  大小写转换
+  字符串对齐
+  """
+  s = "This is a test."
+  print('\n\n- 字符串大小写转换、对齐')
+  print('转换成大写s.upper() =>',s.upper())
+  print('转换成小写s.lower() =>',s.lower())
+  print('交换大小写s.swapcase() =>',s.swapcase())
+  print('首字母大写 s.capitalize() =>',s.capitalize())
+  print('每个单词首字母大写，其余小写 s.title() =>',s.title())
+  print('是否是大写 s.isupper() =>',s.isupper())
+  print('是否是大写 s.islower() =>',s.islower())
+  print('是否是title s.istitle() =>',s.istitle())
+
+  print('\n\n-字符串对齐操作')
+  s = "code"
+  print('中心填充 s.center(20,"-") =>',s.center(20,"-"))
+  print('左侧填充 s.ljust(20,"-") =>',s.ljust(20,"-"))
+  print('右侧填充 s.rjust(20,"-") =>',s.rjust(20,"-"))
+  print('前导0填充 s.zfill(9) => ',s.zfill(10))
+
+  print('\n\n-字符串的子串替换')
+  s = 'code-code-code'
+  print('s = ',s)
+  print("s.replace(要替换的子串，用什么来替换，替换次数)")
+  print('s.replace("code","python") =>',s.replace('code','python'))
+  print('s.replace("code","python",1) =>',s.replace('code','python',1))
+
+  print('\n\n-字符串字符转换')
+  table = str.maketrans('bcd','234')
+  print("str.maketrans('bcd','234') => ",table)
+  print("s = ",s)
+  print("s.translate(table) =>",s.translate(table))
+  print('将字符串中的某些值删掉,maketrans的前两个参数也可以省略')
+  table = str.maketrans('bcd','234','ie')
+  print("str.maketrans('bcd','234','ie') => ",table)
+  print("s.translate(table) =>",s.translate(table))
+  
+  print('\n\n-字符串的劈分')
+  s = 'Python Swift Kotlin'
+  print("s = 'Python Swift Kotlin'")
+  print('s.split() => ',s.split())
+  print('s.rsplit() => ',s.rsplit())
+  s = 'Python|Swift|Kotlin'
+  print("s = 'Python|Swift|Kotlin'")
+  print('s.split(sep="|") =>',s.split(sep="|"))
+  print('s.split(sep="|",maxsplit=1) =>',s.split(sep="|",maxsplit=1))
+  
+  print('\n\n-字符串的合并')
+  s = '|'.join(['python','swift','kotlin'])
+  print("'|'.join(['python','swift','kotlin']) =>",s)
+  print("'|'.join('python') => ",'|'.join('python'))
+
+  print('\n\n-以is开头的方法')
+  print("是否是合法的标识符  '123'.isidentifier() =>",'123'.isidentifier())
+  print("是否由空白字符组成，指标符、回车、换行等 ‘\\t \\r \\n’.isspace() => ",'\t \r \n'.isspace())
+  print("是否全部是字母 'abcd'.isalpha() => ",'abcd'.isalpha())
+  print("是否全部是十进制数组成 '123'.isdecimal() => ",'123'.isdecimal())
+  print("是否全部是数字,汉字数字和罗马数字都是数字 '233五六'.isnumeric() => " ,'233五六'.isnumeric())
+  print("是否全部由字母和数字组成 '111abc'.isalnum() => ",'111abc'.isalnum())
+
+  print("\n\n-取出前导字符串或后续字符串,默认是取空格")
+  s1 = '    hello world     '
+  s2 = 'www.example.com'
+  print('s1 = "{}",s2 = "{}"'.format(s1,s2))
+  print('s1.lstrip() =>',s1.lstrip())
+  print('s1.rstrip() =>',s1.rstrip())
+  print('s1.strip() =>',s1.strip())
+  
+  print('s2.lstrip("cmowz.") =>',s2.lstrip('cmowz.'))
+  print('s2.rstrip("cmowz.") =>',s2.rstrip('cmowz.'))
+  print('s2.strip("cmowz.") =>',s2.strip('cmowz.'))
+
+
+
+
 
 
 if __name__ == '__main__' :
-    #t_is()            # 用is查看不可变数据类型
-    #t_id()            # 用id查看对象的内存地址
-    #t_lianshi()       # 链式比较
-    #t_logic()         # and 和 or 的优先级
-    #t_range()         # range()的用法
-    #t_list()          # list列表的用法
-    #t_tuple()         # tuple元组的用法
-    #t_string()        # 字符串的用法
-    t_format_string()  # 格式化字符串 
+    #t_is()               # is 判断对象
+    #t_id()               # 用id查看对象的内存地址
+    #t_lianshi()          # 链式比较
+    #t_logic()            # and 和 or 的优先级
+    #t_range()            # range()的用法
+    #t_list()             # list列表的用法
+    #t_tuple()            # tuple元组的用法
+    #t_string()           # 字符串的用法
+    #t_format_string()    # 格式化字符串 
+    t_upper_string()     # 字符串大小写转换、劈分、合并、判断等等
     #pass
     
