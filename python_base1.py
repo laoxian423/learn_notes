@@ -440,8 +440,97 @@ def t_dict():
   book = {'book1':'《python》','book2':'《C++》','book3':'《java》'}
   print('book = ',book)
   print('我周一看的{book1},周二看的{book2},周三看的{book3}.'.format_map(book))
+
+def t_set():
+  """集合的操作
+  
+  只有key的字典
+  不可有重复数据，重复的会被消除掉
+  无序的
+  元素可以是任何不可变类型，可混合存放
+  集合和列表相比，会浪费较大的内存
+  """
+  print('\n\n-集合的创建')
+  set1 = {3,5,9,2,6}
+  set2 = set(range(1,6))  # range(start,stop)
+  set3 = set([3,4,5,6])
+  set4 = set((3,7,5,45,6))
+  set5 = set('3567898')
+  set6 = set({3,4,5,6,7})
+  set7 = set() # 空集合
+  print("set1 = {3,5,9,2,6} => ",set1)
+  print("set2 = set(range(1,6)) => ",set2)
+  print("set3 = set([3,4,5,6]) => ",set3)
+  print("set4 = set((3,7,5,45,6)) => ",set4)
+  print("set5 = set('3567898') => ",set5)
+  print("set6 = set({3,4,5,6,7}) => ",set6)
+  print("set7 = set() => ",set7)
+
+  print('\n\n-集合的关系')
+  s1 = {1,2,3,5}
+  s2 = {3,2,5,1}
+  print("s1 = {0},s2 = {1}, s1 == s2 => {2}".format(s1,s2,s1 == s2))
+  
+  print('\n\n-判断一个集合是否是另一个集合的子集')
+  s1 = {1,3,5,7,9}
+  s2 = {2,6,10}
+  s3 = {1,3,5,6,7,9}
+  print(s1,s2,s3)
+  print('s1是否是s2子集',s1.issubset(s2)) 
+  print('s1是否是s3的子集',s1.issubset(s3)) 
+
+  print('\n\n-判断一个集合是否是另一个集合的超集')
+  print('s2 是否s1的超集',s2.issuperset(s1))
+  print('s3 是否s1的超集',s3.issuperset(s1))
+
+  print('\n\n-两个集合是否没有交集')
+  print('s1 与 s2 是否没有交集 =》',s1.isdisjoint(s2))
+  print('s1 与 s3 是否没有交集 =》',s1.isdisjoint(s3))
+
+  print('\n\n-计算两个集合的交集')
+  s1 = {1,3,5,7,9}
+  s2 = {2,3,6,7,10}
+  print(s1,s2,s1.intersection(s2))
+
+  print('\n\n-计算两个集合的并集')
+  print(s1,s2,s1.union(s2))
+
+  print('\n\n-计算两个集合的差集')
+  print(s1,s2,s1.difference(s2))
+
+  print('\n\n-计算两个集合的对称差集（并集-交集）')
+  print(s1,s2,s1.symmetric_difference(s2))
+
+  print('\n\n-集合的查询操作')
+  s = {3,4,5,6,7,8}
+  print('5 in s =>',5 in s)
+
+  print('\n\n-集合的增加操作')
+  s.add(10)
+  print('s.add(10) => ',s)
+  s.update({2,8})
+  print('s.update({2,8)} => ',s )
+  s.update([20,80])
+  print('s.update([20,80]) => ',s )
+  s.update((200,800))
+  print('s.update((200,800)) => ',s )
+
+  print('\n\n-集合的删除')
+  print(s)
+  s.remove(200)
+  print('s.remove(200) 不存在会抛出异常 => ',s)
+  s.discard(800)  
+  print('s.discard(800) 不存在不会抛出异常 => ',s)
+  a = s.pop()
+  print('s.pop(10) =>',a,s)
+
+ 
+
+
   
 
+
+  
 
 
   
@@ -459,6 +548,7 @@ if __name__ == '__main__' :
     #t_string()           # 字符串的用法
     #t_format_string()    # 格式化字符串 
     #t_upper_string()     # 字符串大小写转换、劈分、合并、判断等等
-    t_dict()              # 字典的操作
+    #t_dict()             # 字典的操作
+    t_set()               # 集合的操作
     #pass
     
