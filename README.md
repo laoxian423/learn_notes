@@ -20,7 +20,7 @@
 
 > * docker_1.md   ------》docker初级操作
 > * docker_2.md   ------》docker中级操作
-> * docker_in_action.md     ------》《docker 实战》学习笔记
+> * docker_in_action.md     ------》《docker 实战》阅读整理
 
 ### 5、VIM 常用整理
 
@@ -32,3 +32,4 @@
 > * python_base.md        ------》python基础
 > * python_faq.md           ------》python常用备忘
 > * vscode.md                  ------》vscode下开发python程序的整理
+> * newbie2export            ------》《python 从小白到大牛》阅读整理
