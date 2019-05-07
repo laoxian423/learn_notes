@@ -93,6 +93,7 @@ git status -sb #查看当前仓库状态(简略显示)
 git log  # 显示当前分支的历史版本
 git log --oneline  # 简略显示
 git clone https://github.com/zhangsna/testgit  # 克隆远程仓库到本地
+git clone --depth 1 https://github.com/zhangsna/testgit  # 只克隆最近一次的提交，项目过大会报错
 git remote -v  # 查看和远程仓库建立的链接信息
 git remote add [shortname] [url] # 增加远程仓库的链接并命名
 git push  # 将本地的提交推送到远程仓库
