@@ -41,7 +41,7 @@ with open('f:/temp/test.csv', 'r', encoding='gbk') as f:
 
 """ csv.writer()
     csv.writer(csvfile, dialect='excel', **fmtparams)
-"""
+
 with open('f:/temp/test.csv', 'r', encoding='gbk') as rf:
     reader = csv.reader(rf)
     with open('f:/temp/test1.csv', 'w', newline='', encoding='gbk') as wf:
@@ -49,4 +49,26 @@ with open('f:/temp/test.csv', 'r', encoding='gbk') as rf:
         for row in reader:
             print(row)
             writer.writerow(row)
+"""
+
+""" 解析 XML 文档
+    SAX（Simple API for XML) 和 DOM（Document Object Model)两种流行模式
+    SAX ：基于时间驱动的解析模式。自上而下遇到开始、结束标签和属性时触发相应事件
+        这种模式只能解析，不能写入。优点是速度快。
+    DOM ：将XML当作一棵树进行解析。一次性读入内存。
+    ElementTree :python提供的兼顾SAX和DOM优点的模块
+"""
+import xml.etree.ElementTree as ET
+
+tree = ET.parse(r'F:\myRepositraies\learn_notes\newbie2export\chapter16\notes.xml')
+print(type(tree))
+
+root = tree.getroot()
+print(type(root))
+print(root.tag) 
+
+for index, child in enumerate(root):
+    print('第{0}个{1}元素，属性：{2} '.format(index, child.tag, child.attrib))
+    for i, child_child in enumerate(child):
+        print('   标签:{0},内容：{1}'.format(child_child.tag, child_child.text))
 
