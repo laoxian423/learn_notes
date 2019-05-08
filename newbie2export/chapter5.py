@@ -1,6 +1,5 @@
 # coding=utf-8
-
-# Python 编码规范
+# LOOK 编码规范
 """
    常用规范：PEP8 和 谷歌python编码规范
    https://www.python.org/dev/peps/pep-0008
@@ -55,6 +54,3 @@
       * 一行代码最多79个字符，注释最多72个字符。
       * 断行：在逗号，运算符后面断开，尽量不使用续行符“\”
 """
-y = 20
-# TODO 声明函数
-print(y)
