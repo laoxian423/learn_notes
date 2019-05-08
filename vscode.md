@@ -69,6 +69,7 @@ F1 或 Ctrl+Shift+P: 打开命令面板。在打开的输入框内，可以输�
     同时选中所有匹配： Ctrl+Shift+L
     Ctrl+D 下一个匹配的也被选中 (在 sublime 中是删除当前行，后面自定义快键键中，设置与 Ctrl+Shift+K 互换了)
     回退上一个光标操作： Ctrl+U
+    左移一个单词  ctru + 左右方向键
 # 重构代码
     找到所有的引用： Shift+F12
     同时修改本文件中所有匹配的： Ctrl+F12
@@ -130,5 +131,11 @@ vsCode配置代码缩略图：
 
 ```bash
 # 在vscode中安装 tabout 插件
+```
+
+##### 0007 TODO TREE
+
+```b
+很好用的一个TODO 插件
 ```
 
