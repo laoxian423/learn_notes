@@ -179,6 +179,9 @@ def delete_dbdata():
 删除:   del d[key]
 查找:   flag = key in d
 """
+#import pysnooper
+
+#@pysnooper.snoop()
 def dbm_operate():
     import dbm
 
@@ -202,5 +205,5 @@ if __name__ == '__main__' :
     # insert_db_user()           # 插入一条数据 I
     # update_db()                # 更新数据 U
     # delete_dbdata()            # 删除数据 D
-    # dbm_operate()              # dbm 的操作
+    dbm_operate()              # dbm 的操作
     pass
