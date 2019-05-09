@@ -72,3 +72,144 @@ for index, child in enumerate(root):
     for i, child_child in enumerate(child):
         print('   标签:{0},内容：{1}'.format(child_child.tag, child_child.text))
 
+
+
+""" XPath XML匹配查找
+    XPath是专门用来在XML中查找信息的语言。如果说XML是数据库，XPath就是SQL。
+    XPath将所有元素看作节点，根节点、父节点、子节点、兄弟节点
+    nodename            选择nodename子节点
+    .                   选择当前节点           ./Note 当前节点下的所有Note子节点
+    /                   路劲指示符             ./Note/CDate  表示所有Note子节点下的CDate节点
+    ..                  选择父节点             ./Note/CDate/..  选择Note节点
+    //                  选择后代节点           .//CDate 表示当前节点中查找所有的CDate后代节点
+    [@attrib]           选择指定属性的所有节点  ./Note[@id] 表示有id属性的所有Note节点
+    [@attrib='value']   选择指定属性等于value   ./Note[@id=1] 表示有id属性等于'1'的所有Note节点
+                        的所有节点  
+    [position]          指定位置，位置从1开始   ./Note[1] 表示第一个Note节点,./Note[last()]标识最
+                        最后一个可以使用last()  后一个Note节点，./Note[last()-1]表示倒数第2个。
+                        获取
+"""
+tree = ET.parse(r'F:\myRepositraies\learn_notes\newbie2export\chapter16\notes.xml')
+root = tree.getroot()
+
+node = root.find("./Note")
+print(node.tag, node.attrib)
+
+node = root.find("./Note/CDate")
+print(node.text)
+
+node = root.find("./Note/CDate/..")
+print(node.tag, node.attrib)
+
+node = root.find(".//CDate")
+print(node.text)
+
+node = root.find("./Note[2]")
+print(node.tag, node.attrib)
+
+
+""" JSON 数据交换格式（JavaScript Object Notation)
+    JSON文档的两种结构为对象(object)和数组(array),
+    对象(object)示例：
+    {
+        "name":"a.htm",
+        "size":345,
+        "saved":true
+    }
+    数组(array)示例：
+    ["text","html","css"]
+"""
+
+""" Python 数据与 JSON 数据的隐射关系
+        python              JSON
+    字典                对象 
+    列表、元组           数组
+    字符串              字符串
+    整数、浮点           数字
+    True                true
+    False               false
+    None                null
+"""
+
+""" JSON的编码和解码：
+    json内置模块
+    dumps() 将编码结果以字符串形式返回
+    dump()  将编码结果保存到文件对象中
+"""
+import json
+
+# 准备数据
+py_dict = {'name': 'tony', 'age': 30, 'sex': True}
+py_list = [1,2,3]
+py_tuple = ('A', 'B', 'C')
+
+py_dict['a'] = py_list
+py_dict['b'] = py_tuple
+
+print(py_dict)
+
+# 编码过程
+json_obj = json.dumps(py_dict)
+print(json_obj)
+
+# 写入JSON数据到data1.json中
+with open('f:/temp/data1.json', 'w') as f:
+    json.dump(py_dict, f)
+
+# indent=4 表示缩进4个空格
+with open('f:/temp/data2.json', 'w') as f:
+    json.dump(py_dict, f, indent=4)
+
+""" JSON 解码
+    loads() 将JSON字符串进行解码，返回Python数据
+    load()  读取文件或流，对其中的JSON数据解码，返回Python数据
+"""
+# 准备数据
+json_obj = r'{"name": "tony", "age": 30, "sex": true, "a": [1, 2, 3], "b": ["A", "B", "C"]}'
+py_dict = json.loads(json_obj)
+print(py_dict)
+print(py_dict['name'])
+print(py_dict['age'])
+print(py_dict['sex'])
+
+py_dicta = py_dict['a']
+print(py_dicta)
+
+with open('f:/temp/data2.json', 'r') as f:
+    data = json.load(f)
+    print(data)
+
+
+
+""" Python 处理配置文件(window ini 文件)
+    ini 配置文件示例：
+    [Startup]
+    RequireOS = windows 2000
+    RequireMSI = 3.0
+    RequireIE = 6.0.2600.0
+    [Product]
+    msi = AcroRead.msi
+"""
+
+""" configparser  配置文件解析
+
+"""
+import configparser
+
+config = configparser.ConfigParser()
+
+config.read('newbie2export/chapter16/test.ini', encoding='utf-8')
+
+print(config.sections())    
+
+section1 = config['Startup']
+print(config.options('Startup'))
+print(section1['RequireOS'])
+print(section1['RequireIE'])
+
+# 写入配置文件
+config['Startup']['RequireMSI'] = '8.0'
+config.add_section('Section2')
+config.set('Section2', 'name', 'Mac')
+with open('newbie2export/chapter16/test.ini', 'w') as fw:
+    config.write(fw)

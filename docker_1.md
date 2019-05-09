@@ -501,6 +501,20 @@ mysql -u root -p
 mysql -u root -p -h  <宿主机地址>
 ```
 
+```bash
+# 在 run mysql时报错
+WARNING: IPv4 forwarding is disabled. Networking will not work.
+b71aa7779a04014ca50c018781ecf216a4cd5989622d84b7cdd87d7d433f4ecd
+docker: Error response from daemon: driver failed programming external connectivity on endpoint mysql (f5a43f385132c5c8c49926c183adf1a63ece8222037a9dce11a0c1453d3abc98):  (iptables failed: iptables --wait -t nat -A DOCKER -p tcp -d 0/0 --dport 3306 -j DNAT --to-destination 172.17.0.2:3306 ! -i docker0: iptables: No chain/target/match by that name.
+# 在宿主机上执行
+echo net.ipv4.ip_forward=1 >> /usr/lib/sysctl.d/00-system.conf
+# 重启宿主机服务
+systemctl restart network && systemctl restart docker
+# OK
+```
+
+
+
 ##### 3、用docker部署Redis
 
 ```shell
