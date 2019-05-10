@@ -448,6 +448,7 @@ yum -y install gcc-c++
 yum -y install zlib*
 yum install libffi-devel -y  #python3.7需要的新的包
 # 4、安装 python,大约10分钟
+# https://www.python.org/ftp/python/
 wget https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz
 tar -xzvf Python-3.7.2.tgz
 cd PyPython-3.7.2
