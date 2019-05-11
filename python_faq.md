@@ -37,3 +37,13 @@ pip install pymysql
 pip install cryptography
 ```
 
+#### 0004 wxPython install on ubuntu 18
+```bash
+sudo apt install make gcc libgtk-3-dev libwebkitgtk-dev 
+     libwebkitgtk-3.0-dev libgstreamer-gl1.0-0 freeglut3 
+     freeglut3-dev python-gst-1.0 python3-gst-1.0 libglib2.0-dev 
+     ubuntu-restricted-extras libgstreamer-plugins-base1.0-dev
+
+sudo pip3 install wxPython
+# 安装了好长时间，一个setup.py执行了差不多30分钟，可能我的笔记本太差
+```

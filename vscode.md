@@ -1,4 +1,4 @@
-##### 001. 如何开始：
+#### 0001. 如何开始：
 
 ```bash
 # 新建一个目录作为你的workspace
@@ -7,7 +7,7 @@ cd pyprojects
 code .      # code 将使用当前目录作为工作区
 ```
 
-##### 002. 如何设置解释器：
+#### 0002. 如何设置解释器：
 
 ```bash
 # 1. 进入code界面
@@ -16,7 +16,7 @@ code .      # code 将使用当前目录作为工作区
 # 4. 选择你要使用python版本
 ```
 
-##### 003. code常用快捷键：
+#### 0003. code常用快捷键：
 
 ```bash
 ctrl + shift + `    # 打开一个新的终端。
@@ -94,7 +94,7 @@ F1 或 Ctrl+Shift+P: 打开命令面板。在打开的输入框内，可以输�
     自动保存：File -> AutoSave ，或者 Ctrl+Shift+P，输入 auto
 ```
 
-##### 004. 安装软件包在虚拟环境：
+#### 0004. 安装软件包在虚拟环境：
 
 * `pip3 install virtualenv -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com`
 * `sudo apt-get install python3-venv`
@@ -106,7 +106,7 @@ py -3 -m venv env
 env\scripts\activate
 # For Linux/macOS
 python3 -m venv env
-source env/bin/activate
+
 
 # 2. Install the packages
 # windows
@@ -120,22 +120,32 @@ python3 -m pip install matplotlib
 
 ```
 
-##### 0005 打开关闭代码缩略图
+#### 0005 打开关闭代码缩略图
 ```
 vsCode配置代码缩略图：
 
 　　文件--首选项--设置 搜索 "editor.minimap.enabled"    true 打开 false 关闭
 ```
 
-##### 0006 跳出右括号
+#### 0006 跳出右括号
 
 ```bash
 # 在vscode中安装 tabout 插件
 ```
 
-##### 0007 TODO TREE
+#### 0007 TODO TREE
 
 ```b
 很好用的一个TODO 插件
 ```
 
+#### 0008 vscode中的Wxpython下出现[pylint]E1101:Module 'wx' has no 'Frame' member 
+```bash
+# pylint 只信任来自标准库stdlib的C扩展，而忽略其他。
+# 需要添加到白名单中
+# file - > preperences -> settings
+# 搜索 pylint Args
+# 编辑 setting.json
+# 添加：
+"python.linting.pylintArgs": ["--extension-pkg-whitelist=wx"]
+```
