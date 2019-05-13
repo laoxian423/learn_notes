@@ -149,3 +149,22 @@ vsCode配置代码缩略图：
 # 添加：
 "python.linting.pylintArgs": ["--extension-pkg-whitelist=wx"]
 ```
+
+#### 0009 vscode 中自定义代码段
+
+```bash
+# 设置  - > User snippet
+# 输入 python
+# 打开 python.json
+{ // 把example 的注释去掉
+    "Print to console": {// 这个代码段的名字,随便起
+        "prefix": "log",// 绑定的关键字
+        "body": [// 输入 Log 时，生成的内容,每行内容包含在双引号里，用逗号间隔
+            "console.log('$1');",//$1 光标出现的位置，如果不设置，默认出现在末尾
+            "$2"//用tab,切换到下一个参数位置
+        ],
+        "description": "Log output to console"//对这个代码段的简单描述
+    }
+}
+```
+
