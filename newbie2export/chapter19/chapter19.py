@@ -5,7 +5,7 @@
     wxPython    需要额外安装。
 """
 
-"""wxPython 安装
+"""wxPython 安装 for ubuntu 18
 sudo apt install make gcc libgtk-3-dev libwebkitgtk-dev 
      libwebkitgtk-3.0-dev libgstreamer-gl1.0-0 freeglut3 
      freeglut3-dev python-gst-1.0 python3-gst-1.0 libglib2.0-dev 
@@ -321,41 +321,132 @@ class App1FlexGrid(wx.App):
         return 0
 
 
-""" wxPython 静态文本和按钮
+""" wxPython 控件
     wx.StaticText
     wx.Button
     wx.BitmapButton
     wx.ToggleButton
+    wx.TextCtrl   wx.TE_MULTILINE 多行，wx.TE_PASSWORD 密码框
 """
 class ControlExample(wx.Frame):
     def __init__(self):
-        super().__init__(parent=None, title='控件',size=(300,200))
+        super().__init__(parent=None, title='控件', size=(300, 1000))
         self.Center()
-        panel = wx.Panel(parent=self)
-        vbox = wx.BoxSizer(wx.VERTICAL)
+        panel = wx.Panel(self)
+        # 复选框 水平布局器--------------------------------------------------
+        hbox1 = wx.BoxSizer(wx.HORIZONTAL)
+        
+        checkbox_text = wx.StaticText(panel, label='选择你喜欢的：')
+        cb1 = wx.CheckBox(panel, 1, 'Python')
+        cb2 = wx.CheckBox(panel, 2, 'Java')
+        cb2.SetValue(True)
+        cb3 = wx.CheckBox(panel, 3, 'C++')
+        self.Bind(wx.EVT_CHECKBOX, self.on_checkbox_click, id=1, id2=3)
+        
+        hbox1.Add(checkbox_text, 1, flag=wx.LEFT | wx.RIGHT | wx.FIXED_MINSIZE, border=5)
+        hbox1.Add(cb1, 1, flag=wx.ALL | wx.FIXED_MINSIZE)
+        hbox1.Add(cb2, 1, flag=wx.ALL | wx.FIXED_MINSIZE)
+        hbox1.Add(cb3, 1, flag=wx.ALL | wx.FIXED_MINSIZE)
 
-        self.statictext = wx.StaticText(parent=panel, label='StaticText',
-                                        style=wx.ALIGN_CENTRE_HORIZONTAL)
-        b1 = wx.Button(parent=panel, label='ok')
+        # 单选框 水平布局器---------------------------------------------------
+        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
+
+        statictext = wx.StaticText(panel, label='选择性别')
+        radio1 = wx.RadioButton(panel, 4, '男', style=wx.RB_GROUP)
+        radio2 = wx.RadioButton(panel, 5, '女')
+        self.Bind(wx.EVT_RADIOBUTTON, self.on_radio1_click, id=4, id2=5)
+
+        hbox2.Add(statictext, 1, flag=wx.LEFT | wx.RIGHT | wx.FIXED_MINSIZE, border=5)
+        hbox2.Add(radio1, 1, flag=wx.ALL | wx.FIXED_MINSIZE)
+        hbox2.Add(radio2, 1, flag=wx.ALL | wx.FIXED_MINSIZE)
+
+        # 按钮、文本输入、下来列表 垂直布局器------------------------------------
+        vbox1 = wx.BoxSizer(wx.VERTICAL)
+        # 普通按钮
+        statictext = wx.StaticText(panel, label='普通按钮')
+        b1 = wx.Button(parent=panel, label='wx.Button')
         self.Bind(wx.EVT_BUTTON, self.on_click, b1)
-
-        b2 = wx.ToggleButton(panel, -1, 'ToggleButton')
+        # ToggleButton
+        b2 = wx.ToggleButton(panel, -1, 'wx.ToggleButton')
         self.Bind(wx.EVT_BUTTON, self.on_click, b2)
-
-        bmp = wx.Bitmap('newbie2export/chapter19/bn.png',wx.BITMAP_TYPE_PNG)
-        b3 = wx.BitmapButton(panel, -1, bmp)
+        # 图像按钮
+        bmp = wx.Bitmap('newbie2export/chapter19/183.png',wx.BITMAP_TYPE_PNG)
+        b3 = wx.BitmapButton(panel, -1, bmp, name='wx.BitmapButton' )
         self.Bind(wx.EVT_BUTTON, self.on_click, b3)
 
-        vbox.Add(100, 10, proportion=1, flag=wx.CENTER | wx.FIXED_MINSIZE)
-        vbox.Add(self.statictext, proportion=1, flag=wx.CENTER | wx.FIXED_MINSIZE)
-        vbox.Add(b1, proportion=1, flag=wx.CENTER | wx.EXPAND)
-        vbox.Add(b2, proportion=1, flag=wx.CENTER | wx.EXPAND)
-        vbox.Add(b3, proportion=1, flag=wx.CENTER | wx.EXPAND)
+        vbox1.Add(statictext, 1, flag=wx.LEFT | wx.RIGHT | wx.FIXED_MINSIZE, border=5)
+        vbox1.Add(b1, proportion=1, flag=wx.CENTER | wx.EXPAND)
+        vbox1.Add(b2, proportion=1, flag=wx.CENTER | wx.EXPAND)
+        vbox1.Add(b3, proportion=1, flag=wx.CENTER | wx.EXPAND)
+        # 文本输入框
+        tc1 = wx.TextCtrl(panel)
+        tc2 = wx.TextCtrl(panel, style=wx.TE_PASSWORD)
+        tc3 = wx.TextCtrl(panel, style=wx.TE_MULTILINE)
+        tc1.SetValue('单行输入')
+        tc3.SetValue('多行输入')
+        #print('User ID:{0}'.format(tc1.GetValue()))
 
+        vbox1.Add(tc1, proportion=1, flag=wx.CENTER | wx.EXPAND)
+        vbox1.Add(tc2, proportion=1, flag=wx.CENTER | wx.EXPAND)
+        vbox1.Add(tc3, proportion=1, flag=wx.CENTER | wx.EXPAND)
+        # 复选框（可修改）
+        statictext = wx.StaticText(panel, label='please choice:')
+        list1 = ['Python', 'C++', 'Java']
+        ch1 = wx.ComboBox(panel, -1, value='C', choices=list1, style=wx.CB_SORT)
+        self.Bind(wx.EVT_COMBOBOX, self.on_combobox, ch1)
+
+        vbox1.Add(statictext, 1, flag=wx.LEFT | wx.RIGHT | wx.FIXED_MINSIZE, border=5)
+        vbox1.Add(ch1, proportion=1, flag=wx.CENTER | wx.EXPAND)
+        # 复选框（不可修改）
+        statictext = wx.StaticText(panel, label='选择性别：')
+        list2 = ['男','女']
+        ch2 = wx.Choice(panel, -1, choices=list2)
+        self.Bind(wx.EVT_CHOICE, self.on_choice, ch2)
+
+        vbox1.Add(statictext, 1, flag=wx.LEFT | wx.RIGHT | wx.FIXED_MINSIZE, border=5)
+        vbox1.Add(ch2, proportion=1, flag=wx.CENTER | wx.EXPAND)
+        # 列表（可单选多选）
+        statictext = wx.StaticText(panel, label='请选择语言：')
+        list1 = ['Python', 'C++', 'Java']
+        #lb1 = wx.ListBox(panel, -1, choices=list1, style=wx.LB_SINGLE) #单选
+        lb1 = wx.ListBox(panel, -1, choices=list1, style=wx.LB_EXTENDED)  #多选
+        self.Bind(wx.EVT_LISTBOX, self.on_listbox1, lb1)
+
+        vbox1.Add(statictext, 1, flag=wx.LEFT | wx.RIGHT | wx.FIXED_MINSIZE, border=5)
+        vbox1.Add(lb1, proportion=1, flag=wx.CENTER | wx.EXPAND)
+        # 静态图片控件
+        bmp = wx.Bitmap('newbie2export\\chapter19\\2.jpg', type=wx.BITMAP_TYPE_JPEG)
+        image = wx.StaticBitmap(panel, -1, bmp)
+        vbox1.Add(image,proportion=1, flag=wx.CENTER)
+
+        # 按顺序加入上面几个布局器到一个父布局器中-----------------------------------------
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        vbox.Add(hbox1, 1, flag=wx.ALL | wx.EXPAND, border=5)
+        vbox.Add(hbox2, 1, flag=wx.ALL | wx.EXPAND, border=5)
+        vbox.Add(vbox1, 1, flag=wx.ALL | wx.EXPAND, border=5)
         panel.SetSizer(vbox)
-    
+        
     def on_click(self, event):
         self.statictext.SetLabelText('Hello,world')
+    
+    def on_checkbox_click(self, event):
+        cb = event.GetEventObject()
+        print('选择{0},状态{1}'.format(cb.GetLabel(), event.IsChecked()))
+    
+    def on_radio1_click(self, event):
+        rb = event.GetEventObject()
+        print('第一组{0} 被选中'.format(rb.GetLabel()))
+    
+    def on_combobox(self, event):
+        print('选择 {0}'.format(event.GetString()))
+    
+    def on_choice(self, event):
+        print('选择 {0}'.format(event.GetString()))
+
+    def on_listbox1(self, event):
+        listbox = event.GetEventObject()
+        print('选择 {0}'.format(listbox.GetSelections()))
+
 
 class ControlExampleAPP(wx.App):
     def OnInit(self):
@@ -368,6 +459,49 @@ class ControlExampleAPP(wx.App):
         return 0
 
 
+""" 分隔窗口
+    wx.SplitterWindow常用方法
+    SplitVertically(window1, window2,cashPosition=0),左右布局，cashPosition是窗框位置
+    SplitHorizontally(win1, win2, cashPosition=0) 上下
+    SetMinimumPaneSize(paneSize) 最小窗口尺寸，左右布局指的是左，上下指的是上，默认0
+"""
+
+class split_win(wx.Frame):
+    def __init__(self):
+        super().__init__(parent=None, title='分隔窗口', size=(350, 180))
+        self.Center()
+        splitter = wx.SplitterWindow(self, -1)
+        leftpanel = wx.Panel(splitter)
+        rightpanel = wx.Panel(splitter)
+        splitter.SplitVertically(leftpanel, rightpanel, 100)
+        splitter.SetMinimumPaneSize(80)
+
+        list1 = ['苹果', '橘子', '香蕉']
+        lb2 = wx.ListBox(leftpanel, -1, choices=list1, style=wx.LB_SINGLE)
+        
+        vbox1 = wx.BoxSizer(wx.VERTICAL)
+        vbox1.Add(lb2, 1, flag=wx.ALL | wx.EXPAND, border=5)
+        leftpanel.SetSizer(vbox1)
+
+        vbox2 = wx.BoxSizer(wx.VERTICAL)
+        self.content = wx.StaticText(rightpanel, label='右侧面板')
+        vbox2.Add(self.content, 1, flag=wx.ALL | wx.EXPAND, border=5)
+        rightpanel.SetSizer(vbox2)
+    
+class split_winApp(wx.App):
+    def OnInit(self):
+        frame = split_win()
+        frame.Show()
+        return True
+
+    def OnExit(self):
+        print("exit")
+        return 0
+
+"""
+ 此外还有菜单、工具栏、网格（Excel）、树等等
+ 太多了，用的时候再整理吧，写界面是最烦人的工作。
+"""
 if __name__ == '__main__':
-    app = ControlExampleAPP()
+    app = split_winApp()
     app.MainLoop()
