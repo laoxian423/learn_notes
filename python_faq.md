@@ -47,3 +47,23 @@ sudo apt install make gcc libgtk-3-dev libwebkitgtk-dev
 sudo pip3 install wxPython
 # 安装了好长时间，一个setup.py执行了差不多30分钟，可能我的笔记本太差
 ```
+
+#### 0005 动态页面数据抓取的方法
+
+```bash
+1）无浏览器界面抓取方法
+# selenium   一个web自动化测试工具，可以按指令自动化操作，可以直接运行在浏览器上，可以让浏览器自动加载页面，获取页面，甚至页面截屏，或者判断动作是否发生，它自己不带浏览器，需要与第三方浏览器结合才能使用。
+# http://pypi.python.org/simple/sulenium
+# 参考文档:http://selenium-python.readthedocs.io/index.html
+pip intall selenium
+
+# PhantomJS  一个无界面浏览器，会把网页加载到内存中并执行上面的JS。
+# PhantomJS 只能下载（http://phantomjs.org/download.html。它是一个浏览器而非python库，但是它可以通过selenium调用来使用
+# 官方文档:http://phantomjs.org/documention
+2）调用真实浏览器抓取方法
+# 用 selenium 操作 firfox 浏览器打开页面，抓取动态数据
+# 解决版本兼容问题 https://github.com/mozilla/geckodriver/releases，不需要安装，解压即可。
+# 在windows环境变量中增加firefox 和 geckodriver的路径
+
+```
+
