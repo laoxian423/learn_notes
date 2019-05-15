@@ -67,3 +67,21 @@ pip intall selenium
 
 ```
 
+#### 0006 BeautifulSoup 网页结构解析工具：
+
+> * 可以根据HTML标签及CSS选择器进行查找的工具包
+>
+> * https://www.crummy.com/software/BeautifulSoup/
+>
+> * BeautifulSoup类的常用API:
+>       .find_all(tagname): 根据标签返回所有符合条件的元素列表
+>       .find(tagname): 根据标签返回符合条件的第一个元素
+>       .select(selector):通过css中选择器查找符合条件的所有元素
+>       .get(key, default=None): 获取标签属性值
+>       .title: 获得当前HTML页面的title属性值
+>       .text:放回标签中的文本内容。
+
+```bash
+pip install beautifulsoup4
+```
+

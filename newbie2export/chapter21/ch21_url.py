@@ -1,5 +1,4 @@
-#-*- coding:utf-8 -*-
-# coding: utf-8
+# LOOK 爬虫-普通网页
 import urllib.request
 
 url = 'http://q.stock.sohu.com/cn/600992/cjmx.shtml'
