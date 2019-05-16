@@ -85,3 +85,48 @@ pip intall selenium
 pip install beautifulsoup4
 ```
 
+#### 0007 更换PIP源
+
+> - 豆瓣：http://pypi.douban.com/simple/
+> - 中科大：https://pypi.mirrors.ustc.edu.cn/simple/
+> - 清华：https://pypi.tuna.tsinghua.edu.cn/simple
+
+```bash
+# 一次性使用
+# 可以在使用pip的时候加参数-i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# 例如：
+   pip install SomePackage -i https://pypi.tuna.tsinghua.edu.cn/simple
+# 这样就会从清华这边的镜像去安装SomePackage库。
+# 永久修改
+# linux下，修改 ~/.pip/pip.conf (没有就创建一个)， 修改 index-url 为国内镜像地址，内容如下：
+[global]
+index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+
+#windows下，直接在user目录中创建一个pip目录，如：C:\Users\xx\pip，新建文件pip.ini，内容如下
+[global]
+index-url = https://pypi.tuna.tsinghua.edu.cn/simple 
+```
+
+#### 0008 pip 一次安装多个包
+
+```bash
+# 列出已经安装的包
+pip freeze 
+pip list
+# 把已安装的包导出列表信息
+pip freeze > require.txt
+# 根据文件安装软件包
+pip install -r require.txt
+# 注，该文件中的版本号如果不写，就安装最新包
+# 卸载包
+pip uninstall PackageName
+# 升级包
+pip install -U PackageName
+# 升级pip
+pip install -U pip
+# 打包
+pip wheel PackageName
+
+```
+

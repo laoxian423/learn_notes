@@ -29,7 +29,8 @@
 
 ### 6、python 学习整理
 
-> * python_base.md        ------》python基础
-> * python_faq.md           ------》python常用备忘
-> * vscode.md                  ------》vscode下开发python程序的整理
-> * newbie2export            ------》《python 从小白到大牛》阅读整理
+> * python_base.md                  ------》python基础
+> * python_faq.md                   ------》python常用备忘
+> * vscode.md                       ------》vscode下开发python程序的整理
+> * newbie2export                   ------》《python 从小白到大牛》阅读整理
+> * whirlwind tour of python        ------》《Python 旋风之旅》阅读整理
