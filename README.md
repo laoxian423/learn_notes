@@ -34,3 +34,4 @@
 > * vscode.md                       ------》vscode下开发python程序的整理
 > * newbie2export                   ------》《python 从小白到大牛》阅读整理
 > * whirlwind tour of python        ------》《Python 旋风之旅》阅读整理
+> * NumPy_Beginner_Guide            ------》 《NumPy 学习指南》阅读整理

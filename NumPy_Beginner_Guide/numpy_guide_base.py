@@ -41,8 +41,8 @@ import numpy as np
 # 一种相对于Python，使用简洁方式的向量加法
 # 不需要遍历 arange 元素，直接进行运算
 def python_sum(n):
-    a = [range(n)]
-    b = [range(n)]
+    a = list(range(n))
+    b = list(range(n))
     c = []
 
     for i in range(len(a)):
@@ -68,60 +68,82 @@ def diff_time_Numpy_python():
     c = python_sum(1000)
     delta = datetime.now() - start
     print('最后两个元素',c[-2:])
-    print('python 1000 :', delta.microseconds)
+    print('python 1000 用时:', delta.microseconds)
 
     start = datetime.now()
     c = numpy_sum(1000)
     delta = datetime.now() - start
     print('最后两个元素',c[-2:])
-    print('numpy 1000 :', delta.microseconds)
+    print('numpy 1000 用时:', delta.microseconds)
 
     # 10000 个向量
     start = datetime.now()
     c = python_sum(10000)
     delta = datetime.now() - start
-    print('最后两个元素',c[-2:])
-    print('python 10000 :', delta.microseconds)
+    print('\n最后两个元素',c[-2:])
+    print('python 10000 用时:', delta.microseconds)
 
     start = datetime.now()
     c = numpy_sum(10000)
     delta = datetime.now() - start
     print('最后两个元素',c[-2:])
-    print('numpy 10000 :', delta.microseconds)
+    print('numpy 10000 用时:', delta.microseconds)
  
     # 100000 个向量
     start = datetime.now()
     c = python_sum(100000)
     delta = datetime.now() - start
-    print('最后两个元素',c[-2:])
-    print('python 100000 :', delta.microseconds)
+    print('\n最后两个元素',c[-2:])
+    print('python 100000 用时:', delta.microseconds)
 
     start = datetime.now()
     c = numpy_sum(100000)
     delta = datetime.now() - start
     print('最后两个元素',c[-2:])
-    print('numpy 100000 :', delta.microseconds)
+    print('numpy 100000 用时:', delta.microseconds)
 
     # 100 0000 个向量
     start = datetime.now()
     c = python_sum(1000000)
     delta = datetime.now() - start
-    print('最后两个元素',c[-2:])
-    print('python 1000000 :', delta.microseconds)
+    print('\n最后两个元素',c[-2:])
+    print('python 1000000 用时:', delta.microseconds)
 
     start = datetime.now()
     c = numpy_sum(1000000)
     delta = datetime.now() - start
     print('最后两个元素',c[-2:])
-    print('numpy 1000000 :', delta.microseconds)
+    print('numpy 1000000 用时:', delta.microseconds)
+
+
+""" Numpy 基础 ----------------------------------------
+*Numpy 数组对象
+    Numpy中的ndarray 是一个多维数组对象，有两部分组成：
+        实际的数据
+        描述这些数据的元数据
+    大部分的数据操作仅仅修改元数据，而不改变底层的实际数据。
+"""
+def demo_ndarray_tpye():
+    """ 演示 ndarray数据类型 """
+    a = np.arange(5)
+    # 类型：64位的机器会现实int64,32位的显示int32
+    print(a.dtype)
+    # 维度
+    print(a.shape)
+    # 创建二维数组
+    m = np.array([np.arange(2), np.arange(2)])
+    print(m)
+    print(m.shape, m.dtype, type(m))
+    # 创建三维数组
+    m = np.array([np.arange(3), np.arange(3), np.arange(3)])
+    print(m)
+    print(m.shape, m.dtype, type(m))
+
+
+
 
 
 if __name__ == "__main__":
-    # diff_time_Numpy_python()
-    start = datetime.now()
-    c = numpy_sum(1000000)
-    delta = datetime.now() - start
-    print('最后两个元素',c[-2:])
-    print('numpy 1000000 :', delta.microseconds)
-    
+    #diff_time_Numpy_python()
+    demo_ndarray_tpye()
     pass
