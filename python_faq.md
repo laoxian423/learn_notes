@@ -130,3 +130,14 @@ pip wheel PackageName
 
 ```
 
+#### 0009 ImportError 错误
+```bash
+# 使用pandas时报错：
+ImportError: C extension: No module named 'pandas._libs.tslibs.nattype' not built.
+# 想着，是不是安装有问题，于是卸载Pandas，准备重新安装，然而被拒绝。
+PermissionError: [WinError 5] 拒绝访问。: 'd:\\programs\\python\\python37-32\\lib\\site-packages\\~andas\\_libs\\tslibs\\conversion.cp37-win32.pyd'
+# 看到文件名，感觉有些熟悉，好像前面杀毒软件报病毒就是这个，估计被隔离了
+# 于是，从隔离区恢复并信任
+# 执行pandas还是有问题，就卸载然后重新安装。
+# 问题解决
+```

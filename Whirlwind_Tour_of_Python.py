@@ -456,14 +456,116 @@ def demo_str_fun():
     # 组合字符串
     print('--'.join(['1', '2', '3']))
 
-""" 14、数据科学工具概览
+""" 14、数据科学工具概览 --------------------------------------------------------
+常用的包：numpy scipy pandas matplotlib scikit-learn
+
+Numpy : 对Python中稠密高维的数组进行存储和操作提供了一个高效途径。
+    提供了ndarray结构体，能够高效地存储和操作向量、矩阵和更高维度的数据集
+    支持按元素的算术运算到相对复杂的线性代数运算
+"""
+import numpy as np
+
+def demo_numpy():
+    """ 软件包Numpy的演示 """
+    x = np.arange(1, 10)
+    print(x)
+    # 对数组中的每个元素平方
+    x = x ** 2
+    print(x)
+    # 与列表推导比较
+    print([val ** 2 for val in range(1,10)])
+    # 多维数字,将上述x 调整为 3*3维度
+    M = x.reshape((3, 3))
+    print(M)
+    # 计算矩阵的转置矩阵,行列对调
+    print(M.T)
+    # 矩阵的乘法
+    print(np.dot(M,[5,6,7]))
+    # 特征值分解
+    print(np.linalg.eigvals(M))
+
+""" Pandas 
+    Pandas 是一个比NumPy新很多的库，并且是基于numpy构建的。
+    Pandas 提供了一个标签化的接口来访问多维数据，并且以数据帧对象的形式呈现。
+"""
+import pandas as pd
+
+def demo_pandas():
+    """ pandas 演示 """
+    df = pd.DataFrame({'label':['A', 'B', 'C', 'A', 'B', 'C'],
+                       'value':[1, 2, 3, 4, 5, 6]})
+    print(df) 
+    print(df['label'])
+    print(df['label'].str.lower())
+    print(df['value'].sum())
+    # 按标签分类汇总
+    print(df.groupby('label').sum())
+
+""" Matplotlib 风格的科学可视化
+    Python中最受欢迎的科学可视化
+"""
+import matplotlib.pyplot as plt
+plt.style.use('ggplot')  # 使用R语言的ggplot风格画面
 
 
+def demo_matplotlib():
+    """ Matplotlib 演示 """
+    x = np.linspace(0, 10) # 从0 到10 范围取值
+    print(x)
+    y = np.sin(x)
+    plt.plot(x,y)
+    plt.show()
+    
 
+""" SciPy: Python 科学计算
+    基于NumPy构建的科学计算中能的集合
+    这个库被组织成一些子模块，每个子模块实现一些数值算法
+    scipy.fftpack:      快速傅里叶变换(Fast Fourier Transforms)
+    scipy.integrate:    数值积分(numerical integration)
+    scipy.interpolate:  数值插值(numerical interpolation)
+    scipy.linalg:       线性代数方法
+    scipy.optimze:      函数值优化(numerical optimization of functions)
+    scipy.sparse:       稀疏矩阵存储(sparse matrix storage)和线性代数
+    scipy.stats:        统计分析方法(statistical analysis)
+"""
+from scipy import interpolate
+
+def demo_scipy():
+    """ scipy 库演示 """
+    # 选择 0 到 10 之间的8个点
+    x = np.linspace(0, 10, 8)
+    y = np.sin(x)
+
+    # 创建一个三次插值函数
+    func = interpolate.interp1d(x, y, kind='cubic')
+
+    # 在1000个点的网格上进行插值运算
+    x_interp = np.linspace(0, 10, 1000) 
+    y_interp = func(x_interp)
+
+    # 绘制结果
+    plt.figure()
+    plt.plot(x, y, 'o')
+    plt.plot(x_interp, y_interp)    
+    plt.show()
+
+
+""" 其他数据科学库
+    Scikit-Learn 机器学习
+    Scikit-image 图像处理、分析的工具
+    Statsmodels  统计建模
 """
 
+""" 15、更多的学习资源
+<<Fluent Python>>  Luciano Ramalho，最佳实践及常见的用法,《流畅的python》
+<<Dive Into Python>>  Mark  Pilgrim,python语言的详细用法，免费
+<<Learn Python the Hard Way>> Zed Shaw，《笨办法学python》
+<<Python Essential Reference>> David Beazley ,语言知识和内置库《python参考手册》
+<<python cookbook>> David Beazley <<python cookbook 中文版>>
+<<The Python Data Science Handbook>> Jake VanderPlas ,数据科学的开始 《python 数据科学手册》
+<<Python for Data Analysis>>,Wes McKinney,pandas的创始人，涵盖了pandas 《利用python进行数据分析》
 
-
+"""
 
 
 
@@ -483,5 +585,9 @@ if __name__ == "__main__":
     #demo_list_tuidao()
     #demo_generator()
     #print(*generator_primes(1000))
-    demo_str_fun()
+    #demo_str_fun()
+    #demo_numpy()
+    #demo_pandas()
+    #demo_matplotlib()
+    demo_scipy()
     pass
