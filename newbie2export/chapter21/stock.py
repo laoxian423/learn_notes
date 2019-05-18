@@ -21,7 +21,7 @@ import urllib.request
 import hashlib
 import re
 from bs4 import BeautifulSoup
-import db_access
+#import db_access
 
 
 import os
@@ -32,6 +32,7 @@ def validateUpdate(html):
     """ 验证数据是否更新，更新返回True,未更新返回False """
 
     # 创建 MD5
+    return True
     md5obj = hashlib.md5()
     md5obj.update(html.encode(encoding='utf-8'))
     md5code =  md5obj.hexdigest()
@@ -86,6 +87,7 @@ if validateUpdate(divstring):
             continue
         trtext = trtext.strip()
         rows = re.split(r'\s+', trtext)
+        """
         fields = {}
     
         fields['Date'] = rows[0]
@@ -94,16 +96,35 @@ if validateUpdate(divstring):
         fields['Low'] = float(rows[3])
         fields['Close'] = float(rows[4])
         fields['Volume'] = int(rows[5].replace(',', ''))
-        data.append(fields)
+        """
+        fields = []
+    
+        fields.append(rows[0])
+        fields.append(rows[1])
+        fields.append(rows[2])
+        fields.append(rows[3])
+        fields.append(rows[4])
+        fields.append(rows[5].replace(',', ''))
 
+        data.append(fields)
+    """
     print('数据格式化完毕，准备入库')
     for row in data:
         row['Symbol'] = 'AAPL'
         db_access.insert_hisq_data(row)
+    """
+    with open('NumPy_Beginner_Guide/appl.csv', 'w') as f:
+        s = ''
+        for row in data:
+            s += str(row[0]).replace('/', '-')
+            s += ' ' + row[1]
+            s += ' ' + row[2]
+            s += ' ' + row[3]
+            s += ' ' + row[4]
+            s += ' ' + row[5]
+            s += '\n'
+        f.write(s)
+
+
 
     print('ok')
-
-
-
-
-
