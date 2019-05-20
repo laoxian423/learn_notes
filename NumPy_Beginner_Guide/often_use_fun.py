@@ -176,3 +176,29 @@ def trans_dates_number():
 # # {0[0]}  第一个0 表示format中的第一个变量（list)，[0]表示这个变量的第一个元素
 # print('星期一:{0[0]} 星期二：{0[1]} 星期三：{0[2]} 星期四：{0[3]} 星期五：{0[4]}'.format(avg))
 
+
+""" 汇总数据 """
+
+def sum_week():
+    """ 按周汇总数据 """
+    dates, close = np.loadtxt('NumPy_Beginner_Guide/appl.csv', 
+                       delimiter=' ', 
+                       usecols=(0, 4), 
+                       converters={0:date2num},  # 这里读出的是字节码，需要在转换函数中转成字符串
+                       unpack=True)
+    #close = close[:16]
+    #dates = dates[:16]
+
+    # 找到第一个星期一
+    first_monday = np.ravel(np.where(dates == 0))[0]
+    # 找到最后一个星期五
+    last_friday = np.ravel(np.where(dates == 4))[-2]
+    # 建立一个数组，存放每周内每一天的索引值
+    weeks_indices = np.arange(first_monday, last_friday + 1)
+    # 按照每个子数组5个元素，用split切分数组
+    weeks_indices = np.split(weeks_indices, len(weeks_indices)/5)
+
+    print(last_friday, weeks_indices)
+
+
+sum_week()
