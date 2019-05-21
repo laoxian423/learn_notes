@@ -178,27 +178,43 @@ def trans_dates_number():
 
 
 """ 汇总数据 """
+def summarize(a, o, h, l, c):
+    print(a)
+    monday_open = o[a[0]]
+    # take 根据 a 中的索引取出对应的值，保存在h 中。
+    week_high = np.max(np.take(h, a))
+    week_low = np.min(np.take(l, a))
+    friday_close = c[a[-1]]
+    return ("APPL", monday_open, week_high, week_low, friday_close)
+
 
 def sum_week():
     """ 按周汇总数据 """
-    dates, close = np.loadtxt('NumPy_Beginner_Guide/appl.csv', 
+    dates, open, high, low, close = np.loadtxt('NumPy_Beginner_Guide/appl.csv', 
                        delimiter=' ', 
-                       usecols=(0, 4), 
+                       usecols=(0, 1, 2, 3,  4), 
                        converters={0:date2num},  # 这里读出的是字节码，需要在转换函数中转成字符串
                        unpack=True)
-    #close = close[:16]
-    #dates = dates[:16]
+    close = close[:25]
+    dates = dates[:25]
 
-    # 找到第一个星期一
-    first_monday = np.ravel(np.where(dates == 0))[0]
-    # 找到最后一个星期五
-    last_friday = np.ravel(np.where(dates == 4))[-2]
+    # 找到第一个星期五，因为数据是按时间降序存放的。
+    first_friday = np.ravel(np.where(dates == 4))[0]
+    # 找到最后一个星期一
+    last_monday = np.ravel(np.where(dates == 0))[-1]
+    print(np.where(dates == 0))
     # 建立一个数组，存放每周内每一天的索引值
-    weeks_indices = np.arange(first_monday, last_friday + 1)
-    # 按照每个子数组5个元素，用split切分数组
-    #weeks_indices = np.split(weeks_indices, len(weeks_indices)/5)
+    weeks_indices = np.arange(first_friday, last_monday + 1)
+    # 用split切分数组,分为5段，每个段5个元素
+    weeks_indices = np.split(weeks_indices, 5)
+    # 用apply_along_axis进行统计
+    weeksummary = np.apply_along_axis(summarize, 1, weeks_indices,
+                                      open, high, low, close)
 
-    print(first_monday, last_friday, len(weeks_indices))
+    print(weeksummary)
+
+
+
 
 
 sum_week()
