@@ -212,6 +212,7 @@ def sum_week():
                                       open, high, low, close)
 
     print(weeksummary)
+    np.savetxt('NumPy_Beginner_Guide/weeksummary.csv',weeksummary, delimiter=',', fmt='%s')
 
 
 
