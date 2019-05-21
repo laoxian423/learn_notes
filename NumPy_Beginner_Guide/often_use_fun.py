@@ -196,9 +196,9 @@ def sum_week():
     # 建立一个数组，存放每周内每一天的索引值
     weeks_indices = np.arange(first_monday, last_friday + 1)
     # 按照每个子数组5个元素，用split切分数组
-    weeks_indices = np.split(weeks_indices, len(weeks_indices)/5)
+    #weeks_indices = np.split(weeks_indices, len(weeks_indices)/5)
 
-    print(last_friday, weeks_indices)
+    print(first_monday, last_friday, len(weeks_indices))
 
 
 sum_week()
