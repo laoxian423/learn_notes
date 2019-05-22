@@ -179,7 +179,6 @@ def trans_dates_number():
 
 """ 汇总数据 """
 def summarize(a, o, h, l, c):
-    print(a)
     monday_open = o[a[0]]
     # take 根据 a 中的索引取出对应的值，保存在h 中。
     week_high = np.max(np.take(h, a))
@@ -192,12 +191,11 @@ def sum_week():
     """ 按周汇总数据 """
     dates, open, high, low, close = np.loadtxt('NumPy_Beginner_Guide/appl.csv', 
                        delimiter=' ', 
-                       usecols=(0, 1, 2, 3,  4), 
+                       usecols=(0, 1, 2, 3, 4), 
                        converters={0:date2num},  # 这里读出的是字节码，需要在转换函数中转成字符串
                        unpack=True)
     close = close[:25]
     dates = dates[:25]
-
     # 找到第一个星期五，因为数据是按时间降序存放的。
     first_friday = np.ravel(np.where(dates == 4))[0]
     # 找到最后一个星期一
@@ -213,7 +211,6 @@ def sum_week():
 
     print(weeksummary)
     np.savetxt('NumPy_Beginner_Guide/weeksummary.csv',weeksummary, delimiter=',', fmt='%s')
-
 
 
 
