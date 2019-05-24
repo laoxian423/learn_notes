@@ -122,7 +122,7 @@ def draw_lisa():
     利萨茹曲线的参数包含A B a b ,为简单起见，我们令A和B均为1
     """
     a = 9.
-    b = 9.
+    b = 8.
     t = np.linspace(-np.pi, np.pi, 201)
     
     x = np.sin(a * t + np.pi/2)
@@ -132,4 +132,58 @@ def draw_lisa():
     plt.show()
 
 
-draw_lisa()
+""" 方波
+    方波可以近似的标识为多个正弦波的叠加，事实上任意一个方波信号都可以用无穷傅里叶级数来表示
+    傅里叶级数（Fourier series)是以正弦函数和余弦函数为基函数的无穷级数
+"""
+def draw_Fourier():
+    """ 方波的绘制 
+    
+    需要累加很多项级数，且级数越多结果越精确，这里k= 99保证足够的精度
+    """
+    # 初始化t 和 k
+    t = np.linspace(-np.pi, np.pi, 201)
+    k = np.arange(1, 99.0)
+    k = 2 * k -1
+    f = np.zeros_like(t)
+    # 使用sin和sum函数进行计算
+    for i in range(len(t)):
+        f[i] =  np.sum(np.sin(k * t[i])/ k)
+    f = (4 / np.pi) * f
+
+    plt.plot(t, f)
+    plt.show()
+
+def draw_sawtooth():
+    """ 锯齿波和三角波 """
+    t = np.linspace(-np.pi, np.pi, 201)
+    k = np.arange(1, 99.0)
+    f = np.zeros_like(t)
+    for i in range(len(t)):
+        f[i] = np.sum(np.sin(2 * np.pi * k * t[i])/k)
+    f = (-2 / np.pi) * f
+    plt.plot(t, f, lw=1.0)
+    plt.plot(t, np.abs(f), lw=2.0)  
+    plt.show()
+
+""" 二进制位操作
+    使用二进制位操作可以提高代码的性能，但会使代码变得难以理解
+"""
+def demo_binary_oper():
+    """ 二进制操作 
+    XOR 又被成为不等运算符，当两个操作数的符号不一致时，结果为负数
+    在Numpy中，^ 对应于bitwise_xor函数，< 对应于less函数。
+    """
+    x = np.arange(-9, 9)
+    y = -x
+    print((x ^ y) < 0)
+    print(np.less(np.bitwise_xor(x, y), 0))
+
+    """
+    在Numpy中， & 对应于bitwise_and
+    == 对应于equal
+    """
+    print( (x & (x -1)) ==0)
+    print(np.equal(np.bitwise_and(x,(x-1)), 0))
+
+demo_binary_oper()

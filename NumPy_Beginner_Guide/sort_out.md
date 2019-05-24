@@ -20,6 +20,12 @@ def myfunc(a, b):
 vfunc = np.vectorize(myfunc) 
 vfunc([1, 2, 3, 4], 2) 
 Out[87]: array([3, 4, 1, 2])
+    
+# 创建通用函数
+# ultimate_anser是一个python函数，两个1表示输入参数个数是1个，输出参数个数是1个
+ufunc = np.frompyfunc(ultimate_answer, 1, 1)
+ufunc(np.arange(4))
+
 ```
 
 * 数学操作
@@ -64,6 +70,9 @@ np.corrcoef(returns1, returns2)
 
 # 绝对值
 np.abs(arr1)
+# 三角函数
+np.sin(arr1)
+
 # 返回元素的正负符号
 np.sign(arr1)
 # 根据正负符号自定义返回值
@@ -72,6 +81,32 @@ np.piecewise(arr1, [arr1 < 0, arr1 > 0])
 # 加权余弦窗函数 np.hanning(N)
 np.hanning(5)
 out:array([0. , 0.5, 1. , 0.5, 0. ])
+    
+# 创建矩阵
+A = np.mat('1 2 3; 4 5 6; 7 8 9')
+B = np.mat(np.range(9).reshape(3, 3))
+ab = np.bmat('A B; A B')
+C = np.matrix([1, 1], [1, 0])
+
+# 算术运算
+a = np.array([2, 6, 5])
+b = np.array([1, 2, 3])
+# 除法,截断小数
+np.divide(a, b)
+np.true_divide(a, b)
+# 除法，返回整数
+np.floor_divide(a, b)
+# 模运算
+# 返回两个数组中元素相除后的余数
+a = np.arange(-4, 4)
+np.remainder(a, 2)
+np.mod(a, 2)
+np.fmod(a, 2) # 对负数的处理有所不同
+
+# 二进制逻辑运算符
+np.less(a, 0)
+np.bitwise_xor(x, y)
+np.bitwise_and(x, y)
 ```
 
 * 文件操作类
