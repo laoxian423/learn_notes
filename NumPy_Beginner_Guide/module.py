@@ -147,3 +147,65 @@ def demo_random():
     plt.plot(np.arange(len(cash)), cash)
     plt.show()
 
+""" 超几何分布
+（hypergeometric distribution）是一种离散概率分布，它描述的是一个管子里有两种物件，无放回地从中
+抽取指定数量的物件后，抽出指定种类物件的数量。
+"""
+def demo_hypergeometric():
+    """ 模拟游戏秀节目 
+    
+    有这样一个节目，每当参赛者回答对一个问题，他们可以从一个罐子里模出3个球并放回。罐子里有一个
+    “倒霉球”，一旦被摸到，参赛者会被扣去6分。如果没摸到加1分。如果有100道问题被正确回答，得分怎样？
+    """
+    # 使用hypergeometric函数初始化游戏的结果矩阵。该函数第一个参数为罐中普通球的数量，
+    # 第二个参数为“倒霉球”的数量，第三个参数为每次采样（摸球）的数量
+    points = np.zeros(100)
+    outcome = np.random.hypergeometric(25, 1, 3, size=len(points))
+    # 根据上一步产生的游戏结果计算相应的得分
+    for i in range(len(points)):
+        if outcome[i] == 3:
+            points[i] = points[i - 1] + 1
+        elif outcome[i] == 2:
+            points[i] = points[i -1] - 6
+        else:
+            print(outcome[i])
+    plt.plot(np.arange(len(points)), points)   
+    plt.show()
+
+""" 连续分布
+连续分布可以用PDF（Probability Density Function,概率密度函数）来描述。随机变量落在某一区间内的概率
+等于概率密度函数在该区间的曲线下方的面积。
+"""
+def draw_normal():
+    """ 绘制正态分布 """
+    # 使用normal函数产生指定数量的随机数
+    N = 10000
+    normal_values = np.random.normal(size=N)
+    # 绘制分布直方图和理论上的概率密度函数（均值为0，方差为1的正太分布）曲线。
+    dummy, bins, dummy = plt.hist(normal_values, np.sqrt(N), normed=True, lw=1)
+    sigma = 1
+    mu =0
+    plt.plot(bins, 1/(sigma * np.sqrt(2 * np.pi)) * np.exp(-(bins - mu)**2 / (2 * sigma**2)), lw=2)
+    plt.show()
+
+def draw_log_distributtion():
+    """ 对数正态分布 
+    
+    （lognormal distribution)是自然对数服从正太分布的任意随机变量的概率分布。
+    """
+    N = 10000
+    lognormal_values =  np.random.lognormal(size=N)
+    # 绘制分布直方图和理论上的概率密度函数（均值为0，方差为1的正太分布）曲线。
+    dummy, bins, dummy = plt.hist(lognormal_values, np.sqrt(N), normed=True, lw=1)
+    sigma = 1
+    mu =0
+    x = np.linspace(min(bins), max(bins), len(bins))
+    pdf = np.exp(-(np.log(x) - mu)**2 / (2*sigma**2))/(x*sigma*np.sqrt(2*np.pi))
+
+    plt.plot(x,pdf,lw=3)
+    plt.show()
+
+draw_log_distributtion()
+
+
+
