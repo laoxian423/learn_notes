@@ -26,6 +26,20 @@ Out[87]: array([3, 4, 1, 2])
 ufunc = np.frompyfunc(ultimate_answer, 1, 1)
 ufunc(np.arange(4))
 
+# 优先按照股价排序，返回索引
+indices = np.lexsort((dates, closes))
+# 搜索：返回数组中最大值对应的下标
+np.argmax(A)  
+# 忽略NaN值
+np.nanargmax(A) 
+# 分组返回对应下标
+np.argwhere(A <=4) 
+# 抽取：按照条件抽取指定元素
+condition = (a % 2) == 0
+print(np.extract(condition, a))
+# 查看非零元素
+print(np.nonzero(a))
+
 ```
 
 * 数学操作
@@ -59,6 +73,8 @@ arr1.prod()
 # 计算所有阶乘
 arr1.cumprod()
 
+# 求矩阵的逆矩阵
+np.linalg.inv(A)
 # 求两个数组的协方差矩阵
 covariance = np.cov(returns1, returns2)
 # 查看矩阵的对角线元素
@@ -67,6 +83,56 @@ covariance.diagonal()
 covariance.trace()
 # 求两个数组的相关系数
 np.corrcoef(returns1, returns2)
+# 求解线性方程组
+A = np.mat('1 -2 1; 0 2 -8; -4 5 9')
+b = np.array([0, 8, -9])
+x = np.linalg.solve(A, b)
+np.dot(A, x) # 验证结果
+""" 特征值和特征向量
+特征值即方程Ax = ax的根，是一个标量。A是二维矩阵，x 是一个一维向量
+特征向量是关于特征值的向量。
+"""
+A = np.mat('3 -2; 1 0')
+# 求解特征值
+print(np.linalg.eigvals(A))
+# 求解特征值和特征向量
+eigenvalues, eigenvectors = np.linalg.eig(A)
+""" 奇异值分解 
+Singular Value Decomposition,是一种因子分解运算，将一个矩阵分解为3个矩阵的乘积
+svd()函数返回3个矩阵，U Sigma V ,U V 是正交矩阵，Sigma包含矩阵的奇异值。
+"""
+A = np.mat(" 4 11 14; 8 7 -2")
+U, Sigma, V = np.linalg.svd(A, full_matrices=False)
+print(U)
+# Sigma并不是奇异值矩阵，只是其对角线上的值，其他是0
+print(Sigma)
+print(V)
+# np.diag(Sigma) 将Sigma补充为一个完整矩阵
+print(U * np.diag(Sigma) * V)
+
+""" 计算广义逆矩阵 """
+A = np.mat('4 11 14; 8 7 -2')
+pseudoinv = np.linalg.pinv(A)
+print(pseudoinv)
+# 与原矩阵相乘，等到一个近似的单位矩阵
+print(A * pseudoinv)
+
+""" 计算傅里叶变换 """
+# 创建一个包含30个点的余弦波信号
+x = np.linspace(0, 2 * np.pi, 30)
+wave = np.cos(x)
+# 使用fft函数对余弦波信号进行傅里叶变换
+transformed = np.fft.fft(wave)
+# 对变换后的结果应用ifft函数，近似还原原始信号
+print(np.all(np.abs(np.fft.ifft(transformed)- wave) < 10 ** -9))
+
+"""   随机数   """
+cash = np.zeros(10000)  # 玩1万轮游戏
+cash[0] = 1000
+# binomial 模拟随机游走,
+outcome = np.random.binomial(9, 0.5, size=len(cash))
+# 返回一个结果矩阵，比如从25个红球和1篮球中每次采样3个，每次拿到红球的数量，100次的情况
+outcome = np.random.hypergeometric(25, 1, 3, size=100)
 
 # 绝对值
 np.abs(arr1)
@@ -275,6 +341,19 @@ arr1.fill(1)
 # 比 1 小的都改为1，比2 大的都改为2
 arr1.clip(1,2)
 
+```
+
+* 金融类函数
+
+```bash
+fv 计算终值（future value),基于一些假设给出的某个金融资产在未来某一时间点的价值
+pv 计算现值(present value)
+npv 净现值(net present value) 按折现率计算净现金流之和
+pmt 更具本金和利率计算每期需支付的金额
+irr 计算内部收益率(internal rate of return) 内部收益率是净现值为0时的有效利率，不考虑通胀
+mirr 计算修正后的内部收益率(modified internal rate of return)
+nper 计算定期付款的期数
+rate 计算利率(rate of interest)
 ```
 
 
