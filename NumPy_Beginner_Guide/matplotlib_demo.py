@@ -1,5 +1,8 @@
 """
 http://matplotlib.sourceforge.net/gallery.html
+
+这本书对于绘图部分真的太老了，基本都跑不下来。
+这一部分我找专门的新书看吧。
 """
 import numpy as np
 import matplotlib.pyplot as plt
