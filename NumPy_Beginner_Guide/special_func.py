@@ -29,7 +29,9 @@ def demo_sort():
     indices = np.lexsort((dates, closes))
     print(indices)
     print(["%s %s" % (datetime.date.fromordinal(int(dates[i])), closes[i]) for i in indices])
-    
+
+
+
 def sort_complex():
     """ 对复数排序 """
     # 生成5个随机数作为实部，5个随机数作为虚部，设置随机数种子为42

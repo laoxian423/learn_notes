@@ -7,12 +7,13 @@ import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
 from matplotlib.dates import DayLocator
 from matplotlib.dates import MonthLocator
+from dateutil.parser import parse ## 导入转换到指定格式日期的工具
 # from matplotlib.finance import quotes_historical_yahoo
 # matplotlib.finance 已经没有了，拆出来成了一个单独的包mpl_finance
 import mpl_finance as mpf
 import sys
-from datetime import date
-
+#from datetime import date
+import datetime
 
 
 
@@ -77,7 +78,11 @@ def draw_ploy_derivative12():
     plt.ylabel('y')
     plt.show()
 
-
+def date2nums(s):
+    """ 日期转换成对应的数字
+    """
+    return datetime.datetime.strptime(str(s,encoding='utf8'), "%d-%m-%Y").toordinal()
+    
 def draw_k():
     """ 绘制股票全年价格 """
     #today = date.today()
@@ -89,8 +94,17 @@ def draw_k():
     month_formatter = DateFormatter("%b %Y")
     d, o, h, l, c = np.loadtxt('NumPy_Beginner_Guide/BHP.csv',
                                 delimiter=',',
-                                usecols=(0, 1, 2, 3, 4, 5),
+                                usecols=(1, 3, 4, 5, 6),
+                                converters={1:date2num},
                                 unpack=True)
+    d = ["%s" % datetime.date.fromordinal(int(d[i])) for i in range(len(d))]
+    data = []
+    for i in range(len(d)):
+        temp = (d[i], o[i], h[i], l[i], c[i])
+        data.append(temp)
+    # data = (d,o,h,l,c)
+    # print(data)
+    # return
     # 创建一个figure顶层容器
     fig = plt.figure()
     # 增加一个子图
@@ -102,9 +116,56 @@ def draw_k():
     # 将x轴上的主格式化器设置为月格式化器，负责x轴上较粗刻度的标签
     ax.xaxis.set_major_formatter(month_formatter)
     # 绘制K线
-    mpf.candlestick_ohlc(ax,(d,o,h,l,c),width=1.0,colorup='r',colordown='green', alpha=1)
+    mpf.candlestick_ohlc(ax, data, width=1.0, colorup='r', colordown='green', alpha=1)
     # 将x轴上的标签格式化为日期
     fig.autofmt_xdate()
     plt.show()
 
-draw_k()
+from matplotlib.pylab import date2num ## 导入日期到数值一一对应的转换工具
+
+def draw_k1():
+    """ K线，上面那个调不好 ，找一个充数"""
+
+    d, o, h, l, c = np.loadtxt('NumPy_Beginner_Guide/BHP.csv',
+                                delimiter=',',
+                                usecols=(1, 3, 4, 5, 6),
+                                converters={1:date2nums},
+                                unpack=True)
+    # 把日期转换为字符串
+    d = ["%s" % datetime.date.fromordinal(int(d[i])) for i in range(len(d))]
+    data = []
+    for i in range(len(d)):
+        # 把日期转换为matplotlib使用的格式，这个日期转换很操蛋
+        temp = (date2num(parse(d[i])) , o[i], h[i], l[i], c[i])
+        data.append(temp)
+    # 设置字体
+    plt.rcParams['font.family'] = 'SimHei' 
+    # 创建图片和坐标轴 
+    fig, ax = plt.subplots() 
+    # 调整底部距离 
+    fig.subplots_adjust(bottom=0.2) 
+    # 设置X轴刻度为日期时间 
+    ax.xaxis_date() 
+    # 设置X轴刻度线并旋转45度 
+    plt.xticks(rotation=45) 
+    # 设置Y轴刻度线 
+    plt.yticks() 
+    # 设置图片标题 
+    plt.title("股票代码 ** K线图") 
+    # 设置X轴标题 
+    plt.xlabel("时间") 
+    # 设置Y轴标题 
+    plt.ylabel("股价（元）") 
+    # 设置网格线 
+    plt.grid(True, 'major', 'both', ls='--', lw=.5, c='k', alpha=.3) 
+    # 股票数据，格式是往列表里添加元组, 每个元组代表一个股票信息。其中元组的格式是（日期，开盘价，最高价，最低价，收盘价） 
+    # data_list_ = [(date2num(parse(str(20181110))),10,20,5,15),(date2num(parse(str(20181111))),11,22,6,14)]
+    # 设置利用mpf画股票K线图 
+    mpf.candlestick_ohlc(ax, data, width=1.0, colorup='r', colordown='green', alpha=1)
+    # 显示图片 
+    plt.show() 
+    # 保存图片
+    # plt.savefig("K线.png") 
+    # 关闭plt，释放内存
+    # plt.close() 
+
