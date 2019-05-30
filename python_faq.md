@@ -125,8 +125,11 @@ pip uninstall PackageName
 pip install -U PackageName
 # 升级pip
 pip install -U pip
-# 打包
+# 打包，导出wheel文件
 pip wheel PackageName
+# 导出wheel文件，本地文件可能没有缓存，需要重新下载，使用命令下载requirements.txt中的包，然后在另一台机子上，使用pip3 install xxxxx.whl 进行安装
+pip3 download -r requirements.txt 
+
 
 ```
 
@@ -141,3 +144,14 @@ PermissionError: [WinError 5] 拒绝访问。: 'd:\\programs\\python\\python37-3
 # 执行pandas还是有问题，就卸载然后重新安装。
 # 问题解决
 ```
+
+#### 0010 nose 测试框架
+
+```python
+'''
+nose是python框架，使得（单元）测试更加容易。nose可以帮助你组织测试代码。任何匹配正则表达式
+(?:^|[b_.-][Tt]est)的Python源代码文件、文件夹或库都将被收集用于测试。nose 充分利用了装饰器
+'''
+pip install nose
+```
+
