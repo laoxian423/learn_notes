@@ -50,5 +50,3 @@ def demo_stats_normal():
     检验一个数据集是否服从正态分布，判断峰度、偏度、正态性
 """
 
-def fitting_sine_wave():
-    pass
