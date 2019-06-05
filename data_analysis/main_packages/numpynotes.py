@@ -5,7 +5,7 @@
 #       对Numpy的学习资料整理，以函数的形式进行组织和演示
 # 历史版本 ：
 #       2019-06-03 ：创建 刘昕
-#       2019-06-03 ：
+#       2019-06-03 ：create_array()  access_array() common_func_and_attr() maths()
 
 # 文档关键字：
 # ndarray
@@ -38,8 +38,8 @@ def create_array():
 
 #create_array() 
 """总结：
-    1、归类：NumPy目前来看发现有两种数据结构ndarray和matrix,ndarray它是一个可变数组，意思是可以修改数据值。另外它一个
-    ndarray数组只能保留一种数据类型，如都是int，或者都是float，str等。
+    1、归类：数据结构。NumPy目前来看发现有两种数据结构ndarray和matrix,ndarray它是一个可变数组，意思是可以修改数据值。
+    另外它一个ndarray数组只能保留一种数据类型，如都是int，或者都是float，str等。
     ndarray 是NumPy的基础，所有操作都是围绕这个数据结构进行，它本身有大量的属性和方法，如上面的ndim查看数组维度。
     2、联系：ndarry和python中的list非常像，不知道是不是从List继承过来的，以后查看一下。但又不同，它比List要方便的多，
     可以直接加减乘除等。
@@ -78,7 +78,7 @@ def access_array():
 
 #access_array()
 """ 总结：
-    1、归类：切片、索引等操作都属于数组的访问。
+    1、归类：数组访问。
     2、联系：ndarray和python的切片操作基本一致。切片的操作非常灵活，我也经常这么用，但是个人觉得简单的切片还行，过于复杂
     或者及其负责的切片操作不宜提倡，如有些切片下标干脆用数学公式生成，可读性太差，和c的指针一样难以阅读。where的用
     法还不错，让我想起sql语句，简单且明了。
@@ -120,7 +120,7 @@ def common_func_and_attr():
 #common_func_and_attr()
 
 """总结
-    1、归类：ndarray的方法和属性
+    1、归类：数组的方法和属性
     2、联系：python的一切都是类，虽然也提供了一些函数式编程的东西。ndarray作为NumPy最重要的一部分，它的方法和属性很多。
     他的方法和属性体现着浓浓的数学特征，像fill,填充一个数组，List里面就没有，其他的方法和属性也是这样，为了参与
     各种运算提供方便。
@@ -138,13 +138,13 @@ def maths_func01():
     rand1 = np.random.rand(10)
     print(1, '\t', rand1, type(rand1))
 
-maths_func01()
+#maths_func01()
 
 """ 总结
     1、归类：数学函数
     2、联系：
         随机数是数学中很重要的部分，每种语言都提供，NumPy的random类中提供了好几个随机数的函数。python本身也提供
-        但numpy似乎提供更多的。
+        但numpy似乎提供更多的，比如随机整数。
     3、用途：
         随机数的用途很广，在数据分析和统计分析中都有很重要的地位。通过对随机浮点数的处理，我们可以生成很多有用的数据。
         比如在绘制曲线，模拟分布等等。
