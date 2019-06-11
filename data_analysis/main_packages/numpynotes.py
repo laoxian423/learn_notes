@@ -36,13 +36,32 @@ def create_array():
     array1 = np.arange(9).reshape(3, 3)
     print(4, array1, array1.ndim)
 
-#create_array() 
+    # 在创建数组时指定元素类型
+    array1 = np.array([1, 2, 3, 4], dtype=np.float32)
+    print(5, array1)
+    # 修改元素类型，并返回一个新数组
+    array2 = np.asarray(array1, dtype=np.float64)
+    print(6, array2)
+    # 修改原始数据类型
+    array1.astype(np.float64)
+    print(7, array1)
+    # 创建混合数据类型，不提倡
+    array3 = np.array([1, 2.0, '3'], dtype=object)
+    print(8, array3)
+
+
+
+create_array() 
 """总结：
     1、归类：数据结构。NumPy目前来看发现有两种数据结构ndarray和matrix,ndarray它是一个可变数组，意思是可以修改数据值。
     另外它一个ndarray数组只能保留一种数据类型，如都是int，或者都是float，str等。
     ndarray 是NumPy的基础，所有操作都是围绕这个数据结构进行，它本身有大量的属性和方法，如上面的ndim查看数组维度。
-    2、联系：ndarry和python中的list非常像，不知道是不是从List继承过来的，以后查看一下。但又不同，它比List要方便的多，
+    2、关联：ndarry和python中的list非常像，不知道是不是从List继承过来的，以后查看一下。但又不同，它比List要方便的多，
     可以直接加减乘除等。
+        python本来只设计了很少的基础数据类型，整形、浮点型、布尔型，由于Numpy是C语言开发的，为了提高运算
+    速度，有增加了很多的基础数据类型。
+        事物的发展应该是分类越来越细的，尤其在数据分析领域，怪不得numpy始终进不了python标准库，也难怪python
+        的创始人黯然离开，确实作为数据分析的流行语言，原有的python设计思想确实很难坚持了。
     3、用途：由于可直接运算，如加减乘除，一个array可以乘以一个常数，也可以乘以另外一个array,做一一对应的运算。感觉用于
     矩阵运算应该很方便，不过NumPy中有专门做矩阵运算的数据结构matrix。不过ndarray是用c实现的，应该说NumPy大部分
     运算都是c实现的，从速度上讲用它就很划算。
@@ -79,7 +98,7 @@ def access_array():
 #access_array()
 """ 总结：
     1、归类：数组访问。
-    2、联系：ndarray和python的切片操作基本一致。切片的操作非常灵活，我也经常这么用，但是个人觉得简单的切片还行，过于复杂
+    2、关联：ndarray和python的切片操作基本一致。切片的操作非常灵活，我也经常这么用，但是个人觉得简单的切片还行，过于复杂
     或者及其负责的切片操作不宜提倡，如有些切片下标干脆用数学公式生成，可读性太差，和c的指针一样难以阅读。where的用
     法还不错，让我想起sql语句，简单且明了。
     3、用途：对数组的访问用处很多，往往我们不会对全部数组数据进行运算，而是只处理他的一部分，以往需要遍历操作，现在通过筛选
@@ -93,8 +112,8 @@ def common_func_and_attr():
     关键字：fill copy ndim dtype shape size itemsize
         填充 深拷贝 浅拷贝 维度 数据类型 数组大小 内存大小
     """
-    arr1 = np.array([1,2,3,4,5])
-    arr2 = np.arange(9).reshape(3,3)
+    arr1 = np.array([1, 2, 3, 4, 5])
+    arr2 = np.arange(9).reshape(3, 3)
     # 填充
     arr1.fill(9)
     print(1,'\t',arr1 )
@@ -104,7 +123,7 @@ def common_func_and_attr():
     arr1[1] = 1000
     print(2, '\t', arr1, arr3)
 
-    arr1 = np.array([1,2,3])
+    arr1 = np.array([1, 2, 3])
     arr3 = arr1.copy()   # 深拷贝，修改其中一个另一个不变
     arr1[1] = 1000
     print(3, '\t', arr1, arr3)
@@ -121,7 +140,7 @@ def common_func_and_attr():
 
 """总结
     1、归类：数组的方法和属性
-    2、联系：python的一切都是类，虽然也提供了一些函数式编程的东西。ndarray作为NumPy最重要的一部分，它的方法和属性很多。
+    2、关联：python的一切都是类，虽然也提供了一些函数式编程的东西。ndarray作为NumPy最重要的一部分，它的方法和属性很多。
     他的方法和属性体现着浓浓的数学特征，像fill,填充一个数组，List里面就没有，其他的方法和属性也是这样，为了参与
     各种运算提供方便。
     3、用途：深拷贝和浅拷贝很重要，我记得在java里面这个处理比较麻烦，尤其将“类”作为参数传递的时候，一个不小心就把你不想
@@ -142,9 +161,10 @@ def maths_func01():
 
 """ 总结
     1、归类：数学函数
-    2、联系：
+    2、关联：
         随机数是数学中很重要的部分，每种语言都提供，NumPy的random类中提供了好几个随机数的函数。python本身也提供
-        但numpy似乎提供更多的，比如随机整数。
+        但numpy似乎提供更多的，比如随机整数randint(),虽然通过处理小数也能得到随机整数，但是NumPy的大部分运算和
+        函数都是 c 编译的，所以还是能用它提供的就用。
     3、用途：
         随机数的用途很广，在数据分析和统计分析中都有很重要的地位。通过对随机浮点数的处理，我们可以生成很多有用的数据。
         比如在绘制曲线，模拟分布等等。
