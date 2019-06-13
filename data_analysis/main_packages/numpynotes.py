@@ -51,7 +51,7 @@ def create_array():
 
 
 
-create_array() 
+#create_array() 
 """总结：
     1、归类：数据结构。NumPy目前来看发现有两种数据结构ndarray和matrix,ndarray它是一个可变数组，意思是可以修改数据值。
     另外它一个ndarray数组只能保留一种数据类型，如都是int，或者都是float，str等。
@@ -171,3 +171,38 @@ def maths_func01():
 
 """
 
+def numerical_oper():
+    """ 数值运算
+
+    关键字：累加、累乘、标准差、方差、平均数、限定、最大最小、四舍五入
+    """
+    arr1 = np.array([1, 2, 3, 4])
+    arr2 = np.array([[1, 2, 3], [4, 5, 6]])
+    # 累加、求和
+    print(1, arr1.sum())
+    print(2, arr2.sum())
+    print(3, arr2.sum(axis=0)) # y轴
+    print(4, arr2.sum(axis=1)) # x轴
+    # 累乘
+    print(5, arr1.prod())
+    print(6, arr2.prod(axis=0))
+    # 平均数
+    print(7, arr1.mean())
+    print(8, arr2.mean())
+    print(9, arr2.mean(axis=0))
+    # 方差
+    print(10, arr1.var())
+    # 标准差
+    print(11, arr1.std())
+    # 限定,小于2的等于2，大于4的等于4
+    print(12, arr1.clip(2, 4))
+    # 最大最小值
+    print(13, arr1.min(),arr1.max())
+    # 返回最大最小值的索引值
+    print(14, arr1.argmin(),arr1.argmax())
+    # 四舍五入
+    arr3 = np.array([1.22, 2.285, 9.345])
+    print(15, arr3.round())
+    print(16, arr3.round(decimals=1))
+
+numerical_oper()
