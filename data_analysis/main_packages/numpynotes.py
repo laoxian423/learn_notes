@@ -6,7 +6,8 @@
 # 历史版本 ：
 #       2019-06-03 ：创建 刘昕
 #       2019-06-03 ：create_array()  access_array() common_func_and_attr() maths()
-#       2019-06-17 : numerical_oper() 6月10日母亲住院准备膝盖置换手术，没有时间学习了。
+#       2019-06-17 : numerical_oper()  sort_function()
+#                    6月10日母亲住院准备膝盖置换手术，好久没学习了。
 
 # 文档关键字：
 # ndarray
@@ -206,7 +207,7 @@ def numerical_oper():
     print(15, arr3.round())
     print(16, arr3.round(decimals=1))
 
-numerical_oper()
+#numerical_oper()
 """ 总结
     1、归类：
         数学运算之常用数值运算
@@ -218,4 +219,37 @@ numerical_oper()
         本书中，prod是作为阶乘来说的，这里按累乘来解释，虽然是一回事，但是体现了两种思想，一个基于
         数学的思路，一个基于应用的思路。对于这个函数来说，累乘更加准确，阶乘只是它的一个特列，函数值
         连续的一个特列。
+"""
+
+def sort_function():
+    """  排序操作
+
+    关键字：排序
+    """
+    # 一维数组的排序,不改变原有顺序，返回一个新的数组
+    arr1 = np.array([2, 4, 1, 9, 7, 2, 10, 8])
+    print(1, np.sort(arr1))
+    # 返回一维数组排序后的索引值
+    print(2, np.argsort(arr1))
+    # 二维数组的排序
+    arr2 = np.array([[2, 5, 1, 3],
+                     [10, 8, 7, 6]])
+    print(3, np.sort(arr2))
+    print(4, np.sort(arr2, axis=0))
+
+    # 排序插入
+    arr3 = np.linspace(0, 10, 20)
+    values = np.array([1.3, 3.5])
+    print(5, arr3, '\n', np.searchsorted(arr3, values))
+
+#sort_function()
+""" 总结：
+    1、归类：
+        通用操作
+    2、关联：
+        基本算法实现。对一维算法的排序还行，多维有些乱，尤其指定轴时就搞不清楚怎么回事了。
+        好像pandas的排序要好用些，这个知道就可以了。此外它还有一个np.lexsort()可以对每
+        个列指定排序规则，需要时在翻看吧，很难用的样子。
+    3、用途：
+        简单的数组排序，似乎都没办法倒序排列。
 """
