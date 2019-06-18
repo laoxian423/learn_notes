@@ -7,7 +7,8 @@
 #       2019-06-03 ：创建 刘昕
 #       2019-06-03 ：create_array()  access_array() common_func_and_attr() maths()
 #       2019-06-17 : numerical_oper()  sort_function()
-#                    6月10日母亲住院准备膝盖置换手术，好久没学习了。
+#                    6月10日母亲住院做膝盖置换手术，好久没学习了。
+#       2019-06-18 : reshape_array()
 
 # 文档关键字：
 # ndarray
@@ -251,5 +252,49 @@ def sort_function():
         好像pandas的排序要好用些，这个知道就可以了。此外它还有一个np.lexsort()可以对每
         个列指定排序规则，需要时在翻看吧，很难用的样子。
     3、用途：
-        简单的数组排序，似乎都没办法倒序排列。
+        简单的数组排序，np.sort()似乎都没办法倒序排列。
+"""
+
+def reshape_array():
+    """ 改变数组形状
+
+    关键字：改变维度 拉平数组 扁平化 拼接数组 水平拼接 垂直拼接
+    """
+    arr1 =  np.arange(1,10)
+    # 改变维度
+    print(1, arr1, '\t', arr1.shape)
+    arr2 = arr1.reshape(3,3)
+    arr1.shape = 3, 3
+    print(2, arr2, arr2.shape)
+    print(3, arr1, arr1.shape)
+
+    # 拉平数据（一维化）
+    arr1 = np.arange(1, 10).reshape(3, 3)
+    print(4, arr1.flatten())
+    arr1 = np.arange(1, 10).reshape(3, 3)
+    print(5, arr1.ravel())
+
+    # 拼接数组
+    arr1 = np.array([[1, 2, 3, 4],
+                     [11, 22, 33, 44]])
+    arr2 = np.array([[5, 6, 7, 8], [55, 66, 77, 88]])
+    print(6, np.concatenate((arr1, arr2)))
+    print(7, np.concatenate((arr1, arr2), axis=1))
+    print(8, np.vstack((arr1, arr2)))
+    print(9, np.hstack((arr1, arr2)))
+
+    # 转置
+    print(10, arr1, arr1.transpose())
+    print(11, arr1.T)
+
+reshape_array()
+
+""" 总结
+    1、归类：
+        数据形状
+    2、关联：
+        这一部分的操作有两个部分，一个是数组本身提供的方法，一个是通用函数。大部分数组函数或者方法
+        都支持axis这个参数，0指按照Y轴处理 ，1表示按照X轴处理。
+    3、用途：
+        Numpy的数组很像矩阵，但是它本身又提供了矩阵的方法和函数，很多功能容易相互混淆。
 """
