@@ -11,6 +11,7 @@
 #       2019-06-18 : reshape_array()
 #       2019-06-19 ：修改更新了create_array()
 #       2019-06-20 ：更新了maths_func01（），新增access_file()
+#       2019-06-21 : 更新access_file()
 
 
 
@@ -391,10 +392,110 @@ def reshape_array():
 def access_file():
     """ 文件访问
 
-    关键字：文件保存  文件读取  分隔符 指定列 指定行
+    关键字： 文件保存  文件读取  分隔符 指定列 指定行
+            保存数组 保存多个数组 读取保存的数组
     """
+    # 读取文件
     path='data_analysis/main_packages/'
     arr1 = np.loadtxt(path+'test.txt', delimiter=',', skiprows=1)
     print(arr1)
+    # 保存文件
+    np.savetxt(path+'test1.txt', arr1, fmt='%d', delimiter=',')
 
-access_file()
+    # 保存数组对象(二进制文件)
+    arr1 = np.arange(1,10).reshape(3,3)
+    np.save(path+'test2.npy', arr1)
+    # 读取数组对象文件
+    a = np.load(path+'test2.npy')
+    print(a)
+
+    # 保存多个数组到文件
+    arr1 = np.arange(1,10).reshape(3,3)
+    arr2 = np.arange(1,13).reshape(3,4)
+    np.savez(path+'test3.npz', a=arr1, b=arr2)
+    # 读取多个数组的文件
+    data = np.load(path+'test3.npz')    
+    print(data.keys())
+    print(data['a'])
+    print(data['b'])
+
+#access_file()
+
+"""总结：
+    1、归类：文件操作
+    2、关联：
+        和Python本身提供的open()相比，读取某些固定格式的文件很方便，比如.csv等
+    3、用途：
+        保存数组、矩阵等ndarray结构的数据，可以直接读取到变量中进行处理，不知道最
+        大能处理的文件是多大，有待于验证。后期可能会都使用pandas来处理文件，可以
+        比较一下两者的速度。
+"""
+
+""" 练习题
+    1、打印numpy的版本
+    2、构造一个5*5的全零矩阵，并计算内存大小
+    3、创建一个10-49的数组，并将其倒序排列
+    4、找到一个数组中不为0的索引。np.nonzero(arr1)
+    5、随机构造一个3*3的矩阵，并打印其中最大最小值
+    6、构造一个5*5的矩阵，令其值都为1，并在最外层加上一圈0.
+       np.pad(arr1,pad_width=1,constant_values=0,mode='constant')
+    7、构建一个shape为（6，7，8）的矩阵，并找到第100个元素的索引值。
+       np.unravel_index(100,(6,7,8))
+    8、对一个5*5的矩阵做归一化操作
+       max,min   (current-min)/(max - min)
+    9、找到两个数组中相同的值
+       np.intersect1d(arr1,arr2)
+    10、得到今天 明天 昨天的日期
+       np.datetime64('today', 'D') - np.timedelta64(1,'D')
+    11、得到一个月中所有的天
+       np.arange('2017-10','2017-11',dtype='datetime64[D]')
+    12、得到一个数的整数部分
+       z = np.random.uniform(0,10,10)
+       np.floor(z)
+    13、构造一个数组，不能被改变
+       z= np.zeros(5)
+       z.flags.writeable=False
+    14、打印大数据的部分值、全部值
+       np.set_printoptions(threshold=5)  # threshold=np.nan
+       z = np.zeros((15,15))
+    15、找到一个数组中，最小的一个数的索引
+       z = np.arange(100)
+       v = np.random.uniform(0,100)
+       index = (np.abs(z-v)).argmin()
+       print(z[index])
+    16、32位的float类型和32位int类型转换
+       z = np.arange(10,dtype=np.int32)
+       z = z.astype(np.float32)
+    17、打印数组元素位置坐标与数值
+       z = np.arange(9).reshape(3,3)
+       for index,value in np.ndenumerate(z):
+           print(index,value)
+    18、按照数组的某一列进行排序
+       z = np.random.randint(0,10,(3,3))
+       print(z[z[:,1].argsort()])
+    19、统计数组中每个值出现的次数
+      z = np.array([1,1,1,2,2,2])
+      np.bincount(z) 
+    20、如何对一个四维数组的最后两维求和
+      z = np.random.randint(0,10,(4,4,4,4))
+      res = z.sum(axis=(-2,-1))
+    21、交换矩阵中的两行
+      z = np.arange(25).reshape(5,5)
+      z[[0,1]] = z[[1,0]]
+    22、找到一个数组中最常出现的数字
+       z = np.random.randint(0,10,50)
+       print(np.bincout(z).argmax())
+    23、快速查找top k
+       z = np.arange(10000)
+       np.random.shuffle(z)
+       n = 5
+       print(z[np.argpartition(-z,n)[]:n])
+    34、去除掉一个数组中，所有元素都相同的数据
+       z = np.random.randint(0,5,(10,3))
+       a = np.array([1,2,3,4])
+       b = np.array([1,2,3,5])
+       np.all(a==b)
+       np.any(a==b) # 只要有一个一样
+       e = np.all(z[:,1:]==z[:,:-1],axis=1)
+    
+"""
