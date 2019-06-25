@@ -8,7 +8,7 @@
 #       2019-06-22 ：access_file()
 #       2019-06-24 ：base_function_attribute() access_data()
 #                    data_operation() observe_data()
-#       2019-06-25 ：更新access_data()
+#       2019-06-25 ：更新access_data()、observe_data（）
 
 import pandas as pd
 
@@ -90,7 +90,7 @@ def access_data():
     print(12, df['Fare'] > 40 )
 
   
-access_data()
+#access_data()
 """ 总结:
     1、归类：数据访问
     2、关联：
@@ -107,15 +107,24 @@ access_data()
 def observe_data():
     """ 观察数据
     
-    关键字：最大值 最小值 平均数 统计信息
+    关键字：最大值 最小值 平均数 统计信息 groupby
     """
     age = df['Age']
     print(1, age.max(), age.min(), age.mean())
     # 显示常用统计信息
     print(2, age.describe())
     print(3, '\n', df.describe())
+    
+    # 使用groupby()分组统计数据
+    print(4, df.groupby('Age').sum())
+    print(5, df.groupby('Age').mean())
+    age_mean = df.groupby('Sex')['Age'].mean()
+    print(6, df.groupby('Sex')['Age'].mean())
+    
 
-#observe_data()
+    
+
+observe_data()
 
 """总结:
     1、归类：统计分析之观察数据
@@ -126,6 +135,7 @@ def observe_data():
     3、用途：
         这一部分主要归类一些概览数据的功能，可以在编写程序之前先对数据有一个大概的认识。这一部分学习的
         时候感觉很数学、很统计，就像我们要解一道题时，或者准备建模时，首先把数据大致了解一下。
+        好吧，Pandas更像是一个 SQL + Excel。
 
 
 """
