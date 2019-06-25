@@ -8,6 +8,7 @@
 #       2019-06-22 ：access_file()
 #       2019-06-24 ：base_function_attribute() access_data()
 #                    data_operation() observe_data()
+#       2019-06-25 ：更新access_data()
 
 import pandas as pd
 
@@ -75,13 +76,27 @@ def access_data():
     print(5, age[:5])
     print(6, age['Heikkinen, Miss. Laina'])
 
+    # 读取多个列
+    print(7,df[['Age','Fare']][:5])
 
-#access_data()
+    # 使用iloc（位置索引） 和 loc（标签索引） 访问数据
+    print(8, df.iloc[0:5])
+    print(9, df.iloc[0:5,1:3])
+
+    print(10, df.loc['Braund, Mr. Owen Harris','Fare'])
+
+    # 使用条件判断来选取数据
+    print(11, df[ df['Fare'] > 40 ])
+    print(12, df['Fare'] > 40 )
+
+  
+access_data()
 """ 总结:
     1、归类：数据访问
     2、关联：
         DataFrame中的每一行和列和Numpy中的ndarray操作差不多，支持python格式的切片操作，看来真是一脉相承
         每一列又继承了dataframe的一些方法和属性，因此可以多尝试一下。
+        我记得python是不是也能用条件筛选索引？
     3、用途：
         要分析数据，首先要访问数据，而且需要很灵活、精确的访问数据，目前多数方法都用到了列名，看来在从
         数据库中导出.csv时，要将列名也一起导出。
@@ -103,7 +118,7 @@ def observe_data():
 #observe_data()
 
 """总结:
-    1、归类：观察数据
+    1、归类：统计分析之观察数据
     2、关联：
         在学习pandas时，我感到和学习程序语言有很大的不同，我觉得我不是在学习python编程，而是学习Excel
         一类的工具软件，所以我不再按照numpy的分类来归类，而是按照应用软件的习惯来分类。比如，新增的这个
@@ -128,9 +143,10 @@ def data_operation():
 """ 总结：
     1、归类：数学运算
     2、关联：
-        和ndarray差不多，估计后面也能学到大量的矩阵运算
+        和ndarray差不多，估计后面也能学到大量的矩阵、向量运算，这里有个不错的叫法“广播效果”
     3、用途：
         这个用处是基本的了，必须的。我发现numpy也好，pandas也好，设计它们的一个主要原因就是
         消灭循环。越学习数据分析，就越发现自己不像是个程序员了，没有了循环，没有了判断，没有
         了多线程，嗯，好吧，这不是我正想要的吗。
 """
+
