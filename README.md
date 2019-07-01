@@ -30,21 +30,15 @@
 ### 6、python 学习整理
 
 > * python_base.md        ：python基础
->
-> * python_faq.md  ：python常用备忘
->
+>* python_faq.md  ：python常用备忘
 > * vscode.md  ：vscode下开发python程序的整理
->
-> * newbie2export ：《python 从小白到大牛》阅读整理
->
+>* newbie2export ：《python 从小白到大牛》阅读整理
 > * whirlwind tour of python ：《Python 旋风之旅》阅读整理
->
-> * NumPy_Beginner_Guide  ： 《NumPy 学习指南》阅读整理
->
+>* NumPy_Beginner_Guide  ： 《NumPy 学习指南》阅读整理
 > * data_analysis  ： 《python 数据分析》学习整理
+>* main_packages  ：  《数据分析四大工具包》
+> 
+>    * numpynotes.py 	:    《numpy》
+>     * pandasnotes.py    :      《pandas》
 >
-> main_packages  ：  《数据分析四大工具包》
->
->   * numpynotes.py 	:    《numpy》
->   * pandasnotes.py    :      《pandas》
->
+
