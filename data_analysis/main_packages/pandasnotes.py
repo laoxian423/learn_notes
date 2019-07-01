@@ -9,12 +9,52 @@
 #       2019-06-24 ：base_function_attribute() access_data()
 #                    data_operation() observe_data()
 #       2019-06-25 ：更新access_data()、observe_data（）
+#       2019-06-26 ：create_df(),更新observe_data（）
+#       2019-07-01 : 更新create_df()、access_data()
 
 import pandas as pd
 
 # 数据文件路径
 path = 'data_analysis/main_packages/'
 df = pd.read_csv(path+'titanic.csv')
+
+def create_df():
+    """ 创建数据结构DataFrame series
+
+    关键字：DataFrame 数据结构  series
+    """
+    # 方式一：自动生成
+    df = pd.read_csv(path+'titanic.csv')
+    # 方式二：手动创建
+    df1 = pd.DataFrame([[1, 2, 3],[4, 5, 6]],
+                         index=['a','b'],
+                         columns=['A','B','C'])
+    print(1, '\n', df1)
+    
+    # 创建series
+    data = [1, 2, 3]
+    index = ['a', 'b', 'c']
+    s = pd.Series(data=data, index=index)
+    print(2, s)
+
+#create_df()
+
+""" 总结
+    1、分类：
+        数据结构
+    2、关联：
+        pandas和Numpy一样，有自己的数据结构类:DataFrame和Series,DataFrame中的每一行
+        就是一个Series。他们具有基本相同的方法和属性。
+    4、用途：
+        每一种语言，或者大的工具包，都有自己的数据结构。所有的方法和属性都是围绕着数据结构
+        展开。无论是BASIC、C、C++都是如此，最先设计的就是数据结构，整数、浮点数、布尔、文件
+        ，在加上控制语句循环、判断等就成了一个完整的处理系统。其实现在想起来，应用系统也是如
+        此，操作系统也是如此。都是在处理广义的或者狭义的数据结构，然后形成了一门编程语言、一个
+        操作系统、一个应用系统。有时候觉得很诡异，比如我们证券，整个行业起码有上千亿的IT投资，
+        都是围绕着那几个很小的表，行情库以及委托成交清算，这几个基础库可能不到10M，但是围绕着
+        这几个库形成了上千亿的IT投入，人类不知道在干什么。
+"""
+#----------------------------------------------------------------------------------
 
 def access_file():
     """ 文件访问
@@ -36,7 +76,7 @@ def access_file():
         Pandas可能是python数据分析领域中最耳熟能详的东西了，凡是接触python数据分析的都基本是从
         pandas开始。在量化交易方面尤其如此，基本都是围绕着Pandas做一些封装。
 """
-
+#----------------------------------------------------------------------------------
 def base_function_attribute():
     """ 基本属性和方法
 
@@ -58,11 +98,11 @@ def base_function_attribute():
     3、用途：
         一部分属性和方法可以帮助观察数据。
 """
-
+#----------------------------------------------------------------------------------
 def access_data():
     """ 访问数据
     
-    关键字：切片 取列值 设置列名为索引
+    关键字：切片 取列值 设置列名为索引 查找 修改 增加 删除
     """
     df = pd.read_csv(path+'titanic.csv')
     age = df['Age']
@@ -89,8 +129,50 @@ def access_data():
     print(11, df[ df['Fare'] > 40 ])
     print(12, df['Fare'] > 40 )
 
-  
-#access_data()
+    # Series的操作
+    # 创建一个Series数据
+    data = [1, 2, 3]
+    index = ['a', 'b', 'c']
+    s = pd.Series(data=data, index=index)
+    # Series 的查找
+    print(15, s.loc['b'])
+    print(16, s.iloc[1])
+    # Series 的修改
+    s1 = s.copy()
+    s1['a'] = 100
+    print(17, s1)
+    # Series的增加
+    s1['d'] = 200
+    print(18,'\n', s1)
+    s.append(s1, ignore_index=True)
+    print(19,'\n', s)
+    # Series的删除
+    del s1['d']
+    print(20,'\n', s1)
+    s1.drop(['b', 'c'],inplace=True)
+    print(21,'\n', s1)
+
+    # DataFrame的操作
+    # 创建一个DF
+    data = [[1, 2, 3], [4, 5, 6]]
+    index = ['a', 'b']
+    columns = ['A','B','C']
+    df = pd.DataFrame(data=data, index=index, columns=columns)
+    print(22, '\n', df)
+    # DF 查找
+    print(23, df.loc['a'])
+    print(24, df['A'])
+    # DF 增加
+    df['D'] = [ 7,8]
+    print(25, '\n', df)
+    # DF 修改
+    df.loc['a']['A'] = 150
+    print(26, '\n', df)
+    # DF 删除
+    df.drop(['b'],inplace=True)
+    del df['D']
+    print(27, '\n', df)
+access_data()
 """ 总结:
     1、归类：数据访问
     2、关联：
@@ -102,13 +184,15 @@ def access_data():
         数据库中导出.csv时，要将列名也一起导出。
 
 """
-
+#----------------------------------------------------------------------------------
 
 def observe_data():
     """ 观察数据
     
-    关键字：最大值 最小值 平均数 统计信息 groupby
+    关键字：最大值 最小值 平均数 统计信息 groupby 二元统计 协方差 相关系数 分值统计
+            count 计数 中位数
     """
+    df = pd.read_csv(path+'/titanic.csv')
     age = df['Age']
     print(1, age.max(), age.min(), age.mean())
     # 显示常用统计信息
@@ -121,10 +205,26 @@ def observe_data():
     age_mean = df.groupby('Sex')['Age'].mean()
     print(6, df.groupby('Sex')['Age'].mean())
     
+    # 基本统计指标
+    print(7, df.sum())
+    print(8, df.sum(axis=1))
+    print(9, df.sum(axis='columns'))
+    print(10, df.median())
 
-    
+    # 二元统计
+    # 协方差
+    print(11, df.cov())
+    # 相关系数
+    print(12, df.corr())
+    # 分值统计
+    print(13, df['Age'].value_counts())
+    # 计数
+    print(14, df['Age'].count())
 
-observe_data()
+  
+
+
+#observe_data()
 
 """总结:
     1、归类：统计分析之观察数据
@@ -136,10 +236,8 @@ observe_data()
         这一部分主要归类一些概览数据的功能，可以在编写程序之前先对数据有一个大概的认识。这一部分学习的
         时候感觉很数学、很统计，就像我们要解一道题时，或者准备建模时，首先把数据大致了解一下。
         好吧，Pandas更像是一个 SQL + Excel。
-
-
 """
-
+#----------------------------------------------------------------------------------
 def data_operation():
     """ 数学运算
 
@@ -157,6 +255,8 @@ def data_operation():
     3、用途：
         这个用处是基本的了，必须的。我发现numpy也好，pandas也好，设计它们的一个主要原因就是
         消灭循环。越学习数据分析，就越发现自己不像是个程序员了，没有了循环，没有了判断，没有
-        了多线程，嗯，好吧，这不是我正想要的吗。
+        了多线程，嗯，好吧。
 """
+#----------------------------------------------------------------------------------
+
 
