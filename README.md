@@ -43,7 +43,8 @@
 >
 > * data_analysis  ： 《python 数据分析》学习整理
 >
->   main_packages  ：  《数据分析四大工具包》
+> main_packages  ：  《数据分析四大工具包》
 >
 >   * numpynotes.py 	:    《numpy》
+>   * pandasnotes.py    :      《pandas》
 >
