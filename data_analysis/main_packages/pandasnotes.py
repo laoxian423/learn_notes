@@ -11,6 +11,7 @@
 #       2019-06-25 ：更新access_data()、observe_data（）
 #       2019-06-26 ：create_df(),更新observe_data（）
 #       2019-07-01 : 更新create_df()、access_data()
+#       2019-07-02 : merge_df()
 
 import pandas as pd
 
@@ -172,7 +173,7 @@ def access_data():
     df.drop(['b'],inplace=True)
     del df['D']
     print(27, '\n', df)
-access_data()
+#access_data()
 """ 总结:
     1、归类：数据访问
     2、关联：
@@ -260,3 +261,53 @@ def data_operation():
 #----------------------------------------------------------------------------------
 
 
+def merge_df():
+    """合并两个DF
+
+    关键字：merge 合并DtaaFrame
+    """
+    left = pd.DataFrame({'key':['K0', 'K1', 'K2', 'K3'],
+                         'A':['A0', 'A1', 'A2', 'A3'],
+                         'B':['B0', 'B1', 'B2', 'B3'],
+                         'C':['C0', 'C1', 'C2', 'C3']
+                         })
+    right = pd.DataFrame({'key':['K0', 'K1', 'K2', 'K3'],
+                        'D':['D0', 'D1', 'D2', 'D3'],
+                        'E':['E0', 'E1', 'E2', 'E3'],
+                        'F':['F0', 'F1', 'F2', 'F3']
+                        })
+
+    print(1, '\n', left) 
+    print(2, '\n', right) 
+    
+    # 合并两个DF,默认按照key值合并，两个表共同拥有的字段
+    print(3, '\n', pd.merge(left, right, on='key'))
+    
+    # 合并,按照两个关键值,相当于交集
+    left1 = pd.DataFrame({'key1':['K0', 'K1', 'K2', 'K3'],
+                         'key2':['K0', 'K1', 'K2', 'K3'],
+                         'A':['A0', 'A1', 'A2', 'A3'],
+                         'B':['B0', 'B1', 'B2', 'B3'],
+                         'C':['C0', 'C1', 'C2', 'C3']
+                         })
+    right1 = pd.DataFrame({'key1':['K0', 'K1', 'K2', 'K3'],
+                          'key2':['K0', 'K1', 'K2', 'K3'],
+                          'D':['D0', 'D1', 'D2', 'D3'],
+                          'E':['E0', 'E1', 'E2', 'E3'],
+                          'F':['F0', 'F1', 'F2', 'F3']
+                         })
+    print(4, '\n', pd.merge(left1, right1, on=['key1','key2']))
+    # 合并,按照两个关键值,相当于并集
+    right1 = pd.DataFrame({'key1':['K0', 'K1', 'K2', 'K3'],
+                          'key2':['K0', 'K1', 'K2', 'K4'],
+                          'D':['D0', 'D1', 'D2', 'D3'],
+                          'E':['E0', 'E1', 'E2', 'E3'],
+                          'F':['F0', 'F1', 'F2', 'F3']
+                         })
+
+    print(5, '\n', pd.merge(left1, right1, on=['key1','key2'], how='outer', indicator=True))
+    # 合并，以'left'或者'right'为基准
+    print(6, '\n', pd.merge(left1, right1, on=['key1','key2'], how='left'))
+    print(7, '\n', pd.merge(left1, right1, on=['key1','key2'], how='right'))
+        
+merge_df()
