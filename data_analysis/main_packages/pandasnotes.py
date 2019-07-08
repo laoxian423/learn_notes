@@ -12,6 +12,7 @@
 #       2019-06-26 ：create_df(),更新observe_data（）
 #       2019-07-01 : 更新create_df()、access_data()
 #       2019-07-02 : merge_df()
+#       2019-07-05 ： data_pivot()
 
 import pandas as pd
 
@@ -309,5 +310,42 @@ def merge_df():
     # 合并，以'left'或者'right'为基准
     print(6, '\n', pd.merge(left1, right1, on=['key1','key2'], how='left'))
     print(7, '\n', pd.merge(left1, right1, on=['key1','key2'], how='right'))
-        
-merge_df()
+
+#merge_df()
+
+"""总结
+    1、归类：通用操作-合并数据
+    2、关联：
+        基础语言中可以用编程手段解决两个表的按关键字合并，Numpy中也有这样的函数，虽然我在漫长的编程生涯中
+        很少合并两个数据集，不过看来这是数据分析中常用手段了。似乎可以通过Merge函数来进行集合的运算，下次
+        试试。
+    3、用途：
+        按教材的说法，可以合并特征值。
+"""
+
+def data_pivot():
+    """ 数据透视表
+
+    关键字： pivot_table
+    """ 
+    # 准备示例数据
+    excel_sample = pd.DataFrame({'Month':['January','January','January','January',
+                                          'February','February','February','February',
+                                          'March','March','March','March'],
+                                 'Category':["Transportation","Grocery","HouseHold","Entertainment",
+                                             "Transportation","Grocery","HouseHold","Entertainment",
+                                             "Transportation","Grocery","HouseHold","Entertainment"],
+                                 'Amount':[74,235,175,100,115,240,225,125,90,260,200,120]})
+    print(1, '\n', excel_sample)
+    pivot1 = excel_sample.pivot_table(index='Category',columns='Month',values='Amount')
+    print(2, '\n\n', pivot1)
+    pivot1 = excel_sample.pivot_table(index='Category',columns='Month',values='Amount',aggfunc='sum')
+    print(3, '\n\n', pivot1)
+
+#data_pivot()       
+
+""" 总结：
+    1、归类：统计分析
+    2、关联：Pandas 和 numpy 都有大量的重复的方法和属性实现同一功能，也不知道这些方法之间有什么不同，也可能相互继承。
+    3、用途：数据透视表的用途很广，尤其对一堆数据进行观察时，可以从各个维度来对数据有个整体映像。
+"""
