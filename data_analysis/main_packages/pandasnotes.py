@@ -13,7 +13,9 @@
 #       2019-07-01 : 更新create_df()、access_data()
 #       2019-07-02 : merge_df()
 #       2019-07-05 ： data_pivot()
+#       2019-07-09 ：date_series()
 
+import datetime
 import pandas as pd
 
 # 数据文件路径
@@ -348,4 +350,45 @@ def data_pivot():
     1、归类：统计分析
     2、关联：Pandas 和 numpy 都有大量的重复的方法和属性实现同一功能，也不知道这些方法之间有什么不同，也可能相互继承。
     3、用途：数据透视表的用途很广，尤其对一堆数据进行观察时，可以从各个维度来对数据有个整体映像。
+"""
+
+def date_series():
+    """ 日期格式及时间序列操作
+
+    关键字：创建日期 日期转换 时间切片 日期切片
+    """
+    # 创建日期数据
+    ds = datetime.datetime(year=2019,month=7,day=9,hour=15,minute=23)
+    print(1, '\n', ds)
+    ts = pd.Timestamp('2019-07-09')
+    print(2, '\n', ts, ts.month, ts.day, ts + pd.Timedelta('5 days'))
+    # 字符转换为日期格式
+    print(3, '\n', pd.to_datetime('2019-07-09'))
+    # 批量数据,从2019-07-09开始每隔12小时共需要10个数据
+    ss = pd.Series(pd.date_range(start='2019-07-09', periods=10, freq='12H'))
+    print(4, '\n', ss)
+    # 从文件中读取
+    data = pd.read_csv(path+'/flowdata.csv', index_col= 0 ,parse_dates=True)
+    print(5, '\n', data.tail())
+    
+    # 时间切片操作
+    print(6, '\n', data[('2012-01-01'):('2012-01-30')])
+    print(7, '\n', data['2013'])
+    print(8, '\n', data[data.index.month == 1])
+    print(9, '\n', data[(data.index.hour > 8) & (data.index.hour < 12)])
+    
+    # 时间序列重采样
+    print(10, '\n', data.resample('D').mean().head())
+    print(11, '\n', data.resample('3D').mean().head())
+
+
+#date_series()
+""" 总结
+    1、归类：统计分析-时间序列
+    2、关联：
+        对于时间的操作我一直不熟悉，也一直在避免使用语言中的日期格式，每次都转换成字符串来进行处理。这次发现时间函数有
+        它的优势，尤其是切片和重采样的处理，看起来干净利落，比我用循环来处理方便和快速很多。
+    3、用途：
+        在金融分析中，时间序列数据可能占比有80%，尤其在证券，所有的数据离开时间就没有了意义。可以说证券分析就是时间分析。
+        每一个数据在不同时间下的规律和反映。
 """
